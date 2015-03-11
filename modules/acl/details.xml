@@ -1,0 +1,7 @@
+<module>
+    <name>ACL</name>
+    <version>1.0</version>
+    <developer>Pradeep</developer>
+    <description>ACL = Access Control List. It handles User, Group, Permission etc. It's recommended not change any thing in this module too.</description>
+    <date>2015-01-10</date>
+</module>
