@@ -11,6 +11,8 @@
 |
 */
 
+Debugbar::disable();
+
 ClassLoader::addDirectories(array(
 
     app_path() . '/commands',
@@ -67,8 +69,10 @@ App::down(function () {
 
 //this will handle findorFail request, if fails then it will return 404 error
 App::error(function (Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-    return Response::view('error404', array(), 404);
+    return View::make('core::error.error404');
 });
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -138,7 +142,6 @@ foreach ($modules_list as $module_name) {
     //echo die("<hr/>Die Here");
 
 }
-
 
 
 

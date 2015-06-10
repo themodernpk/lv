@@ -1,9 +1,9 @@
 <?php
-
 use Illuminate\Database\Eloquent\SoftDeletingTrait;
 
 class Module extends Eloquent
 {
+    /* ****** Code Completed till 10th april */
     use SoftDeletingTrait;
     protected $dates = ['deleted_at'];
     protected $softDelete = true;
@@ -16,10 +16,6 @@ class Module extends Eloquent
         'active'
     ];
 
-
-    //------------------------------------------------------------
-    //------------------------------------------------------------
-    //------------------------------------------------------------
-
-
+    //--------------------------
+    /* ******\ Code Completed till 10th april */
 }

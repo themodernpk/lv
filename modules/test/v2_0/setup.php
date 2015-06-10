@@ -12,10 +12,14 @@ function install()
     }
 
     //create new tables
-    Schema::create('tests', function ($table) {
-        $table->increments('id');
-        $table->string('category');
-    });
+    if (!Schema::hasTable('tests'))
+    {
+
+        Schema::create('tests', function ($table) {
+            $table->increments('id');
+            $table->string('category');
+        });
+    }
 
     $response['status'] = 'success';
 

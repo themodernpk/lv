@@ -11,13 +11,7 @@ class ModulesTableSeeder extends Seeder {
 				'active' => 1,
 				'created_at' => Dates::now(),
 				'updated_at' => Dates::now(),
-			],
-			[   'name' => 'acl',
-				'version' => '1.0',
-				'active' => 1,
-				'created_at' => Dates::now(),
-				'updated_at' => Dates::now(),
-			],
+			]
 
 		];
 

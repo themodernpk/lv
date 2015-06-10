@@ -1,10 +1,10 @@
 <?php
-
 use Illuminate\Database\Eloquent\SoftDeletingTrait;
 
 class Setting extends Eloquent
 {
 
+    /* ****** Code Completed till 10th april */
     protected $guarded = array('id');
 
     protected $fillable = [
@@ -15,26 +15,16 @@ class Setting extends Eloquent
     ];
 
     //------------------------------------------------------------
-
     public static function value($key)
     {
         $setting = Setting::where('key', '=', $key)->first();
-
-        if($setting)
-        {
+        if ($setting) {
             return $setting->value;
-        }else{
+        } else {
             return false;
         }
-
     }
 
     //------------------------------------------------------------
-
-
-    //------------------------------------------------------------
-    //------------------------------------------------------------
-    //------------------------------------------------------------
-
-
+    /* ******\ Code Completed till 10th april */
 }

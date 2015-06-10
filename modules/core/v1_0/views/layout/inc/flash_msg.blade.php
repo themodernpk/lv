@@ -1,7 +1,7 @@
 <!--flash message-->
         @if(Session::has('flash_error'))
         <div class="alert alert-danger fade in">
-            <button aria-hidden=true data-dismiss=alert class=close type=button>X</button>
+            <button aria-hidden=true data-dismiss=alert class=close zztype=button>X</button>
             <p>{{ Session::get('flash_error') }}</p>
         </div>
         @endif

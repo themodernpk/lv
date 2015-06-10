@@ -35,7 +35,7 @@ function modules_path($module_name = NULL)
 function modules_list()
 {
     if (Session::get('modules_table')) {
-        //core & acl modules will be loaded by default while remaining will be searched from database
+        //core will be loaded by default while remaining will be searched from database
         $count = DB::table('modules')->where('active', '=', 1)->count();
     } else
     {
@@ -53,7 +53,7 @@ function modules_list()
         $modules = $item;
     } else
     {
-        $modules = array('core', 'acl');
+        $modules = array('core');
     }
 
     return $modules;
@@ -126,14 +126,13 @@ function module_current_version($module_name)
         if($module)
         {
             return $module->version;
-        } else if($module_name== "core" || $module_name == "acl")
+        } else if($module_name== "core")
         {
             $version = array_reverse(module_versions_list($module_name));
             $version = str_replace('v', '', $version[0]);
             $version = str_replace('_', '.', $version);
             return $version;
         }
-
 
     } else
     {

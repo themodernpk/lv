@@ -1,74 +1,58 @@
-@extends('core::layout.master')
-
+@extends('core::layout.core')
 
 @section('content')
+    <!-- begin #page-loader -->
+    <div id="page-loader" class="fade in"><span class="spinner"></span></div>
+    <!-- end #page-loader -->
 
-@include('core::layout.inc.header_public')
+    <!-- begin #page-container -->
+    <div id="page-container" class="fade">
+        <!-- begin login -->
+        <div class="login bg-black animated fadeInDown">
+            <!-- begin brand -->
+            <div class="login-header">
+                <div class="brand">
+                    <span class="logo"></span> LV APP
+                    <small>Application is licensed to <b>WebReinvent</b></small>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-sign-in"></i>
+                </div>
+            </div>
+            <!-- end brand -->
+            <div class="login-content">
 
-<div class="container ">
+                @include('core::layout.inc.error_msg')
+                @include('core::layout.inc.flash_msg')
 
-	<div class="row featurette mr_top_140">
-		<div class="col-md-7">
-			<div class="slogan">
-				<h2>CRM App</h2>
-				<h3>with a brain of it's own</h3>
-				<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.</p>
-			</div>
+                {{ Form::open(array('route' => 'postlogin', 'class' =>'margin-bottom-0', 'role' => 'form')) }}
 
-
-		</div>
-		<div class="col-md-5">
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<span class="glyphicon glyphicon-lock"></span> Login</div>
-					<div class="panel-body">
-
-						@include('core::layout.inc.error_msg')
-						@include('core::layout.inc.flash_msg')
-
-						{{ Form::open(array('route' => 'postlogin', 'class' =>'form-horizontal', 'role' => 'form')) }}
-							<div class="form-group">
-								<label for="inputEmail3" class="col-sm-3 control-label">
-									Email</label>
-									<div class="col-sm-9">
-										<input type="text" value="{{Input::old('email')}}" name="email" class="form-control" id="inputEmail3" placeholder="Email" >
-									</div>
-								</div>
-								<div class="form-group">
-									<label for="inputPassword3" class="col-sm-3 control-label">
-										Password</label>
-										<div class="col-sm-9">
-											<input type="password" name="password" class="form-control" id="inputPassword3" placeholder="Password" required>
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-sm-offset-3 col-sm-9">
-											<div class="checkbox">
-												<label>
-													<input type="checkbox" name="remember"/>
-													Remember me
-												</label>
-											</div>
-										</div>
-									</div>
-									<div class="form-group last">
-										<div class="col-sm-offset-3 col-sm-9">
-											<button type="submit" class="btn btn-success btn-sm">
-												Sign in</button>
-												<button type="reset" class="btn btn-default btn-sm">
-													Reset</button>
-												</div>
-											</div>
+                <div class="form-group m-b-20">
+                    <input type="text" class="form-control input-lg" value="{{Input::old('email')}}" name="email"
+                           placeholder="Email Address"/>
+                </div>
+                <div class="form-group m-b-20">
+                    <input type="password" class="form-control input-lg" name="password" placeholder="Password"/>
+                </div>
+                <div class="checkbox m-b-20">
+                    <label>
+                        <input type="checkbox" name="remember"/> Remember Me
+                    </label>
+                </div>
+                <div class="login-buttons">
+                    <button type="submit" class="btn btn-success ">Sign me in</button>
+                    <a href="{{URL::route('register')}}" class="btn btn-info">Sign up</a>
+                </div>
+                {{ Form::close() }}
+            </div>
+        </div>
+        <!-- end login -->
 
 
-										{{ Form::close() }}
-									</div>
-									<div class="panel-footer">
-										Not Registred? <a href="{{URL::route('register')}}">Register here</a></div>
-									</div>
-								</div>
-							</div>
+    </div>
+    <!-- end page container -->
+@stop
 
-
-						</div>
-						@stop
+@section('page_specific_foot')
+    <script src="<?php echo asset_path(); ?>/js/apps.min.js"></script>
+@stop

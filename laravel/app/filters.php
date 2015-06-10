@@ -1,27 +1,13 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Application & Route Filters
-|--------------------------------------------------------------------------
-|
-| Below you will find the "before" and "after" events for the application
-| which may be used to do any work before or after a request into your
-| application. Here you may also register your custom route filters.
-|
-*/
 
 App::before(function($request)
 {
-
-
     //this code is handle database errors
     App::error(function(\PDOException $e, $code)
     {
 
         Log::error( 'FATAL DATABASE ERROR: ' . $code . ' = ' . $e->getMessage() );
-
-
 
         if ( Config::get('app.debug') == true )
         {
@@ -58,7 +44,15 @@ App::before(function($request)
 
 App::after(function($request, $response)
 {
-    //
+    //login if api request is made
+
+    $input = Input::all();
+
+    if(isset($input['format']))
+    {
+        Auth::logout();
+    }
+
 });
 
 /*
@@ -75,19 +69,27 @@ App::after(function($request, $response)
 Route::filter('auth', function()
 {
 
-
-
+    $input = Input::all();
     try{
+
         if (Auth::guest())
         {
-            Session::put('redirect', URL::full());
-            return Redirect::guest('login')->with('flash_error', 'You must be logged in to view this page!');
+            //if format is set then we try to check login credentials
+            if(isset($input['format']))
+            {
+                $response = User::authenticate($input);
+                if($response['status'] == 'failed')
+                {
+                    return json_encode($response);
+                }
+            } else
+            {
+                Session::put('redirect', URL::full());
+                return Redirect::guest('login')->with('flash_error', 'You must be logged in to view this page!');
+            }
         }
 
-
-
         //if user is logged in than do further validation
-
         if (Auth::check())
         {
             $user = Auth::user();
@@ -108,15 +110,10 @@ Route::filter('auth', function()
                 return Redirect::route('login')->with('flash_error', 'Your account is inactive.');
             }
 
-
-
         }
     }
     catch(PDOException $e)
     {
-
-
-
 
         if ( Config::get('app.debug') == true )
         {
