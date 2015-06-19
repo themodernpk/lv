@@ -29,7 +29,7 @@
             <div class="modal fade" id="modal-dialog">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        {{ Form::open(array('route' => 'createGroups', 'class' =>'form','id'=>'form' ,'method' =>'POST')) }}
+                        {{ Form::open(array('class' =>'form','id'=>'form' ,'method' =>'POST')) }}
 
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -39,14 +39,14 @@
 
 
                             <div class="form-group">
-                                {{ Form::text('name', null, array('class' => 'form-control ', 'placeholder' => 'Group Name', 'required')) }}
+                                {{ Form::text('name', null, array('class' => 'form-control ', 'placeholder' => 'Group Name', 'id' =>'group_name', 'required')) }}
                             </div>
 
                         </div>
                         <div class="modal-footer">
 
                             <a href="" class="btn btn-sm btn-white" data-dismiss="modal">Close</a>
-                            <button type="submit" class="btn btn-sm btn-success loader"><i class="fa fa-edit"></i>
+                            <button type="button" id="group_submit" data-href="<?php echo URL::route('groupStore'); ?>" class="btn btn-sm btn-success loader"><i class="fa fa-edit"></i>
                                 Submit
                             </button>
                         </div>
@@ -165,7 +165,7 @@
 
                                             <td>{{$item->id}}</td>
                                             <td>
-                                                @if(!Input::has('trash'))
+                                                @if(!Input::has('trash') && Permission::check('allow-ajax-edit'))
                                                     <a class="editable" data-pk="{{$item->id}}"
                                                        data-name="{{get_table_name()}}" id="edit-{{$item->id}}"
                                                        href="#">{{$item->name}}</a>
@@ -190,7 +190,7 @@
                                                         <input type="checkbox" data-render="switchery" class="BSswitch"
                                                                data-theme="black" checked="checked"
                                                                data-switchery="true" name="active"
-                                                               data-exception="{{$exception}}" value="{{$item->id}}"
+                                                               data-exception="{{$exception}}" data-href="<?php echo URL::route('ajax_toggle_status'); ?>" value="{{$item->id}}"
                                                                style="display: none;">
 
 
@@ -202,13 +202,14 @@
                                                             <input type="checkbox" data-render="switchery"
                                                                    class="BSswitch" data-theme="green" checked="checked"
                                                                    data-switchery="true" name="active"
-                                                                   data-exception="{{$exception}}" value="{{$item->id}}"
+                                                                   data-exception="{{$exception}}" data-href="<?php echo URL::route('ajax_toggle_status'); ?>" value="{{$item->id}}"
                                                                    style="display: none;">
                                                             @else<!-- when switch is unchecked color will be green -->
                                                             <input type="checkbox" data-render="switchery"
                                                                    class="BSswitch" data-theme="green"
                                                                    unchecked="unchecked" data-switchery="true"
                                                                    name="active" data-exception="{{$exception}}"
+                                                                   data-href="<?php echo URL::route('ajax_toggle_status'); ?>"
                                                                    value="{{$item->id}}" style="display: none;">
 
                                                         @endif
@@ -218,6 +219,11 @@
                                             <td>{{Dates::showTimeAgo($item->created_at)}}</td>
                                             <td>{{Dates::showTimeAgo($item->updated_at)}}</td>
                                             @if(Permission::check('manage-group-permission'))
+                                                <?php $exception = false;
+
+                                                if (in_array($item->id, core_settings('permissions')['exceptions'])) {
+                                                    $exception = true;
+                                                }?>
                                                 <td>
 
                                                     <!-- click to see permission -->
@@ -230,9 +236,11 @@
 
                                                     <a class="btn btn-sm btn-icon btn-circle btn-danger"
                                                        id="delete_{{$item->id}}" data-exception="{{$exception}}"
+                                                       data-href="<?php echo URL::route('ajax_delete'); ?>"
                                                        title=""><i class="fa fa-minus"></i></a>
 
                                                 </td>
+
                                             @endif
 
                                             <td><input type="checkbox" class="idCheckbox" name="id[]"
@@ -283,6 +291,8 @@
     <script src="<?php echo asset_path(); ?>/js/form-slider-switcher.demo.min.js"></script>
     <script src="<?php echo asset_path(); ?>/plugins/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
     <script src="<?php echo asset_path(); ?>/js/apps.min.js"></script>
+    <script src="<?php echo asset_path(); ?>/group.js"></script>
+    <script src="<?php echo asset_path(); ?>/common.js"></script>
 
 
 
@@ -319,11 +329,7 @@
     </script>
 
 
+  {{ View::make('core::layout.javascript')->with('block_name', 'row_edit'); }}
 
-    {{ View::make('core::layout.javascript')->with('block_name', 'switch_button'); }}
-
-    {{ View::make('core::layout.javascript')->with('block_name', 'row_delete'); }}
-
-    {{ View::make('core::layout.javascript')->with('block_name', 'row_edit'); }}
 
 @stop

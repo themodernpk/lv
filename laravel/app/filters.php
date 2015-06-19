@@ -44,14 +44,7 @@ App::before(function($request)
 
 App::after(function($request, $response)
 {
-    //login if api request is made
 
-    $input = Input::all();
-
-    if(isset($input['format']))
-    {
-        Auth::logout();
-    }
 
 });
 
@@ -74,8 +67,8 @@ Route::filter('auth', function()
 
         if (Auth::guest())
         {
-            //if format is set then we try to check login credentials
-            if(isset($input['format']))
+            //if apirequest is set then we try to check login credentials
+            if(isset($input['apirequest']))
             {
                 $response = User::authenticate($input);
                 if($response['status'] == 'failed')

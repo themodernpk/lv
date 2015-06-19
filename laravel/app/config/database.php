@@ -55,9 +55,9 @@ return array(
 		'mysql' => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
-			'database'  => 'lv',
-			'username'  => 'root',
-			'password'  => '',
+			'database'  => 'lvwebrei_lv',
+			'username'  => 'lvwebrei_app',
+			'password'  => 'F[d9rG00]6en',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',

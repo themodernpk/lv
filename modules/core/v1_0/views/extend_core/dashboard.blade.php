@@ -1,6 +1,8 @@
 <div class="row">
 
+
     @if(Permission::check('allow-dashboard-activity-log'))
+
         <!-- begin col-6 -->
         <div class="col-md-8 ui-sortable">
             <div class="panel panel-inverse" data-sortable-id="flot-chart-1">

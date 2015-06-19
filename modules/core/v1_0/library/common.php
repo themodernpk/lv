@@ -27,17 +27,19 @@ class Common
         return substr(str_shuffle(str_repeat($pool, 5)), 0, $length);
     }
 //-----------------------------------------------------------------------------
+
     public static function debug($text)
     {
-        $input = Input::all();
-        $debug_val = Config::get('app.debug');
+        $debug = Config::get('app.debug', true);
 
-        if(isset($input['debug']) || $debug_val == true)
+        if($debug == true)
         {
-            return $text;
+            return "<hr/>".$text;
         }
+
     }
 //-----------------------------------------------------------------------------
+
     /*
 
         public static function ajax_toggle_status()

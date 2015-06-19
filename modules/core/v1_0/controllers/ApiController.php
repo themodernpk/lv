@@ -10,37 +10,11 @@ class ApiController extends BaseController
     function __construct()
     {
         $this->input = Input::all();
+       // print_r($this->input);
     }
 
     //--------------------------------------------------------------------
-    private function authenticate()
-    {
-        if (!isset($this->input['login_email']) || !isset($this->input['login_password'])) {
-            $response['status'] = "failed";
-            $response['errors'] = "API Credentials are not send";
-            Activity::log($response['errors'], NULL, 'API');
-            return $response;
-        }
-        $credentials = array('email' => $this->input['login_email'], 'password' => $this->input['login_password']);
-        //authenticate
-        if (!Auth::attempt($credentials, false)) {
-            $response['status'] = "failed";
-            $response['errors'] = "API Authentication Failed";
-            Activity::log($this->input['login_email'] . " | " . $response['errors'], NULL, 'API');
-            return $response;
-        } else {
-            Activity::log("User authenticated via API", Auth::user()->id, 'API');
-            unset($this->input['login_email']);
-            unset($this->input['login_password']);
-        }
-        //check api access
-        if (!Permission::check('api-access')) {
-            $response['status'] = "failed";
-            $response['errors'] = "This account does not have API access";
-            Activity::log($response['errors'], Auth::user()->id, 'API');
-            return $response;
-        }
-    }
+    
 
     //--------------------------------------------------------------------
     /**
@@ -48,20 +22,26 @@ class ApiController extends BaseController
      * from email or add new user
      * @return string
      */
-    public function userCreate()
+    public function userCreate($input = NULL)
     {
-        $response = $this->authenticate();
-        if ($response['status'] == 'failed') {
+        if($input == NULL)
+        {
+            $input = Input::all();
+        }
+        $response = User::authenticate($input);
+        if($response['status'] == 'failed')
+        {
             return json_encode($response);
         }
-        $response = User::add($this->input);
+
+        /*$response = User::add($this->input);
         if ($response['status'] == "failed") {
             return json_encode($response);
         } else if ($response['status'] == "success") {
             $response['data'] = "User account successfully created for " . $this->input['email'];
             Activity::log("Account created for " . $this->input['email'], Auth::user()->id, 'API');
             return json_encode($response);
-        }
+        }*/
     }
 
     //--------------------------------------------------------------------

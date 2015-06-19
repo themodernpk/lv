@@ -29,6 +29,7 @@ class CoreController extends BaseController
     {
         //call logout function
         Auth::logout();
+
         $data = array();
         $count_users = User::count();
         if ($count_users == 0) {
@@ -40,7 +41,6 @@ class CoreController extends BaseController
     //--------------------------------------------------
     public function postLogin()
     {
-
         $response = User::authenticate();
 
         if($response['status'] == 'failed')
@@ -54,49 +54,9 @@ class CoreController extends BaseController
                 return Redirect::route('dashboard')->with('flash_success', 'You are successfully logged in.');
             }
         }
-
-
-
-
-        //-------------------------------------------------
-
-/*        $data = array();
-        $input = Input::all();
-        $rules = array('email' => 'required|email', 'password' => 'required');
-        $v = Validator::make($input, $rules);
-        if ($v->fails()) {
-            return Redirect::route('login')->withErrors($v)->withInput();
-        } else {
-            $credentials = array('email' => $input['email'], 'password' => $input['password']);
-            $remember = false;
-            if (isset($input['remember']) && $input['remember'] == true) {
-                $remember = true;
-            }
-
-            if (Auth::attempt($credentials, $remember))
-            {
-                $user_id = Auth::id();
-                $user = User::find($user_id);
-                //check where user permission "disallow-login"
-                if (!Permission::check('allow-login')) {
-                    return Redirect::route('error')->with('flash_error', "You don't have permission to login");
-                }
-
-                //update last login column
-                $user->lastlogin = Dates::now();
-                $user->save();
-
-                if ($redirect = Session::get('redirect')) {
-                    Session::forget('redirect');
-                    return Redirect::to($redirect);
-                } else {
-                    return Redirect::route('dashboard')->with('flash_success', 'You are successfully logged in.');
-                }
-            } else {
-                return Redirect::back()->withErrors($v)->with('flash_error', 'Enter valid account details');
-            }
-        }*/
+           
     }
+
 
     //--------------------------------------------------
     function getRegister()
@@ -114,9 +74,11 @@ class CoreController extends BaseController
     //--------------------------------------------------
     public function postRegister()
     {
+
         $data = array();
         $input = Input::all();
         $count_users = User::count();
+
         if ($count_users < 1) {
             //Create Admin permission
             $permission = Permission::firstOrCreate(array('name' => 'Admin'));
@@ -144,13 +106,23 @@ class CoreController extends BaseController
             $insert = array($group->id, array('active' => 0));
             $group->permissions()->sync($insert);
         }
+
+
         //check if already registered
-        $response = User::add($input);
+        $response = User::store($input);
+       /* $errors ='';
+        foreach($response['errors'][0] as $list)
+        {
+            $errors .= $list;
+        }*/
         if ($response['status'] == 'failed') {
             return Redirect::route('register')->withErrors($response['errors']);
         } else if ($response['status'] == 'success') {
             return Redirect::route('login')->with('flash_success', 'Account details successfully created');
         }
+
+
+
     }
 
     //--------------------------------------------------
@@ -169,4 +141,54 @@ class CoreController extends BaseController
 
     //------------------------------------------------------
     /* ******\ Code Completed till 10th april */
+
+    function setting()
+    {
+        $data = array();
+        $data['list'] = Setting::getSettings();
+        $format = Input::get('format');
+
+        if (isset($format)) {
+            Switch ($format) {
+                case 'json':
+                    $response = array('status' => 'success', 'data' => $data);
+                    return json_encode($response);
+                    break;
+            }
+        }
+        return View::make('core::admin.core-admin-setting')->with('title', 'Setting')->with('data', $data);
+    }
+
+    function settingStore()
+    {
+        $input = Input::all();
+        unset($input['_token']);
+        unset($input['href']);
+
+        $validator = Setting::validate($input);
+        if ($validator->fails())
+        {
+            $response = array('status' => 'warning', 'errors' => $validator->messages());
+            return json_encode($response);
+        }
+
+        if($input != '')
+        {
+            $settings = Setting::createSettings($input);
+            if ($settings['status'] == 'success')
+            {
+                $response = array('status' => 'success', 'data' =>$settings);
+            }
+            else
+            {
+                $response = array('status' => 'failed', 'error' => 'Unable to Add Settings');
+            }
+            return json_encode($response);
+        }
+
+    }
+
+
+
+
 } // end of class

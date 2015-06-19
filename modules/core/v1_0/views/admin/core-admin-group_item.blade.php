@@ -15,7 +15,6 @@
 
     <!-- begin page-header -->
     <h1 class="page-header">{{$title}}</h1>
-
     <!-- end page-header -->
 
     <!-- begin row -->
@@ -26,7 +25,37 @@
 
 
             <!-- open model when click on add button -->
+            <!-- #modal-dialog -->
+            <div class="modal fade" id="modal-dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        {{ Form::open(array('class' =>'form','id'=>'form' ,'method' =>'POST')) }}
 
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 class="modal-title">Details</h4>
+                        </div>
+                        <div class="modal-body">
+
+
+                            <div class="form-group">
+                                {{ Form::text('name', null, array('class' => 'form-control ', 'placeholder' => 'Group Name', 'id' =>'group_name', 'required')) }}
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+
+                            <a href="" class="btn btn-sm btn-white" data-dismiss="modal">Close</a>
+                            <button type="button" id="group_submit" data-href="<?php echo URL::route('groupStore'); ?>" class="btn btn-sm btn-success loader"><i class="fa fa-edit"></i>
+                                Submit
+                            </button>
+                        </div>
+                        {{ Form::close() }}
+
+                    </div>
+                </div>
+            </div>
+            <!-- #end of modal-dialog -->
 
             <!-- begin panel -->
             <div class="panel panel-inverse">
@@ -40,32 +69,17 @@
                            data-click="panel-remove"><i class="fa fa-times"></i></a>
 
                     </div>
-                    <h4 class="panel-title">Permissions List</h4>
+                    <h4 class="panel-title">Group List</h4>
                 </div>
 
                 <div class="panel-body">
 
-                    <!--  form for activate/Deactivte delete/thrash   -->
                     {{ Form::open(array('route' => 'bulkAction', 'class' =>'form', 'method' =>'POST')) }}
 
                     <div class="row">
                         <div class="col-md-12">
                             <div class="pull-right">
-                                <div class="btn-group">
-
-                                    <!-- if group has no thrashed -->
-                                    <!--  @if(!Input::has('trash'))
-                                        <a class="btn btn-sm btn-info" href="#modal-dialog" data-toggle="modal"><i class="fa fa-plus"></i> Add</a>
-                                        <button type="submit" name="action" value="active" class="btn btn-sm btn-success" ><i class="fa fa-check"></i> Activate</button>
-                                        <button type="submit" name="action" value="deactive" class="btn btn-sm btn-warning" ><i class="fa fa-minus"></i> Deactive</button>
-                                        <button type="submit" name="action" value="delete" class="btn btn-sm btn-danger" ><i class="fa fa-times"></i> Delete</button>
-                                        @else
-
-                                            <a  class="btn btn-sm btn-info" href="{{URL::route('groups')}}" ><i class="fa fa-angle-double-left"></i> Back</a>
-                                        <button type="submit" name="action" value="forcedelete" class="btn btn-sm btn-danger" ><i class="fa fa-times"></i> Permanent Delete</button>
-                                        <button type="submit" name="action" value="restore" class="btn btn-sm btn-inverse"><i class="fa fa-trash-o"></i> Restore</button>
-                                    @endif -->
-                                </div>
+                                
 
                             </div>
                         </div>
@@ -82,59 +96,21 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Name</th>
-                                    <th>Slug</th>
-                                    <th>Active</th>
-                                    <!-- <th>Actions</th> 
-                                    <th><input id="selectall" type="checkbox"/></th>-->
+                                    <th>Slug</th>                                 
+                                    <th>Created</th>
+                                    <th>Updated</th>
+                                   
                                 </tr>
                                 </thead>
 
                                 <tbody>
-
-
-                                <!-- get the all group and list them -->
-                                @if(is_object($data['list']))
-                                    @foreach($data['list'] as $item)
-
-                                        <tr class="" id="{{$item->pivot->id}}">
-
-                                            <td>{{$item->pivot->id}}</td>
-                                            <td>{{$item->name}}</td>
-                                            <td>{{$item->slug}}</td>
-                                            <td>
-                                                <?php $exception = false; ?>
-                                                <!-- check status id from group permission table -->
-                                                @if(intval($item->pivot->active) == intval(1))
-
-                                                    <input type="checkbox" data-render="switchery" class="BSswitch"
-                                                           data-theme="green" checked="checked" data-switchery="true"
-                                                           name="active" data-update-table="true"
-                                                           data-exception="{{$exception}}" value="{{$item->pivot->id}}"
-                                                           data-href="<?php echo URL::route('ajax_toggle_status'); ?>"
-                                                           style="display: none;">
-                                                @else
-                                                    <input type="checkbox" data-render="switchery" class="BSswitch"
-                                                           data-theme="green" unchecked="unchecked"
-                                                           data-switchery="true" name="active" data-update-table="true"
-                                                           data-exception="{{$exception}}" value="{{$item->pivot->id}}"
-                                                           data-href="<?php echo URL::route('ajax_toggle_status'); ?>"
-                                                           style="display: none;">
-
-                                                @endif
-                                            </td>
-
-                                            <!-- <td>
-
-                                                <!-- click to see permission -->
-
-                                            <!-- <a class="btn btn-sm btn-icon btn-circle btn-danger" id="delete_{{$item->id}}" data-exception="{{$exception}}" title=""><i class="fa fa-minus"></i></a>
-
-                                    </td> -->
-                                            <!-- <td><input type="checkbox" class="idCheckbox" name="id[]" value="{{$item->id}}" > -->
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                @endif
+                                     @if(!empty($data['list']))
+                                       <td><?php echo $data['list']->id;?></td>
+                                       <td><?php echo $data['list']->name;?></td>
+                                       <td><?php echo $data['list']->slug;?></td>
+                                       <td>{{Dates::showTimeAgo($data['list']->created_at)}}</td>
+                                        <td>{{Dates::showTimeAgo($data['list']->updated_at)}}</td>
+                                      @endif                             
 
                                 </tbody>
                             </table>
@@ -147,7 +123,7 @@
                        // 2nd argument is value which is actually table name in encrypted form
                        // 3rd argument is id to perfrorm client side operation  ,like ajax to switch status
                      -->
-                    {{Form::hidden('table', get_table_name(NULL, 'group_permission'), array('id' => 'table')) }}
+                    {{Form::hidden('table', get_table_name(), array('id' => 'table')) }}
                     {{Form::close()}}
 
                 </div>
@@ -159,16 +135,19 @@
     <!-- end row -->
 
 @stop
+
 @section('page_specific_foot')
 
     <script src="<?php echo asset_path(); ?>/plugins/gritter/js/jquery.gritter.js"></script>
     <script src="<?php echo asset_path(); ?>/plugins/DataTables/js/jquery.dataTables.js"></script>
     <script src="<?php echo asset_path(); ?>/plugins/DataTables/js/dataTables.colVis.js"></script>
+
     <script src="<?php echo asset_path(); ?>/js/table-manage-colvis.demo.min.js"></script>
     <script src="<?php echo asset_path(); ?>/plugins/switchery/switchery.min.js"></script>
     <script src="<?php echo asset_path(); ?>/js/form-slider-switcher.demo.min.js"></script>
     <script src="<?php echo asset_path(); ?>/plugins/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
     <script src="<?php echo asset_path(); ?>/js/apps.min.js"></script>
+    <script src="<?php echo asset_path(); ?>/group.js"></script>
     <script src="<?php echo asset_path(); ?>/common.js"></script>
 
 
@@ -178,9 +157,12 @@
             TableManageColVis.init();
             FormSliderSwitcher.init();
 
+            // select all check box if it is checked
+
             $('#selectall').click(function () {
                 var current_state = $(this).is(":checked");
-                if (current_state == true) {
+
+                if (current_state) {
                     $(".idCheckbox").each(function () {
                         $(this).attr("checked", true);
                     });
@@ -189,13 +171,21 @@
                         $(this).attr("checked", false);
                     });
                 }
+
             });
 
+            // DeActivate the parent if parent is not selected
             $('.idCheckbox').click(function () {
                 if (!$(this).is(":checked")) {
                     $('#selectall').attr("checked", false);
                 }
             });
         });
+
     </script>
+
+
+   <!--  {{ View::make('core::layout.javascript')->with('block_name', 'row_edit'); }} -->
+
+
 @stop

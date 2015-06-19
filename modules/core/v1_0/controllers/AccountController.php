@@ -19,7 +19,7 @@ class AccountController extends BaseController
     //------------------------------------------------------
     function updateAccount()
     {
-        $response = User::edit();
+        $response = User::store();
         if ($response['status'] == 'failed') {
             return Redirect::back()->withErrors($response['errors']);
         } else if ($response['status'] == 'success') {

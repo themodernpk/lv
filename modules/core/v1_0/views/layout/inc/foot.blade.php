@@ -26,6 +26,7 @@
         App.init();
     });
 </script>
-<script src="<?php echo asset_path(); ?>/custom.js"></script>{{ View::make('core::layout.javascript')->with('block_name', 'markRead'); }}
+<script src="<?php echo asset_path(); ?>/custom.js"></script>
+
 
 <!-- ================== END COMMON ================== -->

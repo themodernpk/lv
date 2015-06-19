@@ -5,10 +5,15 @@
     <link href="<?php echo asset_path(); ?>/plugins/switchery/switchery.min.css" rel="stylesheet"/>
     <link href="<?php echo asset_path(); ?>/plugins/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
     <link href="<?php echo asset_path(); ?>/plugins/gritter/css/jquery.gritter.css" rel="stylesheet"/>
+    
+
 @stop
 
 
 @section('content')
+
+
+
 
     <!-- begin page-header -->
     <h1 class="page-header">{{$title}}</h1>
@@ -25,24 +30,27 @@
             <div class="modal fade" id="modal-dialog">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        {{ Form::open(array('route' => 'createPermission', 'class' =>'form', 'method' =>'POST')) }}
-
+                        <form class="form" id="demo-form" data-parsley-validate>
+                      
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                            <h4 class="modal-title">Details</h4>
+                            <h4 class="modal-title">Details </h4>
                         </div>
                         <div class="modal-body">
 
                             <div class="form-group">
-                                {{ Form::text('name', null, array('class' => 'form-control', 'placeholder' => 'Permission Name', 'required')) }}
+                                 <input type="text" class="form-control" placeholder="Permission Name" id="name" name="name" required >
+                                 <input type="hidden" name="id">
+                                
                             </div>
 
                         </div>
                         <div class="modal-footer">
                             <a href="javascript:;" class="btn btn-sm btn-white" data-dismiss="modal">Close</a>
-                            <button type="submit" class="btn btn-sm btn-success">Submit</button>
+                            <button type="button" id="permission_submit" data-href="<?php echo URL::route('permissionStore'); ?>"  class="btn btn-sm btn-success">Submit</button>
                         </div>
-                        {{ Form::close() }}
+                        <!-- {{ Form::close() }} -->
+                        </form>
 
                     </div>
                 </div>
@@ -78,8 +86,8 @@
                                     @if(!Input::has('trash'))
 
                                         @if(Permission::check('allow-to-add-permission'))
-                                            <a class="btn btn-sm btn-info" href="#modal-dialog" data-toggle="modal"><i
-                                                        class="fa fa-plus"></i> Add</a>
+                                            <a class="btn btn-sm btn-info" href="#modal-dialog" data-toggle="modal">
+                                                <i class="fa fa-plus"></i> Add</a>
                                         @endif
 
                                         @if(Permission::check('allow-bulk-active'))
@@ -164,17 +172,17 @@
 
                                 <tbody>
 
-
+                               
                                 @if(is_object($data['list']))
                                     @foreach($data['list'] as $item)
                                         <tr class="" id="{{$item->id}}">
 
                                             <td>{{$item->id}}</td>
                                             <td>
-                                                @if(!Input::has('trash'))
+                                                @if(!Input::has('trash') && Permission::check('allow-ajax-edit'))
                                                     <a class="editable" data-pk="{{$item->id}}"
                                                        data-name="{{get_table_name()}}" id="edit-{{$item->id}}"
-                                                       href="#">{{$item->name}}</a>
+                                                       href="#"  data-editlink="<?php echo URL::route('ajax_edit'); ?>">{{$item->name}}</a>
                                                 @else
                                                     {{$item->name}}
                                                 @endif
@@ -198,6 +206,7 @@
                                                                data-theme="black" checked="checked"
                                                                data-switchery="true" name="active"
                                                                data-exception="{{$exception}}" value="{{$item->id}}"
+                                                               data-href="<?php echo URL::route('ajax_toggle_status'); ?>"
                                                                style="display: none;">
 
 
@@ -210,12 +219,14 @@
                                                                    class="BSswitch" data-theme="green" checked="checked"
                                                                    data-switchery="true" name="active"
                                                                    data-exception="{{$exception}}" value="{{$item->id}}"
+                                                                   data-href="<?php echo URL::route('ajax_toggle_status'); ?>"
                                                                    style="display: none;">
                                                         @else
                                                             <input type="checkbox" data-render="switchery"
                                                                    class="BSswitch" data-theme="green"
                                                                    unchecked="unchecked" data-switchery="true"
                                                                    name="active" data-exception="{{$exception}}"
+                                                                   data-href="<?php echo URL::route('ajax_toggle_status'); ?>"
                                                                    value="{{$item->id}}" style="display: none;">
 
                                                         @endif
@@ -233,6 +244,7 @@
                                                         <a class="btn btn-sm btn-icon btn-circle btn-danger"
                                                            id="delete_{{$item->id}}" data-exception="{{$exception}}"
                                                            data-toggle="tooltip" data-placement="top"
+                                                           data-href="<?php echo URL::route('ajax_delete'); ?>"
                                                            data-original-title="Delete" title=""><i
                                                                     class="fa fa-minus"></i></a>
 
@@ -251,8 +263,7 @@
                                         </tr>
                                     @endforeach
                                 @endif
-
-
+                            
                                 </tbody>
 
 
@@ -279,6 +290,7 @@
 
 @section('page_specific_foot')
 
+  
     <script src="<?php echo asset_path(); ?>/plugins/gritter/js/jquery.gritter.js"></script>
     <script src="<?php echo asset_path(); ?>/plugins/DataTables/js/jquery.dataTables.js"></script>
     <script src="<?php echo asset_path(); ?>/plugins/DataTables/js/dataTables.colVis.js"></script>
@@ -288,11 +300,15 @@
     <script src="<?php echo asset_path(); ?>/js/form-slider-switcher.demo.min.js"></script>
     <script src="<?php echo asset_path(); ?>/plugins/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
     <script src="<?php echo asset_path(); ?>/js/apps.min.js"></script>
+    <script src="<?php echo asset_path(); ?>/permission.js"></script>
+    <script src="<?php echo asset_path(); ?>/common.js"></script>
+
+    {{ View::make('core::layout.javascript')->with('block_name', 'row_edit'); }}
 
 
 
     <script>
-        $(document).ready(function () {
+       $(document).ready(function () {
             TableManageColVis.init();
             FormSliderSwitcher.init();
 
@@ -315,13 +331,11 @@
             });
 
 
-        });
+        }); 
     </script>
 
+ {{ View::make('core::layout.javascript')->with('block_name', 'row_edit'); }}
+    
 
-
-    {{ View::make('core::layout.javascript')->with('block_name', 'switch_button'); }}
-    {{ View::make('core::layout.javascript')->with('block_name', 'row_delete'); }}
-    {{ View::make('core::layout.javascript')->with('block_name', 'row_edit'); }}
 
 @stop

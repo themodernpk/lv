@@ -55,15 +55,11 @@ class Permission extends Eloquent
             }
         }
         /* end of only in case of admin */
-
         $permission_d = Permission::where('slug', '=', $permission_slug)->first();
-
         if (count($permission_d) < 1) {
             return false;
         }
-
         $permission = Group::find($group_id)->permissions()->wherePivot('permission_id', $permission_d->id)->get();
-
         if ($permission[0]->pivot->active == 0) {
             return false;
         } else if ($permission[0]->pivot->active == 1) {
@@ -72,28 +68,6 @@ class Permission extends Eloquent
     }
 
     //------------------------------------------------------------
-    public static function createIt($input = array())
-    {
-        if (empty($input)) {
-            $input = Input::all();
-        }
-        //evaluate response of logic
-        $permission = new Permission();
-        $permission->name = ucwords($input['name']);
-        $permission->slug = Str::slug(strtolower($input['name']));
-        $permission->active = 1;
-        $permission->save();
-        if ($permission == false) {
-            $response['status'] = "failed";
-            $response['errors'] = array(constant('core_failed_undefined'));
-            return $response;
-        }
-        //sync this permission with rest of the groups
-        Custom::syncPermissions();
-        $response['status'] = "success";
-        $response['data'] = $permission;
-        return $response;
-    }
 
     //------------------------------------------------------------
     /* ******\ Code Completed till 10th april */

@@ -39,6 +39,12 @@ class Group extends Eloquent
         return $results;
     }
 
+    public static function getGroupList()
+    {
+        $data = Group::all();
+        return json_encode($data);
+    }
+
     //------------------------------------------------------------
     /* ******\ Code Completed till 10th april */
 }

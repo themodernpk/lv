@@ -102,8 +102,12 @@ class Activity extends Eloquent
         if ($parent_id != NULL) {
             $activity->parent_id = $parent_id;
         }
+      
+
         $activity->content = $content;
+
         $activity->save();
+
     }
 
     //------------------------------------------------------------

@@ -18,15 +18,18 @@ class AdminController extends BaseController
         $this->beforeFilter(function () {
             if (!Permission::check('show-admin-section'))
             {
-                if(isset($this->input['format']))
+                $error = "You don't have permission to view this page";
+                if (isset($this->input['apirequest']))
                 {
+
                     $response = array();
                     $response['status'] = 'failed';
-                    $response['errors'][] = constant('core_msg_permission_denied').Common::debug(' for show-admin-section');
-                    return json_encode($response);
+                    $response['errors'][] = $error;
+                    return $response;
+
                 } else
                 {
-                    return Redirect::route('error')->with('flash_error', constant('core_msg_permission_denied'));
+                    return Redirect::route('error')->with('flash_error', $error);
                 }
 
             }
@@ -173,10 +176,9 @@ class AdminController extends BaseController
             $data['list'] = Permission::all();
         }
 
-        if(isset($this->input['format']))
-        {
-            Switch($this->input['format'])
-            {
+
+        if (isset($this->input['apirequest'])) {
+            Switch ($this->input['apirequest']) {
                 case 'json':
                     $response = array('status' => 'success', 'data' => $data['list']);
                     return json_encode($response);
@@ -184,12 +186,10 @@ class AdminController extends BaseController
             }
         }
 
-
         $data['count'] = Permission::onlyTrashed()->count();
         return View::make(self::$view . '-permission')->with('title', 'Permissions')->with('data', $data);
-    }
 
-    //------------------------------------------------------
+    }
 
     function permissionsItem($id)
     {
@@ -204,17 +204,20 @@ class AdminController extends BaseController
         {
             $response['status'] = 'success';
             $response['data'] = $item;
+            $data['permissionlist'] = $item;
         }
 
-        if(isset($this->input['format']))
+        if(isset($this->input['apirequest']))
         {
-            Switch($this->input['format'])
+            Switch($this->input['apirequest'])
             {
                 case 'json':
+                    $response = array('status' => 'success', 'data' => $data['permissionlist']);
                     return json_encode($response);
                     break;
             }
         }
+        return View::make(self::$view . '-permission_item')->with('title', 'Permission')->with('data', $data);
 
 
         //otherwise show UI display
@@ -225,8 +228,6 @@ class AdminController extends BaseController
     }
 
     //------------------------------------------------------
-
-
     /* #################################
      * This method is defined to create Permission 
      * We use Permission model to do this
@@ -237,47 +238,92 @@ class AdminController extends BaseController
      * if validation is failed we return error message
      * #################################
      */
-    function permissionStore()
+    function permissionStore($input=NULL)
     {
-        $input = Input::all();
+        if($input == NULL)
+        {
+            $input = Input::all();
+        }
+
         $validator = Permission::validate($input);
+        if ($validator->fails())
+        {
+            /* $response['status'] = "failed";
+             $response['erortext'][] = $validator->messages();*/
+            $response = array('status' => 'failed', 'errors' => $validator->messages());
+            return json_encode($response);
 
-
-
-        if ($validator->fails()) {
-            return Redirect::back()->withErrors($validator)->withInput();
-        }
-        $response = Permission::createIt($input);
-        if ($response['status'] == 'failed') {
-            return Redirect::back()->withErrors($response['errors'])->withInput();
-        } else {
-            Activity::log("Permission created, '" . $input['name'] . "' ", Auth::user()->id, 'Created', 'permissions', $response['data']->id);
-            return Redirect::back()->with('flash_success', constant('core_success_message'));
         }
 
+        //if id is passed then update else create
+        if(isset($input['id']) && $input['id'] != "")
+        {
+            $item = Permission::find($input['id']);
+        } else
+        {
+            $item = new Permission();
+        }
+        $item->name = $input['name'];
+        $item->save();
+
+        //sync this permission with rest of the groups
+        Custom::syncPermissions();
+
+        if($item)
+        {
+            $response = array('status' => 'success', 'data' => $item);
+        }
+
+        return json_encode($response);
 
 
     }
 
     //------------------------------------------------------
-    function postGroups()
+
+    function groupStore($input=NULL)
     {
-        $input = Input::all();
-        $slug = Str::slug($input['name']);
-        $v = Group::validate($input);
-        if ($v->fails()) {
-            return Redirect::back()->withErrors($v)->withInput();
-        } else {
-            $group = Group::firstorNew(array('slug' => $slug));
-            $group->name = $input['name'];
-            $group->slug = $slug;
-            $group->save();
-            Activity::log("Group - created, '" . $input['name'] . "' ", Auth::user()->id, 'Created', 'groups', $group->id);
-            //sync this Group with rest of the groups
-            Custom::syncPermissions();
-            return Redirect::back()->with('flash_success', 'Details Saved');
+        if($input == NULL)
+        {
+            $input = Input::all();
         }
+
+        $validator = Group::validate($input);
+        if ($validator->fails())
+        {
+            /* $response['status'] = "failed";
+             $response['erortext'][] = $validator->messages();*/
+            $response = array('status' => 'failed', 'errors' => $validator->messages());
+            return json_encode($response);
+
+        }
+
+        //if id is passed then update else create
+        if(isset($input['id']) && $input['id'] != "")
+        {
+            $item = Group::find($input['id']);
+        } else
+        {
+            $item = new Group();
+        }
+        $slug = Str::slug($input['name']);
+        $item->name = $input['name'];
+        $item->slug = $slug;
+        $item->save();
+        Activity::log("Group - created, '".$input['name']."' ", Auth::user()->id, 'Created', 'groups', $item->id);
+        //sync this permission with rest of the groups
+        Custom::syncPermissions();
+
+        if($item)
+        {
+            $response = array('status' => 'success', 'data' => $item);
+        }
+
+        return json_encode($response);
+
+
     }
+
 
     //------------------------------------------------------
     function getModules()
@@ -403,6 +449,7 @@ class AdminController extends BaseController
     */
     function getUsers()
     {
+
         if (isset($this->input['trash'])) {
             $data['list'] = User::onlyTrashed()->get();
         } else {
@@ -410,12 +457,24 @@ class AdminController extends BaseController
         }
         $data['group'] = Group::all();
         $data['count'] = User::onlyTrashed()->count();
+
+        if(isset($this->input['apirequest']))
+        {
+            Switch($this->input['apirequest'])
+            {
+                case 'json':
+                    $response = array('status' => 'success', 'data' => $data['list']);
+                    return json_encode($response);
+                    break;
+            }
+        }
+
         return View::make(self::$view . '-user')->with('title', 'Users')->with('data', $data);
     }
 
     //------------------------------------------------------
     /* #################################
-    * This method is defined to update user information
+    * This method is defined to create and edit user
     * We use User model to do this
     * We get All input ,validate it
     * if validation is succeed we 'log' the activity , in Activities table
@@ -423,67 +482,40 @@ class AdminController extends BaseController
     * if validation is failed we return error message
     * #################################
     */
-    function updateUser()
+
+    function userStore($input=NULL)
     {
-        $input = Input::all();
-        $user_id = $input['id'];
-        $user = User::find($user_id);
-        if (!$user) {
-            return Redirect::back()->with('flash_error', constant('core_failed_undefined'));
+
+        if($input == NULL)
+        {
+            $input = Input::all();
         }
-        $rule = array();
-        //set validation rules
-        if (isset($input['email']) && $input['email'] != $user->email) {
-            $rule['email'] = 'required|email|unique:users';
+
+
+        $validator = User::validate($input);
+
+        if ($validator->fails())    {
+            // Set errors and return false
+            $response = array('status' => 'failed', 'errors' => $validator->messages());
+            return json_encode($response);
         }
-        if (isset($input['name']) && $input['name'] != $user->name) {
-            $rule['name'] = 'required';
+        $response = User::store($input);
+
+
+        if ($response['status'] == 'success')
+        {
+            $response = array('status' => 'success', 'data' => $response['data']);
+            return json_encode($response);
         }
-        if (isset($input['mobile']) && $input['mobile'] != $user->mobile) {
-            $rule['mobile'] = 'integer|min:10';
+        else{
+            $response['status'] = 'failed';
+            $response['errors']= 'Unable to add User';
         }
-        $validator = Validator::make($input, $rule);
-        if ($validator->fails()) {
-            return Redirect::back()->withErrors($validator);
-        } else {
-            $user->email = $input['email'];
-            $user->name = $input['name'];
-            $user->mobile = $input['mobile'];
-            $user->group_id = $input['group_id'];
-            $user->save();
-            if ($user) {
-                return Redirect::back()->with('flash_success', "User Edited Successfully for " . $user->email);
-            }
-            return Redirect::back()->with('flash_error', constant('core_failed_undefined'));
-        }
+
+        return json_encode($response);
+
     }
 
-    //------------------------------------------------------
-    /* #################################
-    * This method is defined to create a new user
-    * We use User model to do this
-    * We get All input ,validate it
-    * if validation is succeed we 'log' the activity , in Activities table
-    * We store result in 'User' table
-    * We use 'add' method to create user defined in 'User' model
-    * if validation is failed we return error message
-    * #################################
-    */
-    function createUser()
-    {
-        $input = Input::all();
-        $validator = User::validate($input);
-        if ($validator->fails()) {
-            return Redirect::back()->withErrors($validator);
-        }
-        $response = User::add($input);
-        if ($response['status'] == 'failed') {
-            return Redirect::back()->withErrors($response['errors'])->withInput();
-        } else {
-            Activity::log("User created, '" . $input['name'] . "' ", Auth::user()->id, 'Created', 'users', $response['data']->id);
-            return Redirect::back()->with('flash_success', constant('core_success_message'));
-        }
-    }
 
     //------------------------------------------------------
     /* #################################
@@ -505,6 +537,17 @@ class AdminController extends BaseController
         } else {
             $data['list'] = Activity::all();
         }
+
+        if(isset($this->input['apirequest']))
+        {
+            Switch($this->input['apirequest'])
+            {
+                case 'json':
+                    $response = array('status' => 'success', 'data' => $data['list']);
+                    return json_encode($response);
+                    break;
+            }
+        }
         return View::make(self::$view . '-activity')->with('title', 'All Activity Log')->with('data', $data);
     }
 
@@ -518,14 +561,28 @@ class AdminController extends BaseController
     * Result is displayed in 'core-admin-Group.blade.php'
     * #################################
     */
-    function getGroups()
+
+
+    function groupList()
     {
+
         if (isset($this->input['trash'])) {
             $data['list'] = Group::onlyTrashed()->get();
         } else {
             $data['list'] = Group::all();
         }
         $data['count'] = Group::onlyTrashed()->count();
+
+        if(isset($this->input['apirequest']))
+        {
+            Switch($this->input['apirequest'])
+            {
+                case 'json':
+                    $response = array('status' => 'success', 'data' => $data['list']);
+                    return json_encode($response);
+                    break;
+            }
+        }
         return View::make(self::$view . '-group')->with('title', 'User Groups')->with('data', $data);
     }
 
@@ -537,7 +594,7 @@ class AdminController extends BaseController
      * To do this, we use $group->permissions; this gives all permission assigned to group
      * #################################
      */
-    function groupPermissions($id)
+    function groupPermissionsList($id)
     {
         if (!Permission::check('manage-group-permission')) {
             return Redirect::route('error')->with('flash_error', constant('core_msg_permission_denied'));
@@ -553,7 +610,38 @@ class AdminController extends BaseController
         */
         $data['group'] = $group;
         $data['list'] = $group->permissions;
+        if(isset($this->input['apirequest']))
+        {
+            Switch($this->input['apirequest'])
+            {
+                case 'json':
+                    $response = array('status' => 'success', 'data' => $data['list']);
+                    return json_encode($response);
+                    break;
+            }
+        }
         return View::make(self::$view . '-group-permissions')->with('title', 'Permissions For Group : ' . $group->name)->with('data', $data);
     }
     /* *****\ Code completed till 10 April 2015 */
+
+    function groupItem($id= NULL)
+    {
+        $data = array();
+        $permission = Group::find($id);
+        $data['list'] = $permission;
+
+        if(isset($this->input['apirequest']))
+        {
+            Switch($this->input['apirequest'])
+            {
+                case 'json':
+                    $response = array('status' => 'success', 'data' => $data['list']);
+                    return json_encode($response);
+                    break;
+            }
+        }
+        return View::make(self::$view . '-group_item')->with('title', 'User Group')->with('data', $data);
+
+    }
+
 } // end of class

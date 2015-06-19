@@ -23,6 +23,7 @@ class CreateUserTable extends Migration {
         	$t->string('name', 300)->nullable();
         	$t->string('mobile', 15);
         	$t->integer('group_id');
+            $t->text('apikey');
         	$t->dateTime('lastlogin');
         	$t->string('remember_token');
         	$t->boolean('active')->default(1);

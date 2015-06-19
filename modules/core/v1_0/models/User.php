@@ -30,70 +30,169 @@ class User extends Eloquent implements UserInterface, RemindableInterface
         'mobile',
         'group_id',
         'active',
-        'remember_token',
+        'remember_token'
     ];
 
-    protected static $rules = array(
-        //'username'              => 'required|alpha_dash|min:4|unique:users',
-        'email' => 'required|email|unique:users',
-        'password' => 'required|alpha_num|min:4',
-        'mobile' => 'integer',
-        'group_id' => 'required',
+
+
+     protected static $rulesadd = array(
+       'name'       =>'required',
+       'email'      => 'required|email|unique:users',
+       'password'   => 'required|min:4'
+
     );
 
+     protected static $rulesupdateUnique = array(
+
+      'email'      => 'required|email|unique:users',
+      'mobile'     => 'numeric'
+
+    );
+
+     protected static $rulesupdate = array(
+
+
+      'mobile'     => 'numeric'
+
+    );
+
+
     //------------------------------------------------------------
-    public static function validate($data, $update = false)
+
+    public static function validate($input)
     {
-        $rules = static::$rules;
-        if($update == true)
+
+        if (!empty($input['id']))
         {
-            unset($rules['password']);
+            $user = User::findorFail($input['id']);
+
+
+            $rules = static::$rulesupdateUnique;
+
+            if(isset($input['email']) && $input['email'] == $user->email )
+            {
+                $rules = static::$rulesupdate;
+            }
+
+
         }
-        return Validator::make($data, $rules);
+        else
+        {
+            $rules  = static::$rulesadd;
+        }
+
+       return Validator::make($input,$rules);
+
     }
 
     //------------------------------------------------------------
 
-    public static function authenticate($input = NULL)
+   public static function authenticate($input = NULL)
     {
+
         if($input == NULL)
         {
             $input = Input::all();
         }
 
-        $rules = array(
-            'email' => 'required|email',
-            'password' => 'required|alpha_num|min:4'
-        );
 
-        //validate inputs
-        $validate = Validator::make($input, $rules);
-        if($validate->fails())
+        //check if it is a api request
+
+
+
+
+
+
+        if(isset($input['email']))
         {
+            $credentials['email'] = $input['email'];
+        }
+
+        if(isset($input['password']))
+        {
+            $credentials['password'] = $input['password'];
+        }
+
+
+        if (isset($input['apirequest']))
+        {
+
+            $rules = array(
+                'username' => 'required',
+                'apikey' => 'required|min:100'
+            );
+
+            $validate = Validator::make($input, $rules);
+            if($validate->fails())
+            {
+                $response = array();
+                $response['status'] = 'failed';
+                $response['errors'] = $validate->errors();
+                return $response;
+            }
+
+            $user = User::where('apikey', '=', $input['apikey'])
+                    ->where('username', '=', $input['username'])
+                    ->first();
+
             $response = array();
-            $response['status'] = 'failed';
-            $response['errors'] = $validate->errors();
-            return $response;
-        }
+            if (!$user) 
+            {
+                $response['status'] = 'failed';
+                $response['errors'][] = "API credentials are incorrect";
+                return $response;
+            }
 
-        //if credentails are passed then attempt to login
-        $credentials = array('email' => $input['email'], 'password' => $input['password']);
-        $remember = false;
-        if (isset($input['remember']) && $input['remember'] == true && !isset($input['format']))
+
+            //check of for invalid credentails if it is apirquest
+            if (!Auth::loginUsingId($user->id))
+            {
+                $response = array();
+                $response['status'] = 'failed';
+                $response['errors'][] = "Unable to login via api";
+                return $response;
+            }
+
+
+        } 
+        else
         {
-            $remember = true;
+        	$rules = array(
+	            'email' => 'required|email',
+	            'password' => 'required|alpha_num|min:4'
+	        );
+
+
+            $validate = Validator::make($input, $rules);
+            if($validate->fails())
+            {
+                $response = array();
+                $response['status'] = 'failed';
+                $response['errors'] = $validate->errors();
+                return $response;
+            }
+
+			//if credentails are passed then attempt to login
+			$remember = false;
+			if (isset($input['remember']) && $input['remember'] == true )
+			{
+				$remember = true;
+			}
+
+			//check of for invalid credentails
+            if (!Auth::attempt($credentials, $remember))
+            {
+                $response = array();
+                $response['status'] = 'failed';
+                $response['errors'][] = "Invalid Credentials";
+                return $response;
+            }
+
         }
 
-        //check of for invalid credentails
-        if (!Auth::attempt($credentials, $remember))
-        {
-            $response = array();
-            $response['status'] = 'failed';
-            $response['errors'][] = "Invalid Credentials";
-            return $response;
-        }
 
-        //if credentials are valid then process further
+
+		//if credentials are valid then process further
         $user_id = Auth::id();
         $user = User::find($user_id);
 
@@ -129,17 +228,18 @@ class User extends Eloquent implements UserInterface, RemindableInterface
             return $response;
         }
 
-
-        //if format is set then check api access permission as well
-        if (isset($input['format']) && !Permission::check('api-access'))
+        //check api access permission if api is accessed
+        if (isset($input['apirequest']))
         {
-            $response = array();
-            $response['status'] = 'failed';
-            $response['errors'][] = "You don't have API access";
-            Auth::logout();
-            return $response;
-        }
-
+	        if (!Permission::check('api-access'))
+	        {
+	            $response = array();
+	            $response['status'] = 'failed';
+	            $response['errors'][] = "API Access denied";
+	            Auth::logout();
+	            return $response;
+	        }
+    	}
 
         //update last login column
         $user->lastlogin = Dates::now();
@@ -152,60 +252,11 @@ class User extends Eloquent implements UserInterface, RemindableInterface
 
         return $response;
 
-    }
 
-    //------------------------------------------------------------
 
-    public static function edit($input = NULL)
-    {
-        if ($input == NULL) {
-            $input = Input::all();
-            $input['id'] = Auth::user()->id;
-        }
-        $user_id = $input['id'];
-        $user = User::findorFail($user_id);
-        $rule = array();
-        //set validation rules
-        if (isset($input['email']) && $input['email'] != $user->email) {
-            $rule['email'] = 'required|email|unique:users';
-        }
-        if (isset($input['name'])) {
-            $rule['name'] = 'required|alpha_num|min:3';
-        }
-        if (isset($input['username']) && $input['username'] != $user->username) {
-            $rule['username'] = 'required|alpha_dash|min:4|unique:users';
-        }
-        if (isset($input['password']) && !empty($input['password']) && $input['password'] != "") {
-            $rule['password'] = 'required|alpha_num|min:4';
-        }
-        if (isset($input['mobile']) && !empty($input['mobile']) && $input['mobile'] != 10) {
-            $rule['mobile'] = 'required|min:10';
-        }
-        if (isset($input['group_id']) && $input['group_id'] != $user->group_id) {
-            $rule['group_id'] = 'required';
-        }
-        $v = Validator::make($input, $rule);
-        if ($v->fails()) {
-            $response['status'] = "failed";
-            $response['errors'] = $v->messages()->all();
-            return $response;
-        } else {
-            unset($input['_token']);
-            foreach ($input as $key => $value) {
-                if ($key == 'password') {
-                    $value = Hash::make($input['password']);
-                }
-                if ($key == 'name') {
-                    $value = trim(ucwords($input['name']));
-                }
-                $user->$key = $value;
-            }
-            $user->save();
-            //Activity::log("Account created for ".$user->email, Auth::user()->id, 'Updated');
-            Activity::log("User - Updated, '" . $input['name'] . "' ", Auth::user()->id, 'Updated', 'users', $user->id);
-            $response['status'] = "success";
-            return $response;
-        }
+        //------------end of the code
+
+
     }
 
     //------------------------------------------------------------
@@ -233,48 +284,123 @@ class User extends Eloquent implements UserInterface, RemindableInterface
         $thumb_url = "http://www.gravatar.com/avatar/" . $thumb . "?s=" . $size;
         return $thumb_url;
     }
-
     //------------------------------------------------------------
-    //Add new user
-    public static function add($input = NULL)
+
+    /* ******\ Code Completed till 10th april */
+    public static function store($input = NULL)
     {
-        if (empty($input)) {
+        if($input == NULL)
+        {
             $input = Input::all();
         }
-        //check user exist or not
-        $exist = User::where('email', '=', $input['email'])->first();
-        if ($exist) {
-            $response['status'] = "failed";
-            $response['errors'] = array('Email already registered');
-            return $response;
+
+        if (!empty($input['id']))
+        {
+            $user = User::findorFail($input['id']);
+            $rule = array();
+            if (isset($input['email']) && $input['email'] != $user->email) {
+                $rule['email'] = 'required|email|unique:users';
+            }
+            if (isset($input['name']) && $input['name'] != $user->name) {
+                $rule['name'] = 'required|alpha_num|min:3';
+            }
+            if (isset($input['username']) && $input['username'] != $user->username) {
+                $rule['username'] = 'required|alpha_dash|min:4|unique:users';
+            }
+            if (isset($input['password']) && !empty($input['password']) && $input['password'] != "") {
+                $rule['password'] = 'required|alpha_num|min:4';
+            }
+            if (isset($input['mobile']) && !empty($input['mobile']) && $input['mobile'] != 10) {
+                $rule['mobile'] = 'required|min:10';
+            }
+            if (isset($input['group_id']) && $input['group_id'] != $user->group_id) {
+                $rule['group_id'] = 'required';
+            }
+            $v = Validator::make($input, $rule);
+            if ($v->fails()) {
+                $response['status'] = "failed";
+                $response['errors'] = $v->messages()->all();
+                return $response;
+            } else {
+                unset($input['apirequest']);
+                unset($input['_token']);
+                foreach ($input as $key => $value) {
+
+                    if ($key == 'password') {
+                        $value = Hash::make($input['password']);
+                    }
+                    if ($key == 'name') {
+                        $value = trim(ucwords($input['name']));
+                    }
+
+                    $user->$key = $value;
+
+                }
+
+
+            }
+
+            $apikey = Crypt::encrypt(time());
+            $user->apikey = $apikey;
+
+            $user->save();
+
+
+
+            Activity::log("User - Updated, '" . $input['name'] . "' ", Auth::user()->id, 'Updated', 'users', $user->id);
+
         }
-        $input['username'] = Common::generate_username($input['email']);
-        if (!isset($input['group_id'])) {
-            $input['group_id'] = Group::where('slug', '=', 'registered')->first()->id;
+        else
+        {
+            $exist = User::where('email', '=', $input['email'])->first();
+            if ($exist) {
+                $response['status'] = "failed";
+                $response['errors'] = array('Email already registered');
+                return $response;
+            }
+            $v = User::validate($input);
+            if ($v->fails()) {
+                $response['status'] = "failed";
+                $response['errors'][] = $v->messages()->all();
+                return $response;
+            }
+            else {
+                unset($input['_token']);
+                $input['username'] = Common::generate_username($input['email']);
+                if (!isset($input['group_id'])) {
+                    $input['group_id'] = Group::where('slug', '=', 'registered')->first()->id;
+                }
+                if (!isset($input['password']) || $input['password'] == "") {
+                    $input['password'] = Common::generate_password();
+                }
+                unset($input['_token']);
+                unset($input['apirequest']);
+                $input['password'] = Hash::make($input['password']);
+                $input['name'] = trim(ucwords($input['name']));
+                $user = new User();
+                $apikey = Crypt::encrypt(time());
+
+                foreach ($input as $key => $value) {
+
+                    $user->$key = $value;
+                }
+                $user->apikey = $apikey;
+                $user->save();
+                Activity::log("Account created for " . $user->email, $user->id . 'Created');
+            }
+
         }
-        if (!isset($input['password']) || $input['password'] == "") {
-            $input['password'] = Common::generate_password();
-        }
-        unset($input['_token']);
-        $input['password'] = Hash::make($input['password']);
-        $input['name'] = trim(ucwords($input['name']));
-        $user = new User();
-        foreach ($input as $key => $value) {
-            $user->$key = $value;
-        }
-        $user->save();
-        if ($user) {
-            Activity::log("Account created for " . $user->email, $user->id . 'Created');
-            //Activity::log("User - Created, '".$input['name']."' ", Auth::user()->id, 'Created', 'users', $user->id);
+
+        if($user)
+        {
             $response['status'] = "success";
             $response['data'] = $user;
             return $response;
-        } else {
+        }
+        else
+        {
             $response['status'] = "failed";
             return $response;
         }
     }
-
-    //------------------------------------------------------------
-    /* ******\ Code Completed till 10th april */
 }

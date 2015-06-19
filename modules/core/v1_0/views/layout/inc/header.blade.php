@@ -25,7 +25,7 @@
                 </form>
             </li>
             <li class="dropdown">
-                <a href="javascript:;" data-toggle="dropdown" class="dropdown-toggle f-s-14 markRead">
+                <a href="javascript:;" data-toggle="dropdown" data-href="<?php echo URL::route('markRead'); ?>" class="dropdown-toggle f-s-14 markRead">
                     <i class="fa fa-bell-o"></i>
                     <span class="label num_noti">{{Notification::count_unread()}}</span>
                 </a>

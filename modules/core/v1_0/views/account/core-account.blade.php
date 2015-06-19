@@ -21,7 +21,7 @@
         <div class="col-md-12">
 
             <!-- # modal-dialog for password-->
-            <div class="modal fade" id="modal-dialog1">
+          <!--   <div class="modal fade" id="modal-dialog1">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         {{ Form::open(array('route' => 'updateAccount', 'class' =>'form', 'id'=>"pass" ,'method' =>'POST')) }}
@@ -30,6 +30,9 @@
                                     aria-hidden="true">&times;</button>
                             <h4 class="modal-title">Change Password</h4>
                         </div>
+                        <input type="hidden" name="id" value="{{Auth::user()->id}}" />
+                        <input type="hidden" name="name" value="{{Auth::user()->name}}" />
+
                         <div class="modal-body">
                             <div class="form-group">
                                 {{Form::label('password', 'Password', array('class' => ''))}}
@@ -37,7 +40,7 @@
                             </div>
                         </div>
                         <!-- modal footer -->
-                        <div class="modal-footer">
+                        <!-- <div class="modal-footer">
                             <button type="submit" class="btn btn-sm btn-success loader"><i class="fa fa-edit"></i>
                                 Submit
                             </button>
@@ -45,7 +48,7 @@
                         {{ Form::close() }}
                     </div>
                 </div>
-            </div>
+            </div>  -->
             <!-- #end of modal-dialog for password-->
 
 
@@ -56,7 +59,8 @@
                     <div class="modal-content">
                         {{ Form::model($data ,array('route' => 'updateAccount', 'class' =>'form','id'=>'form' ,'method' =>'POST')) }}
 
-
+                        <input type="hidden" name="id" value="{{Auth::user()->id}}" />
+                        <input type="hidden" name="apikey" value="{{Auth::user()->apikey}}" />
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                             <h4 class="modal-title">Update Details</h4>
@@ -75,6 +79,14 @@
                             <div class="form-group">
                                 {{Form::label('mobile', 'Mobile', array('class' => ''))}}
                                 {{ Form::number('mobile', Auth::user()->mobile, array('class' => 'form-control ', 'placeholder' => 'Mobile', 'required')) }}
+                            </div>
+                              <div class="form-group">
+                                {{Form::label('username', 'Username', array('class' => ''))}}
+                                {{ Form::text('username', Auth::user()->username, array('class' => 'form-control ', 'placeholder' => 'Username', 'required')) }}
+                            </div>
+                              <div class="form-group">
+                                {{Form::label('password', 'Password', array('class' => ''))}}
+                                {{ Form::password('password', array('class' => 'form-control ','id'=>'password-reset','placeholder' => 'Password', 'required')) }}
                             </div>
                         </div>
                         <!-- modal footer -->
@@ -109,13 +121,13 @@
                     <!--  form for activate/Deactivte delete/thrash   -->
                     {{ Form::open(array('route' => 'bulkAction', 'class' =>'form', 'method' =>'POST')) }}
 
-                    <div class="row">
+                    <!-- <div class="row">
                         <div class="col-md-12">
                             <div class="pull-right">
                                 <div class="btn-group">
 
                                     <!-- Change password Button -->
-                                    <a class="btn btn-sm btn-success" href="#modal-dialog1" data-toggle="modal"
+                                    <!--<a class="btn btn-sm btn-success" href="#modal-dialog1" data-toggle="modal"
                                        class="btn btn-sm btn-success "><i class="fa fa-key"></i>
                                         Change Password
                                     </a>
@@ -124,7 +136,7 @@
                             </div>
                         </div>
 
-                    </div>
+                    </div> -->
 
                     <br/>
 
@@ -183,6 +195,34 @@
                 </div>
             </div>
             <!-- end panel -->
+
+
+            <!-- begin panel -->
+            <div class="panel panel-inverse">
+                <div class="panel-heading">
+                    <h4 class="panel-title">API Details</h4>
+                </div>
+
+                <div class="panel-body">
+
+                    <table id="data-table" class="table table-striped table-bordered">
+
+                        <tr><th width="200">API Username</th><td>{{Auth::user()->username}}</td></tr>
+                        <tr><th>API Key</th><td><textarea class="form-control bg-grey-lighter" rows="5">{{Auth::user()->apikey}}</textarea></td></tr>
+
+                        </table>
+
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            <!-- end panel -->
+
+
+
 
         </div>
         <!-- end col-10 -->

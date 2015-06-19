@@ -14,6 +14,6 @@ define('core_failed_undefined', 'Undefined Error');
 define('core_success', "Success! It's done");
 define('core_failed_not_exist', "Data does not exist");
 define('core_msg_exceptions', "This data under exception, action can't be performed");
-define('core_msg_permission_denied', "Permission Denied");
+define('core_msg_permission_denied', "Permission Denied.");
 
 /* ******\ Code Completed till 10th april */

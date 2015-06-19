@@ -5,6 +5,7 @@
     <link href="<?php echo asset_path(); ?>/plugins/switchery/switchery.min.css" rel="stylesheet"/>
     <link href="<?php echo asset_path(); ?>/plugins/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
     <link href="<?php echo asset_path(); ?>/plugins/gritter/css/jquery.gritter.css" rel="stylesheet"/>
+    <link href="<?php echo asset_path(); ?>/plugins/parsley/src/parsley.css" rel="stylesheet" />
 @stop
 
 
@@ -26,7 +27,7 @@
             <div class="modal fade" id="modal-dialog">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        {{ Form::open(array('route' => 'createUser', 'method' =>'POST')) }}
+                        {{ Form::open(array( 'method' =>'POST', 'id' => 'addNew','data-parsley-validate'=>'true')) }}
 
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -35,19 +36,19 @@
                         <div class="modal-body">
 
                             <div class="form-group">
-                                {{ Form::text('name', null, array('class' => 'form-control', 'placeholder' => 'Name', 'required')) }}
+                                {{ Form::text('name', null, array('class' => 'form-control', 'placeholder' => 'Name','id'=>'name', 'data-parsley-required'=>'true')) }}
                             </div>
                             <div class="form-group">
-                                {{ Form::text('email', null, array('class' => 'form-control', 'placeholder' => 'Email', 'required')) }}
+                                {{ Form::text('email', null, array('class' => 'form-control email', 'placeholder' => 'Email', 'id'=>'email','data-parsley-type'=>'email','data-parsley-required'=>'true')) }}
                             </div>
                             <div class="form-group">
-                                {{ Form::password('password', array('class' => 'form-control', 'placeholder' => 'Pasword', 'required')) }}
+                                {{ Form::password('password', array('class' => 'form-control', 'placeholder' => 'Pasword','id'=>'password','data-parsley-required'=>'true')) }}
                             </div>
                             <div class="form-group">
-                                {{ Form::text('mobile', null, array('class' => 'form-control', 'placeholder' => 'Mobile', 'integer')) }}
+                                {{ Form::text('mobile', null, array('class' => 'form-control', 'placeholder' => 'Mobile','id'=>'mobile', 'data-parsley-type'=>'digits')) }}
                             </div>
                             <div class="form-group">
-                                <select class="form-control" id="group_id" name="group_id">
+                                <select class="form-control" id="group_id" name="group_id" required>
                                     <option value="" selected disabled>Please Select Group</option>
                                     @foreach($data['group'] as $item)
                                         <option value="{{$item->id}}"><?php echo $item->name; ?></option>
@@ -73,8 +74,9 @@
 
                         </div>
                         <div class="modal-footer">
+                            <input type="hidden" id='href' value="<?php echo URL::route('userStore'); ?>">
                             <a href="javascript:;" class="btn btn-sm btn-white" data-dismiss="modal">Close</a>
-                            <button type="submit" class="btn btn-sm btn-success">Submit</button>
+                            <button type="submit" id="add_user" class="btn btn-sm btn-success">Submit</button>
                         </div>
                         {{ Form::close() }}
 
@@ -89,31 +91,31 @@
                  aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        {{ Form::open(array('route' => 'updateUser', 'method' =>'POST')) }}
-                        <div class="modal-header">
+                        {{ Form::open(array('method' =>'POST','id'=>'editform','data-parsley-validate'=>'true')) }}
+                        <div class="modal-header"> 
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                         aria-hidden="true">&times;</span></button>
                             <h4 class="modal-title" id="ModalLabel"><i class="fa"></i> Edit User </h4>
                         </div>
                         <div class="modal-body">
-                            <input type="hidden" name="id" id="user_id" value="">
+                            <input type="hidden" name="id" id="id" value="">
 
                             <div class="form-group">
                                 <label for="recipient-name" class="control-label">Name:</label>
-                                <input type="text" class="form-control" name="name" id="user_name" value="Edit Name">
+                                <input type="text" class="form-control" name="name" id="user_name" value="Edit Name" data-parsley-required='true'>
                             </div>
                             <div class="form-group">
                                 <label for="message-text" class="control-label">Email:</label>
-                                <input type="text" class="form-control" name="email" id="email" value="Edit Email">
+                                <input type="text" class="form-control" name="email" id="user_email" value="Edit Email" data-parsley-type="email" data-parsley-required="true" >
                             </div>
                             <div class="form-group">
                                 <label for="message-text" class="control-label">Phone:</label>
-                                <input type="text" class="form-control" name="mobile" id="mobile" value="Edit Phone">
+                                <input type="text" class="form-control" name="mobile" id="user_mobile" value="Edit Phone" data-parsley-type="digits">
                             </div>
                             <div class="form-group">
                                 <label for="message-text" class="control-label">Group:</label>
 
-                                <select class="form-control" id="group_id" name="group_id">
+                                <select class="form-control" id="user_group_id" name="group_id" >
                                     <option>Select Group</option>
                                     @foreach($data['group'] as $item)
                                         <option value="{{$item->id}}"><?php echo $item->name; ?></option>
@@ -124,6 +126,7 @@
 
                         </div>
                         <div class="modal-footer">
+                            <input type="hidden" id='edithref' value="<?php echo URL::route('userStore'); ?>">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                             <button type="submit" id="update" class="btn btn-primary">Update</button>
                         </div>
@@ -221,7 +224,7 @@
 
 
                         <div class="table-responsive">
-                            <table id="data-table" class="table table-striped table-bordered">
+                            <table id="userdatatable" class="table table-striped table-bordered">
                                 <thead>
                                 <tr>
                                     <th>#</th>
@@ -254,7 +257,8 @@
 
                                             <td>{{$item->id}}</td>
                                             <td>
-                                                @if(!Input::has('trash'))
+                                                @if(!Input::has('trash') && Permission::check('allow-ajax-edit'))
+
                                                     <a class="editable" data-pk="{{$item->id}}"
                                                        data-name="{{get_table_name()}}" id="edit-{{$item->id}}"
                                                        href="#">{{$item->name}}</a>
@@ -283,12 +287,14 @@
                                                                data-theme="green" checked="checked"
                                                                data-switchery="true" name="active"
                                                                data-exception="{{$exception}}" value="{{$item->id}}"
+                                                               data-href="<?php echo URL::route('ajax_toggle_status'); ?>"
                                                                style="display: none;">
                                                     @else
                                                         <input type="checkbox" data-render="switchery" class="BSswitch"
                                                                data-theme="green" unchecked="unchecked"
                                                                data-switchery="true" name="active"
                                                                data-exception="{{$exception}}" value="{{$item->id}}"
+                                                               data-href="<?php echo URL::route('ajax_toggle_status'); ?>"
                                                                style="display: none;">
 
                                                     @endif
@@ -313,6 +319,7 @@
                                                         <a class="btn btn-sm btn-icon btn-circle btn-danger"
                                                            id="delete_{{$item->id}}" data-exception="{{$exception}}"
                                                            data-toggle="tooltip" data-placement="top"
+                                                           data-href="<?php echo URL::route('ajax_delete'); ?>"
                                                            data-original-title="Delete" title=""><i
                                                                     class="fa fa-minus"></i></a>
                                                     @endif
@@ -361,14 +368,17 @@
     <script src="<?php echo asset_path(); ?>/plugins/gritter/js/jquery.gritter.js"></script>
     <script src="<?php echo asset_path(); ?>/plugins/DataTables/js/jquery.dataTables.js"></script>
     <script src="<?php echo asset_path(); ?>/plugins/DataTables/js/dataTables.colVis.js"></script>
-
+    <script src="<?php echo asset_path(); ?>/plugins/parsley/dist/parsley.js"></script>
     <script src="<?php echo asset_path(); ?>/js/table-manage-colvis.demo.min.js"></script>
     <script src="<?php echo asset_path(); ?>/plugins/switchery/switchery.min.js"></script>
     <script src="<?php echo asset_path(); ?>/js/form-slider-switcher.demo.min.js"></script>
     <script src="<?php echo asset_path(); ?>/plugins/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
     <script src="<?php echo asset_path(); ?>/js/apps.min.js"></script>
+    <script src="<?php echo asset_path(); ?>/common.js"></script>
 
+    <script src="<?php echo asset_path(); ?>/user.js"></script>
 
+    {{ View::make('core::layout.javascript')->with('block_name', 'row_edit'); }}
 
     <script>
         $(document).ready(function () {
@@ -394,6 +404,12 @@
 
             });
 
+        });
+
+
+
+
+        $(document).ready(function () {
             $('#edit').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget) // Button that triggered the modal
                 var id = button.data('whatever');
@@ -413,14 +429,12 @@
                         $(".modal-header #ModalLabel").find('i').removeClass('fa-spin');
                         $(".modal-header #ModalLabel").find('i').removeClass('fa-spinner');
 
-                        //alert(response)
-
-
-                        $(".modal-body #user_id").val(object.data.id);
+                        //alert(response);
+                        $(".modal-body #id").val(object.data.id);
                         $(".modal-body #user_name").val(object.data.name);
-                        $(".modal-body #email").val(object.data.email);
-                        $(".modal-body #mobile").val(object.data.mobile);
-                        $(".modal-body #group_id").val(object.data.group_id);
+                        $(".modal-body #user_email").val(object.data.email);
+                        $(".modal-body #user_mobile").val(object.data.mobile);
+                        $(".modal-body #user_group_id").val(object.data.group_id);
 
                     },
                     error: function () {
@@ -429,20 +443,16 @@
                 });
 
 
-            })
+            });
+
 
 
         });
 
+
+ 
+
     </script>
-
-
-
-    {{ View::make('core::layout.javascript')->with('block_name', 'switch_button'); }}
-
-    {{ View::make('core::layout.javascript')->with('block_name', 'row_delete'); }}
-
-    {{ View::make('core::layout.javascript')->with('block_name', 'row_edit'); }}
 
 
 @stop
