@@ -165,23 +165,17 @@ class CoreController extends BaseController
         unset($input['_token']);
         unset($input['href']);
 
-        $validator = Setting::validate($input);
-        if ($validator->fails())
-        {
-            $response = array('status' => 'warning', 'errors' => $validator->messages());
-            return json_encode($response);
-        }
-
         if($input != '')
         {
             $settings = Setting::createSettings($input);
+         
             if ($settings['status'] == 'success')
             {
                 $response = array('status' => 'success', 'data' =>$settings);
             }
             else
             {
-                $response = array('status' => 'failed', 'error' => 'Unable to Add Settings');
+                $response = array('status' => 'failed', 'error' => $settings['error'] );
             }
             return json_encode($response);
         }

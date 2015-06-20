@@ -11,8 +11,6 @@
 |
 */
 
-Debugbar::disable();
-
 ClassLoader::addDirectories(array(
 
     app_path() . '/commands',

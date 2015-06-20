@@ -56,38 +56,29 @@ function deleteRow(tableID)
                     $(".pace").removeClass('pace-inactive');
                 },
                 success: function (response) {
+                   
                     var object = JSON.parse(response);
+
                     if (object.status == "failed") {
 
-                        //console.log( object.errors.name );
+                        console.log( object.error );
                         $.each(object.error, function() {
 
                             $.gritter.add({
                                 title: '<label class="btn btn-xs btn-icon btn-circle btn-danger"><i class="fa fa-times"></i></label> ' + object.error,
                                 sticky: false,
                             });
-
-                        });
+                         });
+                       
                     }
-                    else if (object.status == "warning") {
-
-                        //console.log( object.errors.name );
-                        $.each(object.errors, function() {
-
-                            $.gritter.add({
-                                title: '<label class="btn btn-xs btn-icon btn-circle btn-danger"><i class="fa fa-times"></i></label> ' + object.errors.key,
-                                sticky: false,
-                            });
-
-                        });
-                    }
+                   
                    else if (object.status == "success") {
 
                             $.gritter.add({
                                 title: '<label class="btn btn-xs btn-icon btn-circle btn-success"><i class="fa fa-check"></i></label>Settings Added Succesfully',
                                 sticky: false,
                             });
-                        window.location.reload();
+                        location.reload();
 
                         }
                      $(".pace").addClass('pace-inactive');
@@ -149,7 +140,7 @@ function deleteRow(tableID)
                         title: '<label class="btn btn-xs btn-icon btn-circle btn-success"><i class="fa fa-check"></i></label>Settings Added Succesfully',
                         sticky: false,
                     });
-                    window.location.reload();
+                    location.reload();
                 }
                 $(".pace").addClass('pace-inactive');
             }
@@ -210,8 +201,7 @@ function deleteRow(tableID)
                         title: '<label class="btn btn-xs btn-icon btn-circle btn-success"><i class="fa fa-check"></i></label>Settings Added Succesfully',
                         sticky: false,
                     });
-                    window.location.reload();
-
+                   location.reload();
                 }
                 $(".pace").addClass('pace-inactive');
             }

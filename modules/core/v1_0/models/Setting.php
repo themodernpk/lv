@@ -14,15 +14,7 @@ class Setting extends Eloquent
         'value'
     ];
 
-    protected static $rules = array(
-        'key' => 'key|unique:settings'
-    );
-
-    //------------------------------------------------------------
-    public static function validate($data)
-    {
-        return Validator::make($data, static::$rules);
-    }
+  
     //------------------------------------------------------------
     public static function value($key)
     {
@@ -38,35 +30,55 @@ class Setting extends Eloquent
 
     public static function createSettings($input= NULL)
     {
+
         if($input == NULL)
         {
             $input = Input::all();
         }
+
+        
         $setting = new Setting();
         unset($input['_token']);
         unset($input['href']);
         unset($input['general_href']);
         unset($input['smtp_href']);
 
+
         if(!empty($input))
         {
             foreach ($input as $key => $value)
-            {
-                $exists = array_key_exists('id', $value);
-                if($exists)
+            { 
+                if (empty( $value['key'] ) && empty($value['group']) && empty($value['label'])&& empty($value['value']))
                 {
-
-
-                    $setting = Setting::findorFail($value['id'] );
-                    $setting->value = $value['value'];
-                    $setting->save();
+                    $response['status'] = "failed";
+                    $response['error'][] = 'Please Fill All the Required Fields';
+                    return $response;
                 }
                 else
                 {
+                    $exists = array_key_exists('id', $value);
+                    if($exists)
+                    {
+                        $setting = Setting::findorFail($value['id'] );                  
+                        $setting->value = $value['value'];
+                        $setting->save();
+                    }
+                    else
+                    {
+                        $key_exist = Setting::where('key', '=', $value['key'])->first();
+                        if ($key_exist) {
+                            $response['status'] = "failed";
+                            $response['error'][] = 'Key already present';
+                            return $response;
+                        }
 
-                   $setting = Setting::insert($value);
+                       $setting = Setting::insert($value);
+                    }
+
+
                 }
 
+                    
             }
 
             if($setting)
@@ -78,9 +90,11 @@ class Setting extends Eloquent
             else
             {
                 $response['status'] = "failed";
+                $response['errors'][]="Unable to add the settings";
                 return $response;
             }
         }
+       
     }
     //------------------------------------------------------------
     public static function getSettings()

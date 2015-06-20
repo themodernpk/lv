@@ -82,10 +82,10 @@ Route::group(['prefix' => 'ajax'], function()
 
 Route::group(array('prefix' => 'admin','before' => 'auth'), function()
 {
-    Route::any('user/store', array('as' => 'userStore', 'uses' => 'AdminController@userStore'));
-    Route::any('updateUser', array('as' => 'updateUser', 'uses' => 'AdminController@updateUser'));
-    Route::any('createUser', array('as' => 'createUser', 'uses' => 'AdminController@createUser'));
-    Route::get('activities/list/', array('as' => 'activities', 'uses' => 'AdminController@getActivities'));
+   Route::post('user/store', array('as' => 'userStore', 'uses' => 'AdminController@userStore'));
+   Route::post('updateUser', array('as' => 'updateUser', 'uses' => 'AdminController@updateUser'));
+   Route::post('createUser', array('as' => 'createUser', 'uses' => 'AdminController@createUser'));
+   Route::get('activities/list/', array('as' => 'activities', 'uses' => 'AdminController@getActivities'));
     Route::any('/setting', array('as' => 'setting', 'uses' => 'CoreController@setting'));
     Route::post('settingStore', array('as' => 'settingStore', 'uses' => 'CoreController@settingStore'));
 

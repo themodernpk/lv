@@ -1,2 +1,4 @@
+laravel/vendor/
+ui/
+laravel/.idea/
 laravel/app/storage/
-.idea/

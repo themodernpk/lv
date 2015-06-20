@@ -95,14 +95,6 @@ class User extends Eloquent implements UserInterface, RemindableInterface
             $input = Input::all();
         }
 
-
-        //check if it is a api request
-
-
-
-
-
-
         if(isset($input['email']))
         {
             $credentials['email'] = $input['email'];
@@ -114,55 +106,37 @@ class User extends Eloquent implements UserInterface, RemindableInterface
         }
 
 
-        if (isset($input['apirequest']))
+        $rules = array(
+            'email' => 'required|email',
+            'password' => 'required|alpha_num|min:4'
+        );
+
+
+        if (isset($input['apirequest']) && isset($input['apikey']) )
         {
 
-            $rules = array(
-                'username' => 'required',
-                'apikey' => 'required|min:100'
-            );
-
-            $validate = Validator::make($input, $rules);
-            if($validate->fails())
-            {
-                $response = array();
-                $response['status'] = 'failed';
-                $response['errors'] = $validate->errors();
-                return $response;
-            }
-
-            $user = User::where('apikey', '=', $input['apikey'])
-                    ->where('username', '=', $input['username'])
-                    ->first();
-
+            $existing_user = User::where('apikey', '=', $input['apikey'])->first();
             $response = array();
-            if (!$user) 
-            {
+            if (!$existing_user) {
                 $response['status'] = 'failed';
-                $response['errors'][] = "API credentials are incorrect";
+                $response['errors'][] = "Your Api Key Is Invalid";
+                Auth::logout();
                 return $response;
             }
+            else{
 
-
-            //check of for invalid credentails if it is apirquest
-            if (!Auth::loginUsingId($user->id))
-            {
-                $response = array();
-                $response['status'] = 'failed';
-                $response['errors'][] = "Unable to login via api";
-                return $response;
+                $get_user = User::find($existing_user->id);
             }
 
-
-        } 
-        else
+        }
+        elseif(isset($input['apirequest']) && $input['apikey'] == "")
         {
-        	$rules = array(
-	            'email' => 'required|email',
-	            'password' => 'required|alpha_num|min:4'
-	        );
-
-
+            $response['status'] = 'failed';
+            $response['errors'][] = "Api Key Is Required";
+            Auth::logout();
+            return $response;
+        }
+        else{
             $validate = Validator::make($input, $rules);
             if($validate->fails())
             {
@@ -171,17 +145,22 @@ class User extends Eloquent implements UserInterface, RemindableInterface
                 $response['errors'] = $validate->errors();
                 return $response;
             }
+        }
 
-			//if credentails are passed then attempt to login
-			$remember = false;
-			if (isset($input['remember']) && $input['remember'] == true )
-			{
-				$remember = true;
-			}
+        //if credentails are passed then attempt to login
+        $remember = false;
+        if (isset($input['remember']) && $input['remember'] == true && !isset($input['apirequest']))
+        {
+            $remember = true;
+        }
 
-			//check of for invalid credentails
-            if (!Auth::attempt($credentials, $remember))
+
+        if (isset($input['apirequest']) && $input['apikey'] !='' )
+        {
+            //check of for invalid credentails if it is apirquest
+            if (!Auth::loginUsingId($get_user->id))
             {
+
                 $response = array();
                 $response['status'] = 'failed';
                 $response['errors'][] = "Invalid Credentials";
@@ -189,10 +168,19 @@ class User extends Eloquent implements UserInterface, RemindableInterface
             }
 
         }
+        else{
+            //check of for invalid credentails
+            if (!Auth::attempt($credentials, $remember))
+            {
+                $response = array();
+                $response['status'] = 'failed';
+                $response['errors'][] = "Invalid Credentials";
+                return $response;
+            }
+        }
 
 
-
-		//if credentials are valid then process further
+        //if credentials are valid then process further
         $user_id = Auth::id();
         $user = User::find($user_id);
 
@@ -228,18 +216,15 @@ class User extends Eloquent implements UserInterface, RemindableInterface
             return $response;
         }
 
-        //check api access permission if api is accessed
-        if (isset($input['apirequest']))
+        //check where user permission "disallow-login"
+        if (!Permission::check('api-access'))
         {
-	        if (!Permission::check('api-access'))
-	        {
-	            $response = array();
-	            $response['status'] = 'failed';
-	            $response['errors'][] = "API Access denied";
-	            Auth::logout();
-	            return $response;
-	        }
-    	}
+            $response = array();
+            $response['status'] = 'failed';
+            $response['errors'][] = "API Access denied";
+            Auth::logout();
+            return $response;
+        }
 
         //update last login column
         $user->lastlogin = Dates::now();
@@ -251,11 +236,6 @@ class User extends Eloquent implements UserInterface, RemindableInterface
         $response['data'] = $user;
 
         return $response;
-
-
-
-        //------------end of the code
-
 
     }
 
@@ -334,19 +314,11 @@ class User extends Eloquent implements UserInterface, RemindableInterface
                     }
 
                     $user->$key = $value;
-
                 }
 
 
             }
-
-            $apikey = Crypt::encrypt(time());
-            $user->apikey = $apikey;
-
             $user->save();
-
-
-
             Activity::log("User - Updated, '" . $input['name'] . "' ", Auth::user()->id, 'Updated', 'users', $user->id);
 
         }
@@ -378,7 +350,9 @@ class User extends Eloquent implements UserInterface, RemindableInterface
                 $input['password'] = Hash::make($input['password']);
                 $input['name'] = trim(ucwords($input['name']));
                 $user = new User();
-                $apikey = Crypt::encrypt(time());
+                $time = Crypt::encrypt(time());
+                $key = array($input['username'],$time);
+                $apikey = implode('#', $key );
 
                 foreach ($input as $key => $value) {
 

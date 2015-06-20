@@ -151,6 +151,7 @@
                                     <th>Username</th>
                                     <th>Email</th>
                                     <th>Mobile</th>
+                                    <th>API Key</th>
                                     <th class="text-center">Action</th>
                                 </tr>
                                 </thead>
@@ -169,6 +170,7 @@
                                     <td>{{Auth::user()->username}}</td>
                                     <td>{{Auth::user()->email}}</td>
                                     <td>{{Auth::user()->mobile}}</td>
+                                      <td>{{Auth::user()->apikey}}</td>
                                     <td class="text-center">
                                         <a class="btn btn-sm btn-info" href="#modal-dialog" data-toggle="modal"
                                            class="btn btn-sm btn-success "><i class="fa fa-pencil"></i>
@@ -195,34 +197,6 @@
                 </div>
             </div>
             <!-- end panel -->
-
-
-            <!-- begin panel -->
-            <div class="panel panel-inverse">
-                <div class="panel-heading">
-                    <h4 class="panel-title">API Details</h4>
-                </div>
-
-                <div class="panel-body">
-
-                    <table id="data-table" class="table table-striped table-bordered">
-
-                        <tr><th width="200">API Username</th><td>{{Auth::user()->username}}</td></tr>
-                        <tr><th>API Key</th><td><textarea class="form-control bg-grey-lighter" rows="5">{{Auth::user()->apikey}}</textarea></td></tr>
-
-                        </table>
-
-
-                        </div>
-                    </div>
-
-
-                </div>
-            </div>
-            <!-- end panel -->
-
-
-
 
         </div>
         <!-- end col-10 -->

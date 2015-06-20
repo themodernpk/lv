@@ -16,22 +16,8 @@ class AdminController extends BaseController
     {
         $this->input = Input::all();
         $this->beforeFilter(function () {
-            if (!Permission::check('show-admin-section'))
-            {
-                $error = "You don't have permission to view this page";
-                if (isset($this->input['apirequest']))
-                {
-
-                    $response = array();
-                    $response['status'] = 'failed';
-                    $response['errors'][] = $error;
-                    return $response;
-
-                } else
-                {
-                    return Redirect::route('error')->with('flash_error', $error);
-                }
-
+            if (!Permission::check('show-admin-section')) {
+                return Redirect::route('error')->with('flash_error', "You don't have permission to view this page");
             }
         });
     }
