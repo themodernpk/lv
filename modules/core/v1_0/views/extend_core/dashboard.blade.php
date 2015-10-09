@@ -49,6 +49,9 @@
         @endif
 
 
+
+
+
                 <!-- begin col-6 -->
         <div class="col-md-4 ui-sortable">
             <div class="panel panel-inverse" data-sortable-id="flot-chart-2">

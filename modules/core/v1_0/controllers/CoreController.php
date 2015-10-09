@@ -18,6 +18,28 @@ class CoreController extends BaseController
     }
 
     //------------------------------------------------------
+    public function getUpload()
+    {
+        Debugbar::disable();
+        $data = array();
+        return View::make(self::$view . "upload")->with('title', 'Upload')->with('data', $data);
+    }
+
+    //------------------------------------------------------
+    public function uploadFile()
+    {
+
+        Debugbar::disable();
+
+        error_reporting(E_ALL | E_STRICT);
+        $upload_handler = new UploadHandler();
+
+
+
+
+
+    }
+    //------------------------------------------------------
     public function getError()
     {
         $data = array();

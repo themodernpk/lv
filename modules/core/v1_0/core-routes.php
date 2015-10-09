@@ -20,6 +20,9 @@ Route::any('/postlogin', array('as' => 'postlogin', 'uses' => 'CoreController@po
 Route::get('/register', array('as' => 'register', 'uses' => 'CoreController@getRegister'));
 Route::any('/postregister', array('as' => 'postregister', 'uses' => 'CoreController@postRegister'));
 Route::get('/logout', array('as' => 'logout', 'uses' => 'CoreController@getLogout'));
+Route::get('/upload', array('as' => 'upload', 'uses' => 'CoreController@getUpload'));
+Route::any('/uploadFile', array('as' => 'uploadFile', 'uses' => 'CoreController@uploadFile'));
+
 
 
 //----------Ajax
