@@ -84,7 +84,7 @@
                                     <th>Name</th>
                                     <th>Slug</th>
                                     <th>Active</th>
-                                    <!-- <th>Actions</th> 
+                                    <!-- <th>Actions</th>
                                     <th><input id="selectall" type="checkbox"/></th>-->
                                 </tr>
                                 </thead>
@@ -196,6 +196,17 @@
                     $('#selectall').attr("checked", false);
                 }
             });
+
+            $(".paginate_button").click(function()
+            {
+                FormSliderSwitcher.init();
+            });
+
+
+
+
+
         });
+
     </script>
 @stop

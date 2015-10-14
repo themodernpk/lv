@@ -92,7 +92,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         {{ Form::open(array('method' =>'POST','id'=>'editform','data-parsley-validate'=>'true')) }}
-                        <div class="modal-header"> 
+                        <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                         aria-hidden="true">&times;</span></button>
                             <h4 class="modal-title" id="ModalLabel"><i class="fa"></i> Edit User </h4>
@@ -404,6 +404,12 @@
 
             });
 
+
+            $(".paginate_button").click(function()
+            {
+                FormSliderSwitcher.init();
+            });
+
         });
 
 
@@ -450,7 +456,7 @@
         });
 
 
- 
+
 
     </script>
 

@@ -216,14 +216,17 @@ class User extends Eloquent implements UserInterface, RemindableInterface
             return $response;
         }
 
-        //check where user permission "disallow-login"
-        if (!Permission::check('api-access'))
-        {
-            $response = array();
-            $response['status'] = 'failed';
-            $response['errors'][] = "API Access denied";
-            Auth::logout();
-            return $response;
+        //check this permission only if api request is assigned
+        if(isset($input['apirequest'])) {
+
+
+            if (!Permission::check('api-access')) {
+                $response = array();
+                $response['status'] = 'failed';
+                $response['errors'][] = "API Access denied";
+                Auth::logout();
+                return $response;
+            }
         }
 
         //update last login column
