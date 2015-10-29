@@ -1,45 +1,23 @@
-@extends('core::layout.coremaster')
+@extends('core::layout.backend')
 
-
-@section('page_specific')
+@section('page_specific_head')
 @stop
 
 
+@section('content')
 
-@section('core_header')
-    <!--header-->
-    <div class="container-fluid header-title">
-
-        <div class="row">
-
-            <div class="col-md-4 col-sm-4 col-ss-12 col-md-offset-0">
-                <div class="title">{{$title}}</div>
-            </div>
-
-            <div class="col-md-6 col-sm-8 col-xs-12 pull-right">
-                Right
-
-
-            </div>
-        </div>
-    </div>
-    <!--/header-->
-@stop
-
-
-@section('core_content')
-
-    <br clear="all" />
+    <!-- begin page-header -->
+    <h1 class="page-header">{{$title}}</h1>
+    <!-- end page-header -->
 
     <!--content-->
-    <div class="container">
-        <h1>Content</h1>
-
+    <div class="row">
+    Content
     </div>
-
     <!--/content-->
 
 
+@stop
 
-
+@section('page_specific_foot')
 @stop
