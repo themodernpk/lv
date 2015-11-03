@@ -216,17 +216,14 @@ class User extends Eloquent implements UserInterface, RemindableInterface
             return $response;
         }
 
-        //check this permission only if api request is assigned
-        if(isset($input['apirequest'])) {
-
-
-            if (!Permission::check('api-access')) {
-                $response = array();
-                $response['status'] = 'failed';
-                $response['errors'][] = "API Access denied";
-                Auth::logout();
-                return $response;
-            }
+        //check where user permission "disallow-login"
+        if (!Permission::check('api-access'))
+        {
+            $response = array();
+            $response['status'] = 'failed';
+            $response['errors'][] = "API Access denied";
+            Auth::logout();
+            return $response;
         }
 
         //update last login column
@@ -292,9 +289,6 @@ class User extends Eloquent implements UserInterface, RemindableInterface
             }
             if (isset($input['password']) && !empty($input['password']) && $input['password'] != "") {
                 $rule['password'] = 'required|alpha_num|min:4';
-            }
-            if (isset($input['mobile']) && !empty($input['mobile']) && $input['mobile'] != 10) {
-                $rule['mobile'] = 'required|min:10';
             }
             if (isset($input['group_id']) && $input['group_id'] != $user->group_id) {
                 $rule['group_id'] = 'required';

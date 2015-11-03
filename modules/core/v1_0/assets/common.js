@@ -1,5 +1,4 @@
-$('.BSswitch').on('change', function ()
-{
+$('.BSswitch').on('change', function () {
                 var active_status = $(this).is(":checked");
                 var exception = $(this).attr("data-exception");
                 var update_table = $(this).attr("data-update-table");
@@ -120,4 +119,5 @@ $(document).find("a[id^='delete_']").live('click', function () {
                 return false;
 
 });
+
 

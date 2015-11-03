@@ -26,11 +26,50 @@ class Permission extends Eloquent
     }
 
     //------------------------------------------------------------
-    public function groups()
+    public function groups($active = NULL)
     {
-        return $this->belongsToMany('Group')->withPivot('active')->withPivot('id');
+        $groups = $this->belongsToMany('Group')->withPivot('active')->withPivot('id');
+
+        if($active != NULL)
+        {
+            $groups->wherePivot('active', $active);
+        }
+
+        return $groups;
     }
 
+    //------------------------------------------------------------
+    public static function userList($permission_slug, $admin=true)
+    {
+        $permission = Permission::where('slug', '=', $permission_slug)->first();
+
+        //find all groups which has this permission and permission is active to the group
+        $groups = $permission->groups('1')->get();
+
+        $group_ids = array();
+        if($groups)
+        {
+            foreach($groups as $group)
+            {
+                $group_ids[] = $group->id;
+            }
+        }
+
+        if($admin == true)
+        {
+            $admin_group = Group::where('slug', '=', 'admin')->first();
+
+            if(!in_array($admin_group->id, $group_ids))
+            {
+                $group_ids[] = $admin_group->id;
+            }
+        }
+
+        $users = User::where('group_id', $group_ids)->get();
+
+        return $users;
+
+    }
     //------------------------------------------------------------
     public static function getList($current_user_only = false)
     {

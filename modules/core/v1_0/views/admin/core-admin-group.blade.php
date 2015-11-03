@@ -324,13 +324,6 @@
                     $('#selectall').attr("checked", false);
                 }
             });
-
-            $(".paginate_button").click(function()
-            {
-                FormSliderSwitcher.init();
-            });
-
-
         });
 
     </script>

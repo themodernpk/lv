@@ -19,7 +19,6 @@
         <!-- begin col-10 -->
         <div class="col-md-12">
 
-
             @foreach($data['list'] as $item)
 
 
@@ -60,17 +59,6 @@
                     <div class="row">
                         <div class="col-md-3">
 
-
-                            <!--  <div class="panel panel-default">
-                            <div class="panel-heading">Developer</div>
-                            <div class="panel-body search-result">
-                                <ul class="meta-search">
-                                    <li><i class="fa fa-code"></i> <span>{{$item['details']->developer}}</span></li>
-                                    <li><i class="fa fa-calendar"></i>
-                                        <span>{{Dates::dateformat($item['details']->date)}}</span></li>
-                                </ul>
-                            </div>
-                        </div> -->
 
 
                         </div>
@@ -123,41 +111,44 @@
                                                     </a>
                                                 @endif
 
-                                                @if($item['name'] != 'core')
+                                                @if($item['name'] == 'core' && $ver == "1.0" )
 
-                                                    {{ Form::open(array('route' => 'moduleInstall', 'role' => 'form', 'class' => 'actModule pull-right', 'style' => 'display:inline-block')) }}
+                                                    You can't uninstall core module
 
-                                                    @if(isset($item['active']->version) && $ver == $item['active']->version  )
-                                                        <button type="submit"
-                                                                class="pull-right btn btn-danger btn-xs submit-module">
-                                                            <i class="fa fa-spinner"></i> Uninstall
-                                                        </button>
-                                                        {{Form::hidden('task', 'uninstall')}}
-                                                    @elseif(isset($item['active']->version) && $ver < $item['active']->version)
-                                                        <span class="pull-right btn btn-default btn-xs submit-module">Outdated</span>
-                                                        {{Form::hidden('task', 'install')}}
-                                                    @elseif(isset($item['active']->version) && $ver > $item['active']->version)
-                                                        <button type="submit"
-                                                                class="pull-right btn btn-warning btn-xs submit-module">
-                                                            <i class="fa fa-spinner"></i> Upgrade
-                                                        </button>
-                                                        {{Form::hidden('task', 'upgrade')}}
-                                                        {{Form::hidden('active_version', $item['active']->version)}}
-                                                    @else
 
-                                                        {{Form::hidden('task', 'install')}}
-                                                        <button type="submit"
-                                                                class="pull-right btn btn-info btn-xs submit-module"><i
-                                                                    class="fa fa-spinner"></i> Install
-                                                        </button>
+                                                @else
+                                                        {{ Form::open(array('route' => 'moduleInstall', 'role' => 'form', 'class' => 'actModule pull-right', 'style' => 'display:inline-block')) }}
 
-                                                    @endif
+                                                        @if(isset($item['active']->version) && $ver == $item['active']->version  )
+                                                            <button type="submit"
+                                                                    class="pull-right btn btn-danger btn-xs submit-module">
+                                                                <i class="fa fa-spinner"></i> Uninstall
+                                                            </button>
+                                                            {{Form::hidden('task', 'uninstall')}}
+                                                        @elseif(isset($item['active']->version) && $ver < $item['active']->version)
+                                                            <span class="pull-right btn btn-default btn-xs submit-module">Outdated</span>
+                                                            {{Form::hidden('task', 'install')}}
+                                                        @elseif(isset($item['active']->version) && $ver > $item['active']->version)
+                                                            <button type="submit"
+                                                                    class="pull-right btn btn-warning btn-xs submit-module">
+                                                                <i class="fa fa-spinner"></i> Upgrade
+                                                            </button>
+                                                            {{Form::hidden('task', 'upgrade')}}
+                                                            {{Form::hidden('active_version', $item['active']->version)}}
+                                                        @else
 
-                                                    {{Form::hidden('name', $item['name'])}}
-                                                    {{Form::hidden('version', $ver)}}
+                                                            {{Form::hidden('task', 'install')}}
+                                                            <button type="submit"
+                                                                    class="pull-right btn btn-info btn-xs submit-module"><i
+                                                                        class="fa fa-spinner"></i> Install
+                                                            </button>
 
-                                                    {{ Form::close() }}
+                                                        @endif
 
+                                                        {{Form::hidden('name', $item['name'])}}
+                                                        {{Form::hidden('version', $ver)}}
+
+                                                        {{ Form::close() }}
 
                                                 @endif
 

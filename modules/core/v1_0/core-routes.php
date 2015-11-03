@@ -20,6 +20,9 @@ Route::any('/postlogin', array('as' => 'postlogin', 'uses' => 'CoreController@po
 Route::get('/register', array('as' => 'register', 'uses' => 'CoreController@getRegister'));
 Route::any('/postregister', array('as' => 'postregister', 'uses' => 'CoreController@postRegister'));
 Route::get('/logout', array('as' => 'logout', 'uses' => 'CoreController@getLogout'));
+Route::get('/upload', array('as' => 'upload', 'uses' => 'CoreController@getUpload'));
+Route::any('/uploadFile', array('as' => 'uploadFile', 'uses' => 'CoreController@uploadFile'));
+
 
 
 //----------Ajax
@@ -42,7 +45,7 @@ Route::group(['prefix' => 'api'], function()
     Route::any('/help', array('as' => 'apihelp', 'uses' => 'ApiController@apiHelp'));
 
 
-
+    
 
 });
 
@@ -66,11 +69,11 @@ Route::group(array('before' => 'auth'), function()
         Route::any('/permissions/item/{id}', array('as' => 'permissionsItem', 'uses' => 'AdminController@permissionsItem'));
 
         Route::any('/permissions/store', array('as' => 'permissionStore', 'uses' => 'AdminController@permissionStore'));
-
+       
         //----------Users
         Route::get('/users/list', array('as' => 'users', 'uses' => 'AdminController@getUsers'));
 
-
+   
     });
 });
 
@@ -82,10 +85,10 @@ Route::group(['prefix' => 'ajax'], function()
 
 Route::group(array('prefix' => 'admin','before' => 'auth'), function()
 {
-    Route::any('user/store', array('as' => 'userStore', 'uses' => 'AdminController@userStore'));
-    Route::any('updateUser', array('as' => 'updateUser', 'uses' => 'AdminController@updateUser'));
-    Route::any('createUser', array('as' => 'createUser', 'uses' => 'AdminController@createUser'));
-    Route::get('activities/list/', array('as' => 'activities', 'uses' => 'AdminController@getActivities'));
+   Route::post('user/store', array('as' => 'userStore', 'uses' => 'AdminController@userStore'));
+   Route::post('updateUser', array('as' => 'updateUser', 'uses' => 'AdminController@updateUser'));
+   Route::post('createUser', array('as' => 'createUser', 'uses' => 'AdminController@createUser'));
+   Route::get('activities/list/', array('as' => 'activities', 'uses' => 'AdminController@getActivities'));
     Route::any('/setting', array('as' => 'setting', 'uses' => 'CoreController@setting'));
     Route::post('settingStore', array('as' => 'settingStore', 'uses' => 'CoreController@settingStore'));
 

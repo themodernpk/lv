@@ -404,12 +404,6 @@
 
             });
 
-
-            $(".paginate_button").click(function()
-            {
-                FormSliderSwitcher.init();
-            });
-
         });
 
 

@@ -5,7 +5,7 @@
     <link href="<?php echo asset_path(); ?>/plugins/switchery/switchery.min.css" rel="stylesheet"/>
     <link href="<?php echo asset_path(); ?>/plugins/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
     <link href="<?php echo asset_path(); ?>/plugins/gritter/css/jquery.gritter.css" rel="stylesheet"/>
-
+    
 
 @stop
 
@@ -31,7 +31,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <form class="form" id="demo-form" data-parsley-validate>
-
+                      
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                             <h4 class="modal-title">Details </h4>
@@ -41,7 +41,7 @@
                             <div class="form-group">
                                  <input type="text" class="form-control" placeholder="Permission Name" id="name" name="name" required >
                                  <input type="hidden" name="id">
-
+                                
                             </div>
 
                         </div>
@@ -172,7 +172,7 @@
 
                                 <tbody>
 
-
+                               
                                 @if(is_object($data['list']))
                                     @foreach($data['list'] as $item)
                                         <tr class="" id="{{$item->id}}">
@@ -263,7 +263,7 @@
                                         </tr>
                                     @endforeach
                                 @endif
-
+                            
                                 </tbody>
 
 
@@ -290,7 +290,7 @@
 
 @section('page_specific_foot')
 
-
+  
     <script src="<?php echo asset_path(); ?>/plugins/gritter/js/jquery.gritter.js"></script>
     <script src="<?php echo asset_path(); ?>/plugins/DataTables/js/jquery.dataTables.js"></script>
     <script src="<?php echo asset_path(); ?>/plugins/DataTables/js/dataTables.colVis.js"></script>
@@ -330,17 +330,12 @@
 
             });
 
-           $(".paginate_button").click(function()
-           {
-               FormSliderSwitcher.init();
-           });
 
-
-        });
+        }); 
     </script>
 
  {{ View::make('core::layout.javascript')->with('block_name', 'row_edit'); }}
-
+    
 
 
 @stop
