@@ -53,10 +53,12 @@ class Notification extends Eloquent
             ->get();
         if (count($items) < 1) {
             $items = Notification::where('user_id', '=', Auth::user()->id)
+                ->where('read', '=', 0)
                 ->orderBy('created_at', 'desc')
                 ->limit(3)
                 ->get();
         }
+
         if ($send_email == true) {
             //TODO: write email function for alert
         }

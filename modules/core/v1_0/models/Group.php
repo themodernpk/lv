@@ -32,12 +32,19 @@ class Group extends Eloquent
     }
 
     //------------------------------------------------------------
+    public static function count_users($group_id)
+    {
+        return User::where('group_id', $group_id)->count();
+    }
+    //------------------------------------------------------------
     public static function getList($current_user_only = false)
     {
         $modelname = __CLASS__;
         $results = Custom::search($modelname, 'name', $current_user_only = false);
         return $results;
     }
+
+    //------------------------------------------------------------
 
     public static function getGroupList()
     {
@@ -46,5 +53,7 @@ class Group extends Eloquent
     }
 
     //------------------------------------------------------------
-    /* ******\ Code Completed till 10th april */
+
+    //------------------------------------------------------------
+
 }

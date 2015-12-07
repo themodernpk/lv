@@ -8,13 +8,13 @@
 
 class AjaxController extends Controller
 {
-
     /* ****** Code Completed till 10th april */
     public static $view = 'core';
 
     function ajax_update_col()
     {
         $input = Input::all();
+
         $name_d = explode('|', $input['name']);
         $table = $name_d[0];
         $column = $name_d[1];
@@ -28,9 +28,15 @@ class AjaxController extends Controller
             DB::table($table)
                 ->where('id', $id)
                 ->update($update_array);
-            echo "ok";
+            $response['status'] = "success";
+            $response['data'][] = array(constant('core_success'));
+            echo json_encode($response);
+            die();
         } catch (\Exception $e) {
-            echo "error while update record";
+            $response['status'] = "failed";
+            $response['errors'][] = $e->getMessage();
+            echo json_encode($response);
+            die();
         }
     }
 
@@ -47,11 +53,16 @@ class AjaxController extends Controller
             DB::table($table)
                 ->where('id', $id)
                 ->update(array($column => $value));
-            echo "ok";
+            $response['status'] = "success";
+            $response['data'][] = array(constant('core_success'));
+            echo json_encode($response);
+            die();
         } catch (\Exception $e) {
-            echo "error while update record";
+            $response['status'] = "failed";
+            $response['errors'][] = $e->getMessage();
+            echo json_encode($response);
+            die();
         }
-        die();
     }
 
     //--------------------------------------------------------------------
@@ -68,101 +79,20 @@ class AjaxController extends Controller
             DB::table('notifications')
                 ->where('user_id', Auth::user()->id)
                 ->update(array('read' => 1));
-            echo "ok";
-        } catch (Exception $e) {
-            echo "error while update record";
-        }
-        die();
-    }
-
-    //--------------------------------------------------------------------
-    /* #################################
-     * This function Activate/Deactivate switch of group/permission/group-permission
-     * it updates the active status of table and returns response in json format
-     * This method is called from ajax
-     * This method works for group/permission as well as pivot table "group-permission"
-     * pivot table's model doesnot exist , so it is handled by if block
-     * since we pass 'update_table' field from ajax for pivot table
-     * if "update_table" is true it means we are updating pivot table
-     * Otherwise we are go to else condition and update table which model exist
-     * get the table name in encrypted form, decrypt it
-     * #################################
-     */
-    function ajax_toggle_status()
-    {
-        $input = Input::all();
-        $input['table'] = Crypt::decrypt($input['table']);
-        // this gets the staus whether it is to activate/Deactivate
-        if ($input['active_status'] != 'false') {
-            $active = 1;
-        } else {
-            $active = 0;
-        }
-        /* this is only for updating group_permission pivot table
-         * since pivot table  model doesnot exist , we use DB::table('tablename') query
-         * it Activate/Deactivate the permission of a group
-         * returns the response in json format
-         * die() it. else block won't execute control goes back to ajax
-         */
-        if ($input['update_table']) {
-            DB::table($input['table'])->where('id', $input['id'])->update(array('active' => $active));
             $response['status'] = "success";
             $response['data'][] = array(constant('core_success'));
             echo json_encode($response);
             die();
-        } /*
-	     * this is only for updating group/permission table 
-	  	 * it Activate/Deactivate the permission/group since its model exist
-	  	 * returns the response in json format
-	  	 */
-        else {
-            $model = get_model_from_table($input['table']);
-            // check model exist or not
-            // if model does not exist returns the response as a "failed"
-            $model_name = $model::find($input['id']);
-            if (!$model_name) {
-                $response['status'] = 'failed';
-                $response['errors'][] = constant('core_failed_not_exist');
-                echo json_encode($response);
-                die();
-            }
-            /*
-             * basically we check the exception for particular table
-             * Check for Exception ,whether it is admin or something else
-             * if Exception then return "permission denied " message
-             * first get exception defined for this
-             * call the core_settings(arg1) function ,defined in functions.php
-             * @arg1 is the key for exception is to be checked
-             * stores the result in $exceptions, which is an array of id
-             */
-            $exceptions = core_settings($input['table'])['exceptions'];
-            if (in_array($input['id'], $exceptions)) {
-                $response['status'] = 'failed';
-                $response['errors'][] = constant('core_msg_exceptions');
-                $response['errors'][] = constant('core_msg_exceptions');
-                echo json_encode($response);
-                die();
-            } // else update the status
-            else {
-                $model = $model::find($input['id']);
-                $model->active = $active;
-                $model->save();
-                // check whether update is performed or not
-                // if not performed returns "failed" message
-                if ($model == false) {
-                    $response['status'] = "failed";
-                    $response['errors'][] = array(constant('core_failed_undefined'));
-                    echo json_encode($response);
-                    die();
-                }
-                // here status is updated and send a successfull message
-                $response['status'] = "success";
-                $response['data'][] = array(constant('core_success'));
-                echo json_encode($response);
-                die();
-            }
+        } catch (\Exception $e) {
+            $response['status'] = "failed";
+            $response['errors'][] = $e->getMessage();
+            echo json_encode($response);
+            die();
         }
     }
+
+    //--------------------------------------------------------------------
+
 
     //--------------------------------------------------------------------
     /* #################################
@@ -185,9 +115,9 @@ class AjaxController extends Controller
             $response['data'][] = array(constant('core_success'));
             echo json_encode($response);
             die();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $response['status'] = "failed";
-            $response['errors'][] = array(constant('core_failed_undefined'));
+            $response['errors'][] = $e->getMessage();
             echo json_encode($response);
             die();
         }

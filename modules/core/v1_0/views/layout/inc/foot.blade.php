@@ -9,6 +9,7 @@
 <script src="<?php echo asset_path(); ?>/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 <script src="<?php echo asset_path(); ?>/plugins/jquery-cookie/jquery.cookie.js"></script>
 <script src="<?php echo asset_path(); ?>/plugins/gritter/js/jquery.gritter.js"></script>
+<script src="<?php echo asset_path(); ?>/plugins/parsley/dist/parsley.js"></script>
 
 <!-- ================== END BASE JS ================== -->
 
@@ -26,7 +27,7 @@
         App.init();
     });
 </script>
-<script src="<?php echo asset_path(); ?>/custom.js"></script>
+<script src="<?php echo asset_path(); ?>/common.js"></script>
 
 
 <!-- ================== END COMMON ================== -->

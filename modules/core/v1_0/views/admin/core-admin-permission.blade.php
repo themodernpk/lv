@@ -4,9 +4,6 @@
     <link href="<?php echo asset_path(); ?>/plugins/DataTables/css/data-table.css" rel="stylesheet"/>
     <link href="<?php echo asset_path(); ?>/plugins/switchery/switchery.min.css" rel="stylesheet"/>
     <link href="<?php echo asset_path(); ?>/plugins/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
-    <link href="<?php echo asset_path(); ?>/plugins/gritter/css/jquery.gritter.css" rel="stylesheet"/>
-    
-
 @stop
 
 
@@ -31,7 +28,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <form class="form" id="demo-form" data-parsley-validate>
-                      
+
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                             <h4 class="modal-title">Details </h4>
@@ -41,7 +38,7 @@
                             <div class="form-group">
                                  <input type="text" class="form-control" placeholder="Permission Name" id="name" name="name" required >
                                  <input type="hidden" name="id">
-                                
+
                             </div>
 
                         </div>
@@ -172,7 +169,7 @@
 
                                 <tbody>
 
-                               
+
                                 @if(is_object($data['list']))
                                     @foreach($data['list'] as $item)
                                         <tr class="" id="{{$item->id}}">
@@ -212,24 +209,22 @@
 
                                                         <!-- switch button for non-admin it will be green -->
                                                     @else
+                                                            @if($item->active == 1)
 
-                                                        @if(intval($item->active) == intval(1))
+                                                                <input type="checkbox" data-render="switchery" class="BSswitch"
+                                                                       data-theme="green" checked="checked" data-switchery="true"
+                                                                       data-pk="{{$item->id}}"
+                                                                       data-href="{{URL::route('ajax_update_col')}}?name=permissions|active"
+                                                                       style="display: none;">
+                                                            @else
 
-                                                            <input type="checkbox" data-render="switchery"
-                                                                   class="BSswitch" data-theme="green" checked="checked"
-                                                                   data-switchery="true" name="active"
-                                                                   data-exception="{{$exception}}" value="{{$item->id}}"
-                                                                   data-href="<?php echo URL::route('ajax_toggle_status'); ?>"
-                                                                   style="display: none;">
-                                                        @else
-                                                            <input type="checkbox" data-render="switchery"
-                                                                   class="BSswitch" data-theme="green"
-                                                                   unchecked="unchecked" data-switchery="true"
-                                                                   name="active" data-exception="{{$exception}}"
-                                                                   data-href="<?php echo URL::route('ajax_toggle_status'); ?>"
-                                                                   value="{{$item->id}}" style="display: none;">
+                                                                <input type="checkbox" data-render="switchery" class="BSswitch"
+                                                                       data-theme="green"  data-switchery="true"
+                                                                       data-pk="{{$item->id}}"
+                                                                       data-href="{{URL::route('ajax_update_col')}}?name=permissions|active"
+                                                                       style="display: none;">
 
-                                                        @endif
+                                                            @endif
                                                     @endif
                                                 </td>
                                             @endif
@@ -263,7 +258,7 @@
                                         </tr>
                                     @endforeach
                                 @endif
-                            
+
                                 </tbody>
 
 
@@ -290,52 +285,12 @@
 
 @section('page_specific_foot')
 
-  
-    <script src="<?php echo asset_path(); ?>/plugins/gritter/js/jquery.gritter.js"></script>
-    <script src="<?php echo asset_path(); ?>/plugins/DataTables/js/jquery.dataTables.js"></script>
-    <script src="<?php echo asset_path(); ?>/plugins/DataTables/js/dataTables.colVis.js"></script>
+    @include('core::elements.datatable-switchery')
 
-    <script src="<?php echo asset_path(); ?>/js/table-manage-colvis.demo.min.js"></script>
-    <script src="<?php echo asset_path(); ?>/plugins/switchery/switchery.min.js"></script>
-    <script src="<?php echo asset_path(); ?>/js/form-slider-switcher.demo.min.js"></script>
+
     <script src="<?php echo asset_path(); ?>/plugins/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
-    <script src="<?php echo asset_path(); ?>/js/apps.min.js"></script>
     <script src="<?php echo asset_path(); ?>/permission.js"></script>
-    <script src="<?php echo asset_path(); ?>/common.js"></script>
 
-    {{ View::make('core::layout.javascript')->with('block_name', 'row_edit'); }}
-
-
-
-    <script>
-       $(document).ready(function () {
-            TableManageColVis.init();
-            FormSliderSwitcher.init();
-
-
-            $('#selectall').click(function () {
-
-                var current_state = $(this).is(":checked");
-
-                if (current_state == true) {
-                    $(".idCheckbox").each(function () {
-                        $(this).attr("checked", true);
-                    });
-                } else {
-                    $(".idCheckbox").each(function () {
-                        $(this).attr("checked", false);
-                    });
-                }
-
-
-            });
-
-
-        }); 
-    </script>
-
- {{ View::make('core::layout.javascript')->with('block_name', 'row_edit'); }}
-    
-
+     {{ View::make('core::layout.javascript')->with('block_name', 'row_edit'); }}
 
 @stop

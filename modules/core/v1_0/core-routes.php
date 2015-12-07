@@ -32,10 +32,8 @@ Route::group(['prefix' => 'ajax'], function()
     Route::any('/ajax_update_col', array('as' => 'ajax_update_col', 'uses' => 'AjaxController@ajax_update_col'));
     Route::any('/ajax_update_col_href', array('as' => 'ajax_update_col_href', 'uses' => 'AjaxController@ajax_update_col_href'));
     Route::any('/markRead', array('as' => 'markRead', 'uses' => 'AjaxController@markRead'));
-    Route::any('/ajax_toggle_status', array('as' => 'ajax_toggle_status', 'uses' => 'AjaxController@ajax_toggle_status'));
     Route::any('/ajax_delete', array('as' => 'ajax_delete', 'uses' => 'AjaxController@ajax_delete'));
     Route::any('/ajax_edit', array('as' => 'ajax_edit', 'uses' => 'AjaxController@ajax_edit'));
-
 });
 
 //----------API
@@ -45,7 +43,7 @@ Route::group(['prefix' => 'api'], function()
     Route::any('/help', array('as' => 'apihelp', 'uses' => 'ApiController@apiHelp'));
 
 
-    
+
 
 });
 
@@ -67,13 +65,12 @@ Route::group(array('before' => 'auth'), function()
         //----------Permission
         Route::any('/permissions/list', array('as' => 'permissions', 'uses' => 'AdminController@permissionList'));
         Route::any('/permissions/item/{id}', array('as' => 'permissionsItem', 'uses' => 'AdminController@permissionsItem'));
-
         Route::any('/permissions/store', array('as' => 'permissionStore', 'uses' => 'AdminController@permissionStore'));
-       
+
         //----------Users
         Route::get('/users/list', array('as' => 'users', 'uses' => 'AdminController@getUsers'));
 
-   
+
     });
 });
 
@@ -116,6 +113,14 @@ Route::group(array('prefix' => 'account','before' => 'auth'), function()
     Route::get('/activities', array('as' => 'accountActivities', 'uses' => 'AccountController@getActivities'));
     Route::get('/profile/{id}', array('as' => 'profile', 'uses' => 'AccountController@getProfile'));
     Route::get('/notifications', array('as' => 'notifications', 'uses' => 'AccountController@getNotifications'));
+});
+
+
+//----------account
+Route::group(array('prefix' => 'notification','before' => 'auth'), function()
+{
+    Route::any('/', array('as' => 'notification', 'uses' => 'NotificationController@index'));
+    Route::any('/create', array('as' => 'notification-create', 'uses' => 'NotificationController@create'));
 });
 
 /* ******\ Code Completed till 10th april */

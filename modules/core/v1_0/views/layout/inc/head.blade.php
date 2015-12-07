@@ -15,6 +15,8 @@
     <link href="<?php echo asset_path(); ?>/css/style-responsive.min.css" rel="stylesheet" />
     <link href="<?php echo asset_path(); ?>/css/theme/default.css" rel="stylesheet" id="theme" />
     <link href="<?php echo asset_path(); ?>/plugins/gritter/css/jquery.gritter.css" rel="stylesheet" />
+    <link href="<?php echo asset_path(); ?>/plugins/parsley/src/parsley.css" rel="stylesheet" />
+
     <!-- ================== END BASE CSS STYLE ================== -->
 
     <!-- ================== BEGIN BASE JS ================== -->

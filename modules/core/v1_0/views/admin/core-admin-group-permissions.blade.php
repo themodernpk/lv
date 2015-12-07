@@ -3,11 +3,6 @@
     <link href="<?php echo asset_path(); ?>/plugins/DataTables/css/data-table.css" rel="stylesheet"/>
     <link href="<?php echo asset_path(); ?>/plugins/switchery/switchery.min.css" rel="stylesheet"/>
     <link href="<?php echo asset_path(); ?>/plugins/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
-    <link href="<?php echo asset_path(); ?>/plugins/gritter/css/jquery.gritter.css" rel="stylesheet"/>
-@stop
-
-@section('page_specific_head')
-    <link href="<?php echo asset_path(); ?>/plugins/DataTables/css/data-table.css" rel="stylesheet"/>
 @stop
 
 
@@ -84,7 +79,7 @@
                                     <th>Name</th>
                                     <th>Slug</th>
                                     <th>Active</th>
-                                    <!-- <th>Actions</th> 
+                                    <!-- <th>Actions</th>
                                     <th><input id="selectall" type="checkbox"/></th>-->
                                 </tr>
                                 </thead>
@@ -104,34 +99,27 @@
                                             <td>
                                                 <?php $exception = false; ?>
                                                 <!-- check status id from group permission table -->
-                                                @if(intval($item->pivot->active) == intval(1))
+
+
+                                                @if($item->pivot->active == 1)
 
                                                     <input type="checkbox" data-render="switchery" class="BSswitch"
                                                            data-theme="green" checked="checked" data-switchery="true"
-                                                           name="active" data-update-table="true"
-                                                           data-exception="{{$exception}}" value="{{$item->pivot->id}}"
-                                                           data-href="<?php echo URL::route('ajax_toggle_status'); ?>"
+                                                           data-pk="{{$item->pivot->id}}"
+                                                           data-href="{{URL::route('ajax_update_col')}}?name=group_permission|active"
                                                            style="display: none;">
                                                 @else
+
                                                     <input type="checkbox" data-render="switchery" class="BSswitch"
-                                                           data-theme="green" unchecked="unchecked"
-                                                           data-switchery="true" name="active" data-update-table="true"
-                                                           data-exception="{{$exception}}" value="{{$item->pivot->id}}"
-                                                           data-href="<?php echo URL::route('ajax_toggle_status'); ?>"
+                                                           data-theme="green"  data-switchery="true"
+                                                           data-pk="{{$item->pivot->id}}"
+                                                           data-href="{{URL::route('ajax_update_col')}}?name=group_permission|active"
                                                            style="display: none;">
-
                                                 @endif
+
                                             </td>
 
-                                            <!-- <td>
 
-                                                <!-- click to see permission -->
-
-                                            <!-- <a class="btn btn-sm btn-icon btn-circle btn-danger" id="delete_{{$item->id}}" data-exception="{{$exception}}" title=""><i class="fa fa-minus"></i></a>
-
-                                    </td> -->
-                                            <!-- <td><input type="checkbox" class="idCheckbox" name="id[]" value="{{$item->id}}" > -->
-                                            </td>
                                         </tr>
                                     @endforeach
                                 @endif
@@ -161,35 +149,13 @@
 @stop
 @section('page_specific_foot')
 
-    <script src="<?php echo asset_path(); ?>/plugins/gritter/js/jquery.gritter.js"></script>
-    <script src="<?php echo asset_path(); ?>/plugins/DataTables/js/jquery.dataTables.js"></script>
-    <script src="<?php echo asset_path(); ?>/plugins/DataTables/js/dataTables.colVis.js"></script>
-    <script src="<?php echo asset_path(); ?>/js/table-manage-colvis.demo.min.js"></script>
-    <script src="<?php echo asset_path(); ?>/plugins/switchery/switchery.min.js"></script>
-    <script src="<?php echo asset_path(); ?>/js/form-slider-switcher.demo.min.js"></script>
+    @include('core::elements.datatable-switchery')
+
     <script src="<?php echo asset_path(); ?>/plugins/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
-    <script src="<?php echo asset_path(); ?>/js/apps.min.js"></script>
-    <script src="<?php echo asset_path(); ?>/common.js"></script>
-
-
 
     <script>
         $(document).ready(function () {
-            TableManageColVis.init();
-            FormSliderSwitcher.init();
 
-            $('#selectall').click(function () {
-                var current_state = $(this).is(":checked");
-                if (current_state == true) {
-                    $(".idCheckbox").each(function () {
-                        $(this).attr("checked", true);
-                    });
-                } else {
-                    $(".idCheckbox").each(function () {
-                        $(this).attr("checked", false);
-                    });
-                }
-            });
 
             $('.idCheckbox').click(function () {
                 if (!$(this).is(":checked")) {

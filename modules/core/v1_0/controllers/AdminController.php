@@ -7,7 +7,7 @@ class AdminController extends BaseController
     var $input;
 
     /* #################################
-     * This is constructor 
+     * This is constructor
      * We use 'beforeFilter' function in this constructor
      * 'Redirect' does not work in 'constructor', if we don't use 'beforeFilter'
      * #################################
@@ -27,10 +27,10 @@ class AdminController extends BaseController
      * This method is defined to perform Bulk Action on following tables
      * "Group/Permission/User " tables
      * We perform 'Activate/DeActivate/Soft Delete/permanent delete/restore' operation in bulk
-     * Based on our action we perform operation using 'switch' concept 
+     * Based on our action we perform operation using 'switch' concept
      * We have multiple submit button in the form , name of each button is 'action'
      * So, We use $input['action'], gives the 'value' of submit button which is 'clicked'
-     * In the 'value' attribute of submit button , what 'action' to be performed is defined 
+     * In the 'value' attribute of submit button , what 'action' to be performed is defined
      * We get table name from hidden field of button
      * Our table name is in 'encrypted' form 'Decrypt' it. and get the model for this table
      * Use 'get_model_from_table' function to get table name ,defined in 'helpers/function.php'
@@ -67,7 +67,7 @@ class AdminController extends BaseController
             }
         }
         // get the action to be performed from 'submit' button's attribute name
-        // $input['action'] return the value of 'submit' button which is 'action' 
+        // $input['action'] return the value of 'submit' button which is 'action'
         //perform action according to that
         switch ($input['action']) {
             case 'active':
@@ -146,9 +146,9 @@ class AdminController extends BaseController
 
     //------------------------------------------------------
     /* #################################
-     * This method is defined to list all Permission 
+     * This method is defined to list all Permission
      * We use Permission model to do this
-     * This method returns 'trashed' as well as 'permisiions not trashed' 
+     * This method returns 'trashed' as well as 'permisiions not trashed'
      * @'Permission::onlyTrashed()->get()' returns trashed permission
      * Depending upon condition we return permission
      * Result is displayed in 'core-admin-permission.blade.php'
@@ -215,12 +215,12 @@ class AdminController extends BaseController
 
     //------------------------------------------------------
     /* #################################
-     * This method is defined to create Permission 
+     * This method is defined to create Permission
      * We use Permission model to do this
-     * We get All input ,validate it 
+     * We get All input ,validate it
      * if validation is succeed we 'log' the activity , in Activities table
      * We store result in 'permissions' table
-     * We use 'createIt'method to create Permission 
+     * We use 'createIt'method to create Permission
      * if validation is failed we return error message
      * #################################
      */
@@ -574,7 +574,7 @@ class AdminController extends BaseController
 
     //------------------------------------------------------
     /* #################################
-     * This method is defined to list all Permissions assigned to a 'Group' 
+     * This method is defined to list all Permissions assigned to a 'Group'
      * We donot need any model here
      * In 'group-permission' table all result are stored, which is 'pivot' table
      * To do this, we use $group->permissions; this gives all permission assigned to group
@@ -590,7 +590,7 @@ class AdminController extends BaseController
         /*
         use findorFail if it fails generate 404 error
         get all data based on relationship of group and permission
-        first check this id exist in group table or not 
+        first check this id exist in group table or not
         if found then allow else return with error message
         route is not secure... it works for id=14 and id=14wwwww
         */

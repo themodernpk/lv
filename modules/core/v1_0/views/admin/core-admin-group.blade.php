@@ -3,11 +3,6 @@
     <link href="<?php echo asset_path(); ?>/plugins/DataTables/css/data-table.css" rel="stylesheet"/>
     <link href="<?php echo asset_path(); ?>/plugins/switchery/switchery.min.css" rel="stylesheet"/>
     <link href="<?php echo asset_path(); ?>/plugins/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
-    <link href="<?php echo asset_path(); ?>/plugins/gritter/css/jquery.gritter.css" rel="stylesheet"/>
-@stop
-
-@section('page_specific_head')
-    <link href="<?php echo asset_path(); ?>/plugins/DataTables/css/data-table.css" rel="stylesheet"/>
 @stop
 
 
@@ -172,6 +167,11 @@
                                                 @else
                                                     {{$item->name}}
                                                 @endif
+
+                                                @if(Group::count_users($item->id))
+                                                    ({{Group::count_users($item->id)}})
+                                                    @endif
+
                                             </td>
                                             <td>{{$item->slug}}</td>
 
@@ -196,22 +196,20 @@
 
                                                         <!-- switch button for non-admin it will be green -->
                                                     @else
-                                                        @if(intval($item->active) == intval(1))
+                                                        @if($item->active == 1)
 
-                                                            <!-- when switch is checked color will be green -->
-                                                            <input type="checkbox" data-render="switchery"
-                                                                   class="BSswitch" data-theme="green" checked="checked"
-                                                                   data-switchery="true" name="active"
-                                                                   data-exception="{{$exception}}" data-href="<?php echo URL::route('ajax_toggle_status'); ?>" value="{{$item->id}}"
+                                                            <input type="checkbox" data-render="switchery" class="BSswitch"
+                                                                   data-theme="green" checked="checked" data-switchery="true"
+                                                                   data-pk="{{$item->id}}"
+                                                                   data-href="{{URL::route('ajax_update_col')}}?name=groups|active"
                                                                    style="display: none;">
-                                                            @else<!-- when switch is unchecked color will be green -->
-                                                            <input type="checkbox" data-render="switchery"
-                                                                   class="BSswitch" data-theme="green"
-                                                                   unchecked="unchecked" data-switchery="true"
-                                                                   name="active" data-exception="{{$exception}}"
-                                                                   data-href="<?php echo URL::route('ajax_toggle_status'); ?>"
-                                                                   value="{{$item->id}}" style="display: none;">
+                                                        @else
 
+                                                            <input type="checkbox" data-render="switchery" class="BSswitch"
+                                                                   data-theme="green"  data-switchery="true"
+                                                                   data-pk="{{$item->id}}"
+                                                                   data-href="{{URL::route('ajax_update_col')}}?name=groups|active"
+                                                                   style="display: none;">
                                                         @endif
                                                     @endif
                                                 </td>
@@ -282,41 +280,13 @@
 
 @section('page_specific_foot')
 
-    <script src="<?php echo asset_path(); ?>/plugins/gritter/js/jquery.gritter.js"></script>
-    <script src="<?php echo asset_path(); ?>/plugins/DataTables/js/jquery.dataTables.js"></script>
-    <script src="<?php echo asset_path(); ?>/plugins/DataTables/js/dataTables.colVis.js"></script>
+    @include('core::elements.datatable-switchery')
 
-    <script src="<?php echo asset_path(); ?>/js/table-manage-colvis.demo.min.js"></script>
-    <script src="<?php echo asset_path(); ?>/plugins/switchery/switchery.min.js"></script>
-    <script src="<?php echo asset_path(); ?>/js/form-slider-switcher.demo.min.js"></script>
     <script src="<?php echo asset_path(); ?>/plugins/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
-    <script src="<?php echo asset_path(); ?>/js/apps.min.js"></script>
     <script src="<?php echo asset_path(); ?>/group.js"></script>
-    <script src="<?php echo asset_path(); ?>/common.js"></script>
-
-
 
     <script>
         $(document).ready(function () {
-            TableManageColVis.init();
-            FormSliderSwitcher.init();
-
-            // select all check box if it is checked
-
-            $('#selectall').click(function () {
-                var current_state = $(this).is(":checked");
-
-                if (current_state) {
-                    $(".idCheckbox").each(function () {
-                        $(this).attr("checked", true);
-                    });
-                } else {
-                    $(".idCheckbox").each(function () {
-                        $(this).attr("checked", false);
-                    });
-                }
-
-            });
 
             // DeActivate the parent if parent is not selected
             $('.idCheckbox').click(function () {

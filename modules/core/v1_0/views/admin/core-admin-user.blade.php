@@ -1,13 +1,10 @@
 @extends('core::layout.backend')
 
 @section('page_specific_head')
+    <link href="<?php echo asset_path(); ?>/plugins/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
     <link href="<?php echo asset_path(); ?>/plugins/DataTables/css/data-table.css" rel="stylesheet"/>
     <link href="<?php echo asset_path(); ?>/plugins/switchery/switchery.min.css" rel="stylesheet"/>
-    <link href="<?php echo asset_path(); ?>/plugins/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
-    <link href="<?php echo asset_path(); ?>/plugins/gritter/css/jquery.gritter.css" rel="stylesheet"/>
-    <link href="<?php echo asset_path(); ?>/plugins/parsley/src/parsley.css" rel="stylesheet" />
 @stop
-
 
 @section('content')
 
@@ -224,27 +221,24 @@
 
 
                         <div class="table-responsive">
-                            <table id="userdatatable" class="table table-striped table-bordered">
+                            <table id="data-table" class="table table-striped table-bordered">
                                 <thead>
                                 <tr>
                                     <th>#</th>
                                     <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Mobile</th>
+                                    <th>Email / Mobile</th>
                                     <th>Group</th>
-                                    <th>Last Login</th>
+                                    <th width="110">Last Login</th>
                                     @if(Permission::check('allow-activedeactive'))
                                         <th>Active</th>
                                     @endif
-                                    <th>Created</th>
-                                    <th>Updated</th>
+                                    <th>Created / Updated</th>
                                     @if(!Input::has('trash'))
                                         <th>Actions</th>
                                     @endif
                                     <th><input id="selectall" type="checkbox"/></th>
                                 </tr>
                                 </thead>
-
 
                                 <tbody>
 
@@ -266,10 +260,19 @@
                                                     {{$item->name}}
                                                 @endif
                                             </td>
-                                            <td class="email">{{$item->email}}</td>
-                                            <td>{{$item->mobile}}</td>
-                                            <td>{{$item->group->name}}</td>
-                                            <td>{{Dates::showTimeAgo($item->lastlogin)}}</td>
+                                            <td class="email">{{$item->email}}
+                                            @if($item->mobile)
+                                                   <br/> {{$item->mobile}}
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if($item->group->name)
+                                                {{$item->group->name}}
+                                                    @else
+                                                NA
+                                                    @endif
+                                            </td>
+                                            <td>{{Dates::dateformat($item->lastlogin)}}</td>
 
                                             @if(Permission::check('allow-activedeactive'))
                                                 <td>
@@ -281,29 +284,30 @@
 
                                                     ?>
 
-                                                    @if(intval($item->active) == intval(1))
+                                                        @if($item->active == 1)
 
-                                                        <input type="checkbox" data-render="switchery" class="BSswitch"
-                                                               data-theme="green" checked="checked"
-                                                               data-switchery="true" name="active"
-                                                               data-exception="{{$exception}}" value="{{$item->id}}"
-                                                               data-href="<?php echo URL::route('ajax_toggle_status'); ?>"
-                                                               style="display: none;">
-                                                    @else
-                                                        <input type="checkbox" data-render="switchery" class="BSswitch"
-                                                               data-theme="green" unchecked="unchecked"
-                                                               data-switchery="true" name="active"
-                                                               data-exception="{{$exception}}" value="{{$item->id}}"
-                                                               data-href="<?php echo URL::route('ajax_toggle_status'); ?>"
-                                                               style="display: none;">
+                                                            <input type="checkbox" data-render="switchery" class="BSswitch"
+                                                                   data-theme="green" checked="checked" data-switchery="true"
+                                                                   data-pk="{{$item->id}}"
+                                                                   data-href="{{URL::route('ajax_update_col')}}?name=users|active"
+                                                                   style="display: none;">
+                                                        @else
 
-                                                    @endif
+                                                            <input type="checkbox" data-render="switchery" class="BSswitch"
+                                                                   data-theme="green"  data-switchery="true"
+                                                                   data-pk="{{$item->id}}"
+                                                                   data-href="{{URL::route('ajax_update_col')}}?name=users|active"
+                                                                   style="display: none;">
+
+                                                        @endif
                                                 </td>
                                             @endif
 
-                                            <td>{{Dates::showTimeAgo($item->created_at)}}</td>
-                                            <td>{{Dates::showTimeAgo($item->updated_at)}}</td>
-
+                                            <td>{{Dates::showTimeAgo($item->created_at)}}
+                                                @if($item->updated_at)
+                                                    <br/> / {{Dates::showTimeAgo($item->updated_at)}}
+                                                @endif
+                                            </td>
                                             @if(!Input::has('trash'))
                                                 <td>
                                                     @if(Permission::check('allow-to-edit-user'))
@@ -365,16 +369,9 @@
 
 @section('page_specific_foot')
 
-    <script src="<?php echo asset_path(); ?>/plugins/gritter/js/jquery.gritter.js"></script>
-    <script src="<?php echo asset_path(); ?>/plugins/DataTables/js/jquery.dataTables.js"></script>
-    <script src="<?php echo asset_path(); ?>/plugins/DataTables/js/dataTables.colVis.js"></script>
-    <script src="<?php echo asset_path(); ?>/plugins/parsley/dist/parsley.js"></script>
-    <script src="<?php echo asset_path(); ?>/js/table-manage-colvis.demo.min.js"></script>
-    <script src="<?php echo asset_path(); ?>/plugins/switchery/switchery.min.js"></script>
-    <script src="<?php echo asset_path(); ?>/js/form-slider-switcher.demo.min.js"></script>
+    @include('core::elements.datatable-switchery')
+
     <script src="<?php echo asset_path(); ?>/plugins/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
-    <script src="<?php echo asset_path(); ?>/js/apps.min.js"></script>
-    <script src="<?php echo asset_path(); ?>/common.js"></script>
 
     <script src="<?php echo asset_path(); ?>/user.js"></script>
 
@@ -382,27 +379,8 @@
 
     <script>
         $(document).ready(function () {
-            TableManageColVis.init();
-            FormSliderSwitcher.init();
+
             $('#user_edit').tooltip();
-
-
-            $('#selectall').click(function () {
-
-                var current_state = $(this).is(":checked");
-
-                if (current_state == true) {
-                    $(".idCheckbox").each(function () {
-                        $(this).attr("checked", true);
-                    });
-                } else {
-                    $(".idCheckbox").each(function () {
-                        $(this).attr("checked", false);
-                    });
-                }
-
-
-            });
 
         });
 

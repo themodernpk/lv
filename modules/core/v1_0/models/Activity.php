@@ -26,24 +26,23 @@ class Activity extends Eloquent
      * This Activity is called in admin Dashboard page
      * #################################
      */
-    public static function get($filter = array())
+    public static function get($filter = array(), $limit = 50)
     {
         /*
          * This block executes if we pass certain value to argument
          * Example: if we want to see a particular activity then if will be executed
          * otherwise only else block will be executed which returns all activity till now
          */
-        if (!empty($filter)) {
-            $q = new Activity();
-            foreach ($filter as $key => $value) {
+        $q = new Activity();
+        if (!empty($filter))
+        {
+            foreach ($filter as $key => $value)
+            {
                 $q = $q->where($key, $value);
             }
-            $activities = $q->get();
-            return $activities;
-        } else {
-            $activities = Activity::all();
-            return $activities;
         }
+        $list = $q->orderBy('created_at', 'desc')->take($limit)->get();
+        return $list;
     }
 
     //------------------------------------------------------------
@@ -102,7 +101,7 @@ class Activity extends Eloquent
         if ($parent_id != NULL) {
             $activity->parent_id = $parent_id;
         }
-      
+
 
         $activity->content = $content;
 
