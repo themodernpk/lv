@@ -51,6 +51,61 @@ class HtmlHelper
 
     }
     //----------------------------------------------
+
+    public static function collapsiblePanel($id)
+    {
+        $data['start'] = true;
+        $data['id'] = $id;
+
+        $view  = View::make('core::elements.collapsiblePanel')->with('data', $data);
+        return $view;
+
+    }
+
+    //----------------------------------------------
+    public static function collapsiblePanelClose()
+    {
+        $data['end'] = true;
+
+        $view  = View::make('core::elements.collapsiblePanel')->with('data', $data);
+        return $view;
+    }
+
+    //----------------------------------------------
+    public static function collapsiblePanelItemTitleStart($panel_id, $panel_item_id)
+    {
+        $data['title_start'] = true;
+        $data['panel_id'] = $panel_id;
+        $data['panel_item_id'] = $panel_item_id;
+
+        $view  = View::make('core::elements.collapsiblePanel')->with('data', $data);
+        return $view;
+    }
+    //----------------------------------------------
+    public static function collapsiblePanelItemTitleClose()
+    {
+        $data['title_end'] = true;
+
+        $view  = View::make('core::elements.collapsiblePanel')->with('data', $data);
+        return $view;
+    }
+    //----------------------------------------------
+    public static function collapsiblePanelItemBodyStart($panel_item_id)
+    {
+        $data['body_start'] = true;
+        $data['panel_item_id'] = $panel_item_id;
+
+        $view  = View::make('core::elements.collapsiblePanel')->with('data', $data);
+        return $view;
+    }
+    //----------------------------------------------
+    public static function collapsiblePanelItemBodyClose()
+    {
+        $data['body_end'] = true;
+
+        $view  = View::make('core::elements.collapsiblePanel')->with('data', $data);
+        return $view;
+    }
     //----------------------------------------------
 
 }// end of class
