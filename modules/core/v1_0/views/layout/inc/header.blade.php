@@ -5,7 +5,7 @@
         <!-- begin mobile sidebar expand / collapse button -->
         <div class="navbar-header">
             <a href="{{URL::to('/')}}" class="navbar-brand"><span
-                        class="navbar-logo"></span> {{constant('core_app_name')}}</a>
+                        class="navbar-logo"></span> {{Setting::value('app-name')}}</a>
             <button type="button" class="navbar-toggle" data-click="sidebar-toggled">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -66,8 +66,6 @@
                         </li>
                     @endforeach
                     <?php } ?>
-
-
                     <li class="dropdown-footer text-center">
                         <a href="{{URL::route('notifications')}}">View more</a>
                     </li>

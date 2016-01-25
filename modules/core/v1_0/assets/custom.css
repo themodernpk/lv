@@ -34,3 +34,29 @@
 .ui-autocomplete{z-index: 2000 !important; font-family: 'Open Sans',"Helvetica Neue",Helvetica,Arial,sans-serif !important;}
 
 /* ******\ Code Completed till 10th april */
+
+.colorpicker{
+  z-index: 10000000;
+}
+
+.modal-dialog-tiny, .modal-dialog-xs{
+    width: 40%;
+    min-width: 400px;
+}
+
+.modal-dialog-sm{
+    width: 60%;
+    min-width: 400px;
+}
+
+.modal-dialog-md{
+    width: 75%;
+    min-width: 400px;
+}
+
+.modal-dialog-lg{
+    width: 85%;
+    min-width: 400px;
+}
+
+.navbar-brand{width: auto; font-weight: 400;}

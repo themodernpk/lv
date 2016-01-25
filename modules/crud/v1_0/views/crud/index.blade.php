@@ -12,9 +12,9 @@
     <!-- end page-header -->
 
     <!--modal-->
-    @include($data->view."elements.".$data->prefix."-create")
-    @include($data->view."elements.".$data->prefix."-view")
-    @include($data->view."elements.".$data->prefix."-update")
+    @include($data->view."elements.create")
+    @include($data->view."elements.view")
+    @include($data->view."elements.update")
     <!--/modal-->
 
     <!--content-->
@@ -22,7 +22,7 @@
 
         {{ Form::open(array('route' => $data->prefix.'-bulk-action', 'class' =>'form', 'method' =>'POST')) }}
 
-        @include($data->view."elements.".$data->prefix."-buttons")
+        @include($data->view."elements.buttons")
 
         <hr/>
         <div class="row">

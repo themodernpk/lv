@@ -87,6 +87,7 @@ Route::group(array('prefix' => 'admin','before' => 'auth'), function()
    Route::post('createUser', array('as' => 'createUser', 'uses' => 'AdminController@createUser'));
    Route::get('activities/list/', array('as' => 'activities', 'uses' => 'AdminController@getActivities'));
     Route::any('/setting', array('as' => 'setting', 'uses' => 'CoreController@setting'));
+    Route::any('/setting/update', array('as' => 'setting-update', 'uses' => 'SettingController@update'));
     Route::post('settingStore', array('as' => 'settingStore', 'uses' => 'CoreController@settingStore'));
 
 });

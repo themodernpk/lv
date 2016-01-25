@@ -180,7 +180,7 @@ function upgrade($active_vesion)
 {
 
     //upgrades code can very for differrent last version
-    switch ($active_vesion->version) {
+    switch ($active_vesion) {
         case 1.0:
 
             break;

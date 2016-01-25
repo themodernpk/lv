@@ -39,7 +39,7 @@ class CrudController extends BaseController
 
         $this->data->trash_count = $model::onlyTrashed()->count();
 
-        return View::make($this->data->view .'crud-list')->with('title', 'Get List')->with('data', $this->data);
+        return View::make($this->data->view .'index')->with('title', 'Get List')->with('data', $this->data);
     }
 
 

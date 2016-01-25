@@ -68,8 +68,12 @@ $('.markRead').click(function ()
         type: "POST",
         url: href,
         context: this,
-        success: function (msg) {
-            if (msg == "ok") {
+        success: function (response)
+        {
+            object = JSON.parse(response);
+
+            if(object.status == "success")
+            {
                 $(this).children('i').removeClass('fa-spin');
                 $(this).children('i').removeClass('fa-spinner');
                 $(this).children('i').addClass('fa-check');
@@ -179,6 +183,13 @@ $('.markRead').click(function ()
 
     });
 
+    // DeActivate the parent if parent is not selected
+    $('.idCheckbox').click(function () {
+        if (!$(this).is(":checked")) {
+            $('#selectall').attr("checked", false);
+        }
+    });
+
     //------------------------------------------------------
 
     //------------------------------------------------------
@@ -192,6 +203,11 @@ $('.markRead').click(function ()
 (function($)
 {
 
+
+    /*
+     * Following function will keep sidebar
+     * minified for 7 days if not expanded again
+     */
 
     $(document).on("click", "[data-click=sidebar-minify]", function()
     {
@@ -224,12 +240,9 @@ $('.markRead').click(function ()
 
 
 
-
-
-
     //------------------------------------------------------
     /*
-     * Gritter Notifications
+     * Ajax Gritter Notifications
      */
     (function(){
 
@@ -248,8 +261,22 @@ $('.markRead').click(function ()
             {
                 try{
                     object = JSON.parse(response);
+                    var document_title = document.title;
+
+                    var arr = document_title.split('# ');
 
                     var count = Object.keys(object).length
+
+                    if(count != '0')
+                    {
+                        if(arr[1])
+                        {
+                            document.title = "("+count+") # "+arr[1];
+                        } else
+                        {
+                            document.title = "("+count+") # "+document_title;
+                        }
+                    }
 
                         $.each(object, function(key, item)
                         {
@@ -260,7 +287,7 @@ $('.markRead').click(function ()
 
                             if(item.link)
                             {
-                                text += "For more details <a class='text-white' href='"+item.link+"'>click here</a>";
+                                text += "For more details <a class='text-white' target='_blank' href='"+item.link+"'>click here</a>";
                             }
 
                             $.gritter.add({
@@ -335,6 +362,7 @@ Common =
         {
             console.log("response=");
             console.log( response);
+            console.log("response end here");
         }
 
         that.find('i').removeClass('fa-spinner').removeClass('fa-spin');
@@ -357,14 +385,15 @@ Common =
                 {
                     Common.showGritter("Processed Successfully", 'btn-success', 'fa-check');
                 }
-
             }
 
             return response;
 
         } catch (e)
         {
-            var errors = ["Response is not in json format."];
+
+
+            var errors = ["Response is not in json format. Check console for more details"];
 
             $.each(errors, function(key, value)
             {
@@ -373,7 +402,6 @@ Common =
 
             response.status = "failed";
             response.errors = errors;
-
             return response;
 
         }

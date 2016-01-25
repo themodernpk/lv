@@ -12,7 +12,7 @@
             <!-- begin brand -->
             <div class="login-header">
                 <div class="brand">
-                    <span class="logo"></span> LV APP
+                    <span class="logo"></span> {{Setting::value('app-name')}}
                     <small>Application is licensed to <b>WebReinvent</b></small>
                 </div>
                 <div class="icon">
