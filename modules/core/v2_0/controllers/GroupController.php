@@ -144,7 +144,6 @@ class GroupController extends BaseController
         {
             $item = $model::withTrashed()->where('id', $this->data->input->pk)->first();
             $item->active = 1;
-            $item->modified_by = Auth::user()->id;
             $item->save();
         } else if(is_array($this->data->input->id))
         {
@@ -152,7 +151,6 @@ class GroupController extends BaseController
             {
                 $item = $model::withTrashed()->where('id', $id)->first();
                 $item->active = 1;
-                $item->modified_by = Auth::user()->id;
                 $item->save();
             }
         }
@@ -168,7 +166,6 @@ class GroupController extends BaseController
         {
             $item = $model::withTrashed()->where('id', $this->data->input->pk)->first();
             $item->active = 0;
-            $item->modified_by = Auth::user()->id;
             $item->save();
         } else if(is_array($this->data->input->id))
         {
@@ -184,7 +181,6 @@ class GroupController extends BaseController
             {
                 $item = $model::withTrashed()->where('id', $id)->first();
                 $item->active = 0;
-                $item->modified_by = Auth::user()->id;
                 $item->save();
             }
         }
@@ -203,7 +199,6 @@ class GroupController extends BaseController
         {
             $item = $model::withTrashed()->where('id', $this->data->input->pk)->first();
             $item->active = 0;
-            $item->deleted_by = Auth::user()->id;
             $item->save();
             $item->delete();
         } else if(is_array($this->data->input->id))
@@ -221,7 +216,6 @@ class GroupController extends BaseController
             {
                 $item = $model::withTrashed()->where('id', $id)->first();
                 $item->active = 0;
-                $item->deleted_by = Auth::user()->id;
                 $item->save();
                 $item->delete();
             }

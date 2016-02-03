@@ -70,9 +70,6 @@ class PermissionController extends BaseController
 
         if($item)
         {
-            $item->createdBy;
-            $item->modifiedBy;
-            $item->deletedBy;
             $response['status'] = 'success';
             $response['data'] = $item;
         } else
@@ -124,7 +121,6 @@ class PermissionController extends BaseController
         {
             $item = $model::withTrashed()->where('id', $this->data->input->pk)->first();
             $item->active = 1;
-            $item->modified_by = Auth::user()->id;
             $item->save();
         } else if(is_array($this->data->input->id))
         {
@@ -132,7 +128,6 @@ class PermissionController extends BaseController
             {
                 $item = $model::withTrashed()->where('id', $id)->first();
                 $item->active = 1;
-                $item->modified_by = Auth::user()->id;
                 $item->save();
             }
         }
@@ -148,7 +143,6 @@ class PermissionController extends BaseController
         {
             $item = $model::withTrashed()->where('id', $this->data->input->pk)->first();
             $item->active = 0;
-            $item->modified_by = Auth::user()->id;
             $item->save();
         } else if(is_array($this->data->input->id))
         {
@@ -164,7 +158,6 @@ class PermissionController extends BaseController
             {
                 $item = $model::withTrashed()->where('id', $id)->first();
                 $item->active = 0;
-                $item->modified_by = Auth::user()->id;
                 $item->save();
             }
         }
@@ -183,7 +176,6 @@ class PermissionController extends BaseController
         {
             $item = $model::withTrashed()->where('id', $this->data->input->pk)->first();
             $item->active = 0;
-            $item->deleted_by = Auth::user()->id;
             $item->save();
             $item->delete();
         } else if(is_array($this->data->input->id))
@@ -201,7 +193,6 @@ class PermissionController extends BaseController
             {
                 $item = $model::withTrashed()->where('id', $id)->first();
                 $item->active = 0;
-                $item->deleted_by = Auth::user()->id;
                 $item->save();
                 $item->delete();
             }
