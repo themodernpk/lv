@@ -207,7 +207,7 @@ class Permission extends Eloquent
     }
 
     //------------------------------------------------------------
-    public static function users_have_permission($slug)
+    public static function users_have_permission($slug, $exclude_current_user = true)
     {
         $permission = Permission::where('slug', '=', $slug)->first();
         if(!$permission)
@@ -233,11 +233,49 @@ class Permission extends Eloquent
             $group_id[] = $group->id;
         }
 
-        $users = User::whereIn('group_id', $group_id)->where('active', 1)->get();
+        if($exclude_current_user == true)
+        {
+            $users = User::whereIn('group_id', $group_id)->where('id', "!=", Auth::user()->id)
+                ->where('active', 1)
+                ->get();
+        } else
+        {
+            $users = User::whereIn('group_id', $group_id)->where('active', 1)->get();
+        }
+
 
         return $users;
     }
 
+    //------------------------------------------------------------
+    public static function users_have_permission_email_array($permission_slug, $exclude_current_user = true)
+    {
+        $users = Permission::users_have_permission($permission_slug);
+
+        if(!empty($users))
+        {
+            foreach($users as $user)
+            {
+                if($exclude_current_user == true)
+                {
+                    if( $user->id != Auth::user()->id)
+                    {
+                        $to[] = $user->email;
+                    }
+                } else
+                {
+                    $to[] = $user->email;
+                }
+
+            }
+
+            return $to;
+        } else
+        {
+            return false;
+        }
+
+    }
     //------------------------------------------------------------
     /* ******\ Code Completed till 10th april */
 } //end of the class

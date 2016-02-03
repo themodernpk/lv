@@ -115,6 +115,13 @@ class CoreSmtp
             return $response;
         }
 
+        $cssToInlineStyles = new \TijsVerkoyen\CssToInlineStyles\CssToInlineStyles();
+        $cssToInlineStyles->setHTML($message);
+        $css = asset_path()."/email-alerts.css";
+        $css = @file_get_contents($css);
+        $cssToInlineStyles->setCSS($css);
+
+        $input['message'] = $cssToInlineStyles->convert();
 
         try{
 
