@@ -5,7 +5,13 @@
     @if(!isset($data->input->show))
         <div class="btn-group">
 
-            @if(Permission::check($data->prefix.'-update'))
+            @if(Permission::check($data->prefix.'-create'))
+                <a class="btn btn-sm btn-info" href="#ModalCreateForm" data-toggle="modal">
+                    <i class="fa fa-plus"></i> Create
+                </a>
+            @endif
+
+            @if(Permission::check($data->prefix.'-update') && $data->settings->enable == true)
 
             <button type="submit" name="action" value="enable"
                     class="btn btn-sm btn-success"><i class="fa fa-thumbs-up"></i> Enable

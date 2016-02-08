@@ -24,6 +24,7 @@ class CrudController extends BaseController
         $this->data->model = $this->settings->model;
         $this->data->rows = $this->settings->rows;
         $this->data->view = $this->settings->view;
+        $this->data->settings = $this->settings;
 
     }
 
