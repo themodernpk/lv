@@ -4,12 +4,15 @@ class CrudController extends BaseController
 {
 
     public $data;
+    public $settings;
+
 
     public function __construct()
     {
 
         $this->data = new stdClass();
-        $this->data->prefix = "crud";
+        $this->settings = Crud::getSettings();
+        $this->data->prefix = $this->settings->prefix;
 
         $this->beforeFilter(function () {
             if (!Permission::check($this->data->prefix.'-read')) {
@@ -17,10 +20,11 @@ class CrudController extends BaseController
             }
         });
 
-        $this->data->table = 'crud';
         $this->data->input = (object)Input::all();
-        $this->data->model = "Crud";
-        $this->data->view = "crud::crud.";
+        $this->data->model = $this->settings->model;
+        $this->data->rows = $this->settings->rows;
+        $this->data->view = $this->settings->view;
+
     }
 
     //------------------------------------------------------
@@ -30,77 +34,74 @@ class CrudController extends BaseController
 
         if(isset($this->data->input->show) && $this->data->input->show == 'trash')
         {
-            $this->data->list = $model::onlyTrashed()->get();
+            $this->data->list = $model::onlyTrashed()->paginate($this->data->rows);
         } else
         {
-            $this->data->list = $model::all();
+
+            if(isset($this->data->input->q) && !empty($this->data->input->q))
+            {
+                $this->data->list = $this->search();
+            } else
+            {
+                $list = $model::orderBy("name", "ASC");
+                $this->data->list = $list->paginate($this->data->rows);
+            }
         }
 
 
         $this->data->trash_count = $model::onlyTrashed()->count();
 
-        return View::make($this->data->view .'index')->with('title', 'Get List')->with('data', $this->data);
+        return View::make($this->data->view .'index')->with('title', 'Item List')->with('data', $this->data);
     }
 
 
+    //------------------------------------------------------
+    function search()
+    {
+        $model = $this->data->model;
+        $list = $model::orderBy("name", "ASC");
 
+        $term = $this->data->input->q;
+
+        $list->where('name', 'LIKE', '%'. $term .'%');
+        $list->orWhere('slug', 'LIKE', '%'. $term .'%');
+        $list->orWhere('id', '=', $term);
+
+        $result = $list->paginate($this->data->rows);
+
+        return $result;
+    }
     //------------------------------------------------------
     function create()
     {
+        $this->beforeFilter(function () {
+            if (!Permission::check($this->data->prefix.'-create')) {
+                return Redirect::route('error')->with('flash_error', "You don't have permission");
+            }
+        });
 
         $model = $this->data->model;
 
-        //first run validation
-        $validate = $model::validate($this->data->input);
+        $response = $model::store();
 
-        if($validate->fails())
-        {
-            $response['status'] = 'failed';
-            $response['errors'] = $validate->messages()->all();
-            echo json_encode($response);
-            die();
-        }
-
-        // create item
-        $create = new $model();
-        $ignore = array('format', 'id', '_token');
-        foreach($this->data->input as $key => $val)
-        {
-            if(in_array($key,$ignore) )
-            {
-                continue;
-            }
-
-            $create->$key = $val;
-        }
-
-        //set created_by
-        $create->created_by = Auth::user()->id;
-
-        try
-        {
-            $create->save();
-
-            $response['status'] = 'success';
-            $response['data'] = $create;
-            echo json_encode($response);
-            die();
-
-        } catch(Exception $e)
-        {
-            $response['status'] = 'failed';
-            $response['errors'][] = $e->getMessage();
-            echo json_encode($response);
-            die();
-        }
-
+        echo json_encode($response);
+        die();
     }
     //------------------------------------------------------
-    function read()
+    function read($id)
     {
 
+        $this->beforeFilter(function () {
+            if (!Permission::check($this->data->prefix.'-read')) {
+                $response['status'] = 'failed';
+                $response['errors'][] = 'You don\'t have permission';
+                echo json_encode($response);
+                die();
+            }
+        });
+
         $model = $this->data->model;
-        $item = $model::withTrashed()->where('id', $this->data->input->id)->first();
+        $item = $model::withTrashed()->where('id', $id)->first();
 
         if($item)
         {
@@ -117,6 +118,10 @@ class CrudController extends BaseController
 
         if($this->data->input->format == 'json')
         {
+            $response_in_json = json_encode($item);
+            $response['html'] = View::make($this->data->view.'elements.view-item')
+                ->with('data', json_decode($response_in_json))
+                ->render();
             echo json_encode($response);
             die();
         } else
@@ -129,64 +134,19 @@ class CrudController extends BaseController
     //------------------------------------------------------
     function update()
     {
+        $this->beforeFilter(function () {
+            if (!Permission::check($this->data->prefix.'-update')) {
+                $response['status'] = 'failed';
+                $response['errors'][] = 'You don\'t have permission';
+                echo json_encode($response);
+                die();
+            }
+        });
+
         $model = $this->data->model;
-
-        if(!isset($this->data->input->id))
-        {
-            if($this->data->input->format == 'json')
-            {
-                $response['status'] = 'failed';
-                $response['errors'][] = 'Item ID is not set';
-                echo json_encode($response);
-                die();
-            }
-        }
-
-        $item = $model::withTrashed()->where('id', $this->data->input->id)->first();
-
-        if(!$item)
-        {
-            if($this->data->input->format == 'json')
-            {
-                $response['status'] = 'failed';
-                $response['errors'][] = 'Item ID is not set';
-                echo json_encode($response);
-                die();
-            }
-        }
-
-        $ignore = array('_token', 'table', 'format');
-        foreach($this->data->input as $key => $val)
-        {
-            if(in_array($key,$ignore) )
-            {
-                continue;
-            }
-
-            $item->$key = $val;
-        }
-
-        try{
-            $item->save();
-
-            $response['status'] = 'success';
-            $response['data'] = $item;
-            if($this->data->input->format == 'json')
-            {
-                echo json_encode($response);
-                die();
-            }
-        } catch(Exception $e)
-        {
-            $response['status'] = 'failed';
-            $response['errors'][] = $e->getMessage();
-            if($this->data->input->format == 'json')
-            {
-                echo json_encode($response);
-                die();
-            }
-        }
-
+        $response = $model::store();
+        echo json_encode($response);
+        die();
     }
     //------------------------------------------------------
     function enable()
@@ -196,17 +156,15 @@ class CrudController extends BaseController
 
         if(isset($this->data->input->pk))
         {
-            $item = $model::find($this->data->input->pk);
+            $item = $model::withTrashed()->where('id', $this->data->input->pk)->first();
             $item->enable = 1;
-            $item->modified_by = Auth::user()->id;
             $item->save();
         } else if(is_array($this->data->input->id))
         {
             foreach($this->data->input->id as $id)
             {
-                $item = $model::find($id);
+                $item = $model::withTrashed()->where('id', $id)->first();
                 $item->enable = 1;
-                $item->modified_by = Auth::user()->id;
                 $item->save();
             }
         }
@@ -220,28 +178,26 @@ class CrudController extends BaseController
 
         if(isset($this->data->input->pk))
         {
-            $item = $model::find($this->data->input->pk);
+            $item = $model::withTrashed()->where('id', $this->data->input->pk)->first();
             $item->enable = 0;
-            $item->modified_by = Auth::user()->id;
             $item->save();
         } else if(is_array($this->data->input->id))
         {
 
             if(empty($this->data->input->id))
             {
-                return Redirect::back()->with('flash_error', constant('core_no_item_selected'));
+                $response['status'] = 'failed';
+                $response['errors'][] = constant('core_no_item_selected');
+                echo json_encode($response);
+                die();
             }
             foreach($this->data->input->id as $id)
             {
-                $item = $model::find($id);
+                $item = $model::withTrashed()->where('id', $id)->first();
                 $item->enable = 0;
-                $item->modified_by = Auth::user()->id;
                 $item->save();
             }
         }
-
-
-
     }
     //------------------------------------------------------
 
@@ -252,9 +208,8 @@ class CrudController extends BaseController
 
         if(isset($this->data->input->pk))
         {
-            $item = $model::find($this->data->input->pk);
+            $item = $model::withTrashed()->where('id', $this->data->input->pk)->first();
             $item->enable = 0;
-            $item->deleted_by = Auth::user()->id;
             $item->save();
             $item->delete();
         } else if(is_array($this->data->input->id))
@@ -262,20 +217,20 @@ class CrudController extends BaseController
 
             if(empty($this->data->input->id))
             {
-                return Redirect::back()->with('flash_error', constant('core_no_item_selected'));
+                $response['status'] = 'failed';
+                $response['errors'][] = constant('core_no_item_selected');
+                echo json_encode($response);
+                die();
             }
 
             foreach($this->data->input->id as $id)
             {
-                $item = $model::find($id);
+                $item = $model::withTrashed()->where('id', $id)->first();
                 $item->enable = 0;
-                $item->deleted_by = Auth::user()->id;
                 $item->save();
                 $item->delete();
             }
         }
-
-
     }
 
     //------------------------------------------------------
@@ -284,19 +239,40 @@ class CrudController extends BaseController
 
         $model = $this->data->model;
 
+        if($this->data->input->action == 'search')
+        {
+            return Redirect::route($this->data->prefix."-index", array('q' => $this->data->input->q));
+        }
+
+
+        if (!Permission::check($this->data->prefix.'-update'))
+        {
+            $response['status'] = 'failed';
+            $response['errors'][] = constant('core_msg_permission_denied');
+        }
+
+        if(!isset($this->data->input->pk) && !isset($this->data->input->id))
+        {
+            $response['status'] = 'failed';
+            $response['errors'][] = constant('core_no_item_selected');
+        }
+
+        if(isset($response['status'])
+            && $response['status'] == 'failed'
+            && isset($this->data->input->format)
+            && $this->data->input->format == 'json')
+        {
+            echo json_encode($response);
+            die();
+        } else if(isset($response['status']) && $response['status'] == 'failed')
+        {
+            return Redirect::back()->with('flash_error', $response['errors'][0]);
+        }
+
+
         switch($this->data->input->action)
         {
             case 'enable':
-
-                if (!Permission::check($this->data->prefix.'-update'))
-                {
-                    return Redirect::back()->with('flash_error', constant('core_msg_permission_denied'));
-                }
-
-                if(!isset($this->data->input->pk) && !isset($this->data->input->id))
-                {
-                    return Redirect::back()->with('flash_error', constant('core_no_item_selected'));
-                }
 
                 $this->enable();
 
@@ -314,16 +290,6 @@ class CrudController extends BaseController
             //------------------------------
             case 'disable':
 
-                if (!Permission::check($this->data->prefix.'-update'))
-                {
-                    return Redirect::back()->with('flash_error', constant('core_msg_permission_denied'));
-                }
-
-                if(!isset($this->data->input->pk) && !isset($this->data->input->id))
-                {
-                    return Redirect::back()->with('flash_error', constant('core_no_item_selected'));
-                }
-
                 $this->disable();
                 if(isset($this->data->input->format) && $this->data->input->format == 'json')
                 {
@@ -338,15 +304,6 @@ class CrudController extends BaseController
             //------------------------------
             case 'delete':
 
-                if (!Permission::check($this->data->prefix.'-delete'))
-                {
-                    return Redirect::back()->with('flash_error', constant('core_msg_permission_denied'));
-                }
-
-                if(!isset($this->data->input->pk) && !isset($this->data->input->id))
-                {
-                    return Redirect::back()->with('flash_error', constant('core_no_item_selected'));
-                }
 
                 $this->delete();
 
@@ -362,15 +319,7 @@ class CrudController extends BaseController
                 break;
             //------------------------------
             case 'restore':
-                if (!Permission::check($this->data->prefix.'-delete'))
-                {
-                    return Redirect::back()->with('flash_error', constant('core_msg_permission_denied'));
-                }
 
-                if(!isset($this->data->input->pk) && !isset($this->data->input->id))
-                {
-                    return Redirect::back()->with('flash_error', constant('core_no_item_selected'));
-                }
 
                 foreach($this->data->input->id as $id)
                 {
@@ -382,16 +331,6 @@ class CrudController extends BaseController
                 break;
             //------------------------------
             case 'permanent_delete':
-                if (!Permission::check($this->data->prefix.'-delete'))
-                {
-                    return Redirect::back()->with('flash_error', constant('core_msg_permission_denied'));
-                }
-
-
-                if(!isset($this->data->input->pk) && !isset($this->data->input->id))
-                {
-                    return Redirect::back()->with('flash_error', constant('core_no_item_selected'));
-                }
 
                 foreach($this->data->input->id as $id)
                 {
@@ -400,11 +339,10 @@ class CrudController extends BaseController
                 return Redirect::back()->with('flash_success', constant('crm_success_message'));
 
                 break;
+
             //------------------------------
 
         }
-
-
     }
     //------------------------------------------------------
 

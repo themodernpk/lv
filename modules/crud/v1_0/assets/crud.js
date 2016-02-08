@@ -1,11 +1,11 @@
 (function($) {
 
 
-
     //-------------------------------------------------------
     $("#createFrom").submit(function(e)
     {
         e.preventDefault();
+
         var data = $( this).serialize();
         var url = $( this ).attr('action');
         var debug = true;
@@ -35,7 +35,7 @@
 
                 if(object.status == "success")
                 {
-                    $(this).find("input, textarea, select").val("");
+                    location.reload();
                 }
             }
 
@@ -74,93 +74,16 @@
             {
                 response = Common.ajaxSuccessHandler(response, that, debug, false);
                 object = JSON.parse(response);
-                var getHTML = "";
-                var i = 0;
 
                 if(object.status == "success")
                 {
-
-                    //var count = Common.count(object.data);
-                    var count = Object.keys(object.data).length;
-                    var halfCount = Math.ceil(count/2);
-
-                    console.log(count+"|"+halfCount);
-
-                    $.each(object.data, function(key, value)
-                    {
-
-                        if(i == 0)
-                        {
-                            getHTML += '<div class="col-md-6"><dl class="dl-horizontal">';
-                        }
-
-                        if(key == "created_by")
-                        {
-                            key = "Created By";
-                            value = object.data.created_by.name;
-                        }
-
-                        if(key == "modified_by")
-                        {
-                            key = "Modified By";
-                            value = object.data.modified_by.name;
-                        }
-
-                        if(key == "deleted_by")
-                        {
-                            key = "Deleted By";
-                            value = object.data.deleted_by.name;
-                        }
-
-                        if(key == "created_at")
-                        {
-                            key = "Created At";
-                            value = object.data.created_at;
-                        }
-
-                        if(key == "updated_at")
-                        {
-                            key = "Updated At";
-                            value = object.data.updated_at;
-                        }
-
-                        if(key == "deleted_at")
-                        {
-                                key = "Deleted At";
-                                value = object.data.deleted_at;
-                        }
-
-                        if(key == "enable" && value == 1)
-                        {
-                            key = "Enable";
-                            value = 'Yes';
-                        } else if(key == "enable" && value == 0)
-                        {
-                            key = "Enable";
-                            value = 'No';
-                        }
-
-                        getHTML += '<dt>'+key+': </dt><dd>'+value+'</dd>';
-
-                        if(i == (halfCount-1))
-                        {
-                            getHTML += '</dl></div>';
-                        }
-
-                        i++;
-
-                        if(i == halfCount)
-                        {
-                            i = 0
-                        }
+                    $(modalID+" .row").html(object.html);
 
 
-                    });
-
-                    $(modalID+" .row").html(getHTML);
 
                     $(modalID+" .modalLoader").hide();
                 }
+
             }
 
         });
@@ -207,8 +130,10 @@
                         if(key == 'enable')
                         {
                             return;
+                        }else
+                        {
+                            $(modalID+" input[name="+key+"]").val(value);
                         }
-                        $(modalID+" input[name="+key+"]").val(value);
                     });
 
                     var $enableCheck = $(modalID+" input[name=enable]");
@@ -250,7 +175,16 @@
             },
             success: function (response)
             {
+
                 Common.ajaxSuccessHandler(response, that, debug);
+                Common.hideSpinner(that);
+
+                var object = JSON.parse(response);
+
+                if(object.status == "success")
+                {
+                    location.reload();
+                }
 
             }
 
@@ -258,6 +192,8 @@
 
     });
     //-------------------------------------------------------
+    //-------------------------------------------------------
+
     //-------------------------------------------------------
 
 

@@ -19,10 +19,12 @@
 
     <!--content-->
         {{HtmlHelper::panel(array('title' => "List"))}}
-
         {{ Form::open(array('route' => $data->prefix.'-bulk-action', 'class' =>'form', 'method' =>'POST')) }}
+        <div class="row">
+        @include($data->view."elements.search")
 
         @include($data->view."elements.buttons")
+        </div>
 
         <hr/>
         <div class="row">
@@ -30,10 +32,11 @@
             <tr>
                 <th width="20">#</th>
                 <th>Name</th>
+                <th>Slug</th>
                 <th width="30"></th>
                 @if(Permission::check($data->prefix.'-update'))
                     <th width="80">Enable</th>
-                    <th width="80">Actions</th>
+                    <th width="120">Actions</th>
                     <th width="20"><input id="selectall" type="checkbox"/></th>
                 @endif
             </tr>
@@ -42,6 +45,7 @@
             <tr>
                 <td>{{$item->id}}</td>
                 <td>{{$item->name}}</td>
+                <td>{{$item->slug}}</td>
                 <td>
                     <span data-toggle="tooltip" data-placement="top" data-original-title="View">
                         <a class="btn btn-sm btn-icon btn-circle btn-info viewItem"
@@ -88,6 +92,8 @@
                                                 <i class="fa fa-edit"></i>
                                             </a>
                             </span>
+
+
                             @endif
 
                             @if(Permission::check($data->prefix.'-delete'))
@@ -109,8 +115,10 @@
                 @endforeach
 
         </table>
-
-
+            <?php
+            $get = Input::get();
+            echo $data->list->appends($get)->links();
+            ?>
         </div>
 
 
@@ -125,6 +133,14 @@
 @stop
 
 @section('page_specific_foot')
+    <!--highlight search-->
+    @if(isset($data->input->q))
+        <script>
+            $("body").highlight("{{$data->input->q}}");
+        </script>
+    @endif
+    <!--highlight search-->
+
     <script src="<?php echo asset_path(); ?>/plugins/switchery/switchery.min.js"></script>
     <script src="<?php echo asset_path(); ?>/js/form-slider-switcher.demo.min.js"></script>
     <script>

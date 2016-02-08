@@ -55,6 +55,7 @@ function migrations()
     Schema::create('cruds', function ($table) {
         $table->increments('id');
         $table->string('name')->nullable();
+        $table->string('slug')->nullable();
         $table->boolean('enable')->default(0);
         $table->string('created_by')->nullable();
         $table->string('modified_by')->nullable();

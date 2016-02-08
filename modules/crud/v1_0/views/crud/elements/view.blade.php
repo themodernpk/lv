@@ -3,18 +3,12 @@
 
 <!--modal body-->
 <div class="modal-body">
-
     <div class="row">
-
-
     </div>
 </div>
 <!--/modal body-->
-
-<br clear="all"/>
 <div class="modal-footer">
     <a href="#" data-dismiss="modal" class="btn btn-sm btn-white" >Close</a>
 </div>
-
 {{HtmlHelper::modalClose()}}
 <!--/modal-->
