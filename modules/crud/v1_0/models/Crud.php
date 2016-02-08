@@ -43,14 +43,65 @@ class Crud extends Eloquent
         $settings->model = 'Crud';
         $settings->view = 'crud::crud.';
         $settings->rows = Config::get('core.settings.rows_to_display');
+
+		$settings->enable = false;
+        $settings->executor = true;
+
         return $settings;
     }
     //------------------------------------------------------------
 
     //------------------------------------------------------------
 
+    public static function findOrStore($input=NULL)
+    {
+
+        $settings = Crud::getSettings();
+        $model = $settings->model;
+
+        if ($input == NULL) {
+            $input = Input::all();
+        }
+
+        //remove empty array
+        if(is_array($input))
+        {
+            $input = array_filter($input);
+        }
+
+        if (!is_object($input)) {
+            $input = (object)$input;
+        }
+
+        if(isset($input->id) && !empty($input->id))
+        {
+            $item = $model::find($input->id);
+            if($item)
+            {
+                $response['status'] = 'success';
+                $response['data'] = $item;
+                return $response;
+            }
+        }
+
+
+        if(isset($input->slug) && !empty($input->slug))
+        {
+            $item = $model::where('slug', '=', $input->slug)->first();
+            if($item)
+            {
+                $response['status'] = 'success';
+                $response['data'] = $item;
+                return $response;
+            }
+        }
+
+        return $model::store($input);
+
+    }
+
     //------------------------------------------------------------
-    public static function store($input=NULL)
+public static function store($input=NULL)
     {
 
         $settings = Crud::getSettings();
@@ -73,56 +124,58 @@ class Crud extends Eloquent
         //if id is provided then find
         if (isset($input->id) && !empty($input->id))
         {
-
             $validator = Validator::make((array)$input, $model::update_rules());
             if($validator->fails())
             {
                 $response['status'] = 'failed';
-                $response['errors'] = $validator->messages()->all();
+                $response['errors'][] = $validator->messages()->all();
                 return $response;
             }
 
             $item = $model::find($input->id);
 
-            if(!$item)
+            if($settings->executor == true && Auth::check())
             {
-                $response['status'] = 'failed';
-                $response['errors'][] = 'Item not found';
-                return $response;
+                $item->modified_by = Auth::user()->id;
             }
 
-            $item->modified_by = Auth::user()->id;
         }
-        else if (isset($input->slug) && !empty($input->slug))
+
+        if (isset($input->slug) && !empty($input->slug))
         {
             $validator = Validator::make((array)$input, $model::update_rules());
             if($validator->fails())
             {
                 $response['status'] = 'failed';
-                $response['errors'] = $validator->messages()->all();
+                $response['errors'][] = $validator->messages()->all();
                 return $response;
             }
 
             $item = $model::where('slug', '=', $input->slug)->first();
-            if(!$item)
+
+            if($settings->executor == true && Auth::check())
             {
-                $response['status'] = 'failed';
-                $response['errors'][] = 'Item not found';
-                return $response;
+                $item->modified_by = Auth::user()->id;
             }
-            $item->modified_by = Auth::user()->id;
-        } else
+
+        }
+
+        if(!isset($item))
         {
             $validator = Validator::make((array)$input, $model::create_rules());
             if($validator->fails())
             {
                 $response['status'] = 'failed';
-                $response['errors'] = $validator->messages()->all();
+                $response['errors'][] = $validator->messages()->all();
                 return $response;
             }
 
             $item = new $model();
-            $item->created_by = Auth::user()->id;
+            if($settings->executor == true && Auth::check())
+            {
+                $item->created_by = Auth::user()->id;
+            }
+
         }
 
         $columns = Schema::getColumnListing($settings->table);
@@ -153,6 +206,7 @@ class Crud extends Eloquent
 
         try{
             $item->save();
+            $item = $model::find($item->id);
             $response['status'] = 'success';
             $response['data'] = $item;
 

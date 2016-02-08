@@ -150,6 +150,7 @@ class CrudController extends BaseController
         die();
     }
     //------------------------------------------------------
+    //------------------------------------------------------
     function enable()
     {
 
@@ -158,14 +159,20 @@ class CrudController extends BaseController
         if(isset($this->data->input->pk))
         {
             $item = $model::withTrashed()->where('id', $this->data->input->pk)->first();
-            $item->enable = 1;
+            if($this->settings->enable ==true)
+            {
+                $item->enable = 1;
+            }
             $item->save();
         } else if(is_array($this->data->input->id))
         {
             foreach($this->data->input->id as $id)
             {
                 $item = $model::withTrashed()->where('id', $id)->first();
-                $item->enable = 1;
+                if($this->settings->enable ==true)
+                {
+                    $item->enable = 1;
+                }
                 $item->save();
             }
         }
@@ -180,7 +187,10 @@ class CrudController extends BaseController
         if(isset($this->data->input->pk))
         {
             $item = $model::withTrashed()->where('id', $this->data->input->pk)->first();
-            $item->enable = 0;
+            if($this->settings->enable ==true)
+            {
+                $item->enable = 0;
+            }
             $item->save();
         } else if(is_array($this->data->input->id))
         {
@@ -195,7 +205,10 @@ class CrudController extends BaseController
             foreach($this->data->input->id as $id)
             {
                 $item = $model::withTrashed()->where('id', $id)->first();
-                $item->enable = 0;
+                if($this->settings->enable ==true)
+                {
+                    $item->enable = 0;
+                }
                 $item->save();
             }
         }
@@ -210,7 +223,10 @@ class CrudController extends BaseController
         if(isset($this->data->input->pk))
         {
             $item = $model::withTrashed()->where('id', $this->data->input->pk)->first();
-            $item->enable = 0;
+            if($this->settings->enable ==true)
+            {
+                $item->enable = 0;
+            }
             $item->save();
             $item->delete();
         } else if(is_array($this->data->input->id))
@@ -227,12 +243,16 @@ class CrudController extends BaseController
             foreach($this->data->input->id as $id)
             {
                 $item = $model::withTrashed()->where('id', $id)->first();
-                $item->enable = 0;
+                if($this->settings->enable ==true)
+                {
+                    $item->enable = 0;
+                }
                 $item->save();
                 $item->delete();
             }
         }
     }
+
 
     //------------------------------------------------------
     function bulkAction()

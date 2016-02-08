@@ -80,3 +80,7 @@
     .hide-on-sm-device{display: none;}
     .page-header-fixed{padding-top:60px;}
 }
+
+.autocomplete_loading {
+    background: white url("img/ui-anim_basic_16x16.gif") right center no-repeat;
+}
