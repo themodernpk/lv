@@ -44,7 +44,7 @@ class CrudController extends BaseController
                 $this->data->list = $this->search();
             } else
             {
-                $list = $model::orderBy("name", "ASC");
+                $list = $model::orderBy("created_at", "ASC");
                 $this->data->list = $list->paginate($this->data->rows);
             }
         }
@@ -60,7 +60,7 @@ class CrudController extends BaseController
     function search()
     {
         $model = $this->data->model;
-        $list = $model::orderBy("name", "ASC");
+        $list = $model::orderBy("created_at", "ASC");
 
         $term = $this->data->input->q;
 

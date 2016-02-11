@@ -206,7 +206,6 @@ public static function store($input=NULL)
 
         try{
             $item->save();
-            $item = $model::find($item->id);
             $response['status'] = 'success';
             $response['data'] = $item;
 
