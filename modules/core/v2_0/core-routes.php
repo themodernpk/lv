@@ -114,7 +114,7 @@ Route::group(array('prefix' => 'notification','before' => 'auth'), function()
 
 Route::group(array('prefix' => 'admin/db/','before' => 'auth'), function()
 {
-    Route::get('/update', array('as' => 'core-db-update', 'uses' => 'CoreDbController@update_2016_01_08_7_30PM'));
+    Route::get('/update', array('as' => 'core-db-update', 'uses' => 'CoreDbController@index'));
 });
 
 //----------Group

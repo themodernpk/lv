@@ -161,6 +161,18 @@ class Group extends Eloquent
     }
 
     //------------------------------------------------------------
+    public static function getGroupIdFromSlug($slug)
+    {
+        $group = Group::where('slug', '=', $slug)->first();
+
+        if(!$group->isEmpty)
+        {
+            return $group;
+        } else
+        {
+            return false;
+        }
+    }
     //------------------------------------------------------------
     //------------------------------------------------------------
 

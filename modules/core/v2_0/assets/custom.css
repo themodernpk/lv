@@ -84,3 +84,5 @@
 .autocomplete_loading {
     background: white url("img/ui-anim_basic_16x16.gif") right center no-repeat;
 }
+
+.datetimepicker{ z-index: 10000 !important; }

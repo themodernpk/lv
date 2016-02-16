@@ -18,22 +18,54 @@ class CoreDbController extends BaseController
     }
 
     //------------------------------------------------------
+    public function index()
+    {
+
+        $list = get_class_methods('CoreDbController');
+
+        foreach($list as $item)
+        {
+
+            if (strpos($item, 'update') !== false)
+            {
+                CoreDbController::$item();
+            }
+
+        }
+
+        echo "<hr/>";
+        echo "Execution Completed";
+
+
+    }
+    //------------------------------------------------------
 
     public function update_2016_01_07_7PM()
     {
 
-        Schema::table('groups', function($table)
+
+        try{
+
+            Schema::table('groups', function($table)
+            {
+                $table->integer('created_by')->unsigned()->nullable();
+                $table->foreign('created_by')->references('id')->on('users')->onDelete('set null')->after('active');
+
+                $table->integer('modified_by')->unsigned()->nullable();
+                $table->foreign('modified_by')->references('id')->on('users')->onDelete('set null')->after('created_by');
+
+                $table->integer('deleted_by')->unsigned()->nullable();
+                $table->foreign('deleted_by')->references('id')->on('users')->onDelete('set null')->after('modified_by');
+
+            });
+
+        } catch(Exception $e)
         {
-            $table->integer('created_by')->unsigned()->nullable();
-            $table->foreign('created_by')->references('id')->on('users')->onDelete('set null')->after('active');
+            echo $e->getMessage();
+            echo " - this will not stop the execution of other functions<hr/>";
+        }
 
-            $table->integer('modified_by')->unsigned()->nullable();
-            $table->foreign('modified_by')->references('id')->on('users')->onDelete('set null')->after('created_by');
 
-            $table->integer('deleted_by')->unsigned()->nullable();
-            $table->foreign('deleted_by')->references('id')->on('users')->onDelete('set null')->after('modified_by');
-
-        });
 
     }
 
@@ -41,18 +73,28 @@ class CoreDbController extends BaseController
     public function update_2016_01_08_6PM()
     {
 
-        Schema::table('permissions', function($table)
+        try{
+            Schema::table('permissions', function($table)
+            {
+                $table->integer('created_by')->unsigned()->nullable();
+                $table->foreign('created_by')->references('id')->on('users')->onDelete('set null')->after('active');
+
+                $table->integer('modified_by')->unsigned()->nullable();
+                $table->foreign('modified_by')->references('id')->on('users')->onDelete('set null')->after('created_by');
+
+                $table->integer('deleted_by')->unsigned()->nullable();
+                $table->foreign('deleted_by')->references('id')->on('users')->onDelete('set null')->after('modified_by');
+
+            });
+
+
+        } catch(Exception $e)
         {
-            $table->integer('created_by')->unsigned()->nullable();
-            $table->foreign('created_by')->references('id')->on('users')->onDelete('set null')->after('active');
+            echo $e->getMessage();
+            echo " - this will not stop the execution of other functions<hr/>";
+        }
 
-            $table->integer('modified_by')->unsigned()->nullable();
-            $table->foreign('modified_by')->references('id')->on('users')->onDelete('set null')->after('created_by');
 
-            $table->integer('deleted_by')->unsigned()->nullable();
-            $table->foreign('deleted_by')->references('id')->on('users')->onDelete('set null')->after('modified_by');
-
-        });
 
     }
 
@@ -60,55 +102,17 @@ class CoreDbController extends BaseController
     public function update_2016_01_08_7PM()
     {
 
-        $permissions[] = 'Core Activity Create';
-        $permissions[] = 'Core Activity Read';
-        $permissions[] = 'Core Activity Update';
-        $permissions[] = 'Core Activity Delete';
-        $permissions[] = 'Core Manage All Users Activity';
-
-        $permissions[] = 'Core Notification Create';
-        $permissions[] = 'Core Notification Read';
-        $permissions[] = 'Core Notification Update';
-        $permissions[] = 'Core Notification Delete';
-        $permissions[] = 'Core All Users Notification';
-
-        $permissions[] = 'Core Permission Create';
-        $permissions[] = 'Core Permission Read';
-        $permissions[] = 'Core Permission Update';
-        $permissions[] = 'Core Permission Delete';
-
-        $permissions[] = 'Core Setting Create';
-        $permissions[] = 'Core Setting Read';
-        $permissions[] = 'Core Setting Update';
-        $permissions[] = 'Core Setting Delete';
-
-        $permissions[] = 'Core User Create';
-        $permissions[] = 'Core User Read';
-        $permissions[] = 'Core User Update';
-        $permissions[] = 'Core User Delete';
+        try{
 
 
-        foreach ($permissions as $permission) {
-            $input['name'] = $permission;
-            $input['slug'] = Str::slug($permission);
 
-            //check if already exist
-            $exist = Permission::where('slug', '=', $input['slug'])->first();
-            if ($exist) {
-                continue;
-            }
-
-            $response = Permission::create($input);
-
-            if ($response['status'] == 'failed') {
-                return $response;
-                die();
-            }
-
+        } catch(Exception $e)
+        {
+            echo $e->getMessage();
+            echo " - this will not stop the execution of other functions<hr/>";
         }
 
-        //sync this permission with rest of the groups
-        Custom::syncPermissions();
+
 
 
     }
@@ -116,18 +120,80 @@ class CoreDbController extends BaseController
     //------------------------------------------------------
     public function update_2016_01_08_7_30PM()
     {
-        Schema::table('users', function($table)
+
+        try{
+
+            $permissions[] = 'Core Activity Create';
+            $permissions[] = 'Core Activity Read';
+            $permissions[] = 'Core Activity Update';
+            $permissions[] = 'Core Activity Delete';
+            $permissions[] = 'Core Manage All Users Activity';
+
+            $permissions[] = 'Core Notification Create';
+            $permissions[] = 'Core Notification Read';
+            $permissions[] = 'Core Notification Update';
+            $permissions[] = 'Core Notification Delete';
+            $permissions[] = 'Core All Users Notification';
+
+            $permissions[] = 'Core Permission Create';
+            $permissions[] = 'Core Permission Read';
+            $permissions[] = 'Core Permission Update';
+            $permissions[] = 'Core Permission Delete';
+
+            $permissions[] = 'Core Setting Create';
+            $permissions[] = 'Core Setting Read';
+            $permissions[] = 'Core Setting Update';
+            $permissions[] = 'Core Setting Delete';
+
+            $permissions[] = 'Core User Create';
+            $permissions[] = 'Core User Read';
+            $permissions[] = 'Core User Update';
+            $permissions[] = 'Core User Delete';
+
+
+            foreach ($permissions as $permission) {
+                $input['name'] = $permission;
+                $input['slug'] = Str::slug($permission);
+
+                //check if already exist
+                $exist = Permission::where('slug', '=', $input['slug'])->first();
+                if ($exist) {
+                    continue;
+                }
+
+                $response = Permission::create($input);
+
+                if ($response['status'] == 'failed') {
+                    return $response;
+                    die();
+                }
+
+            }
+
+            //sync this permission with rest of the groups
+            Custom::syncPermissions();
+
+            Schema::table('users', function($table)
+            {
+                $table->integer('created_by')->unsigned()->nullable();
+                $table->foreign('created_by')->references('id')->on('users')->onDelete('set null')->after('active');
+
+                $table->integer('modified_by')->unsigned()->nullable();
+                $table->foreign('modified_by')->references('id')->on('users')->onDelete('set null')->after('created_by');
+
+                $table->integer('deleted_by')->unsigned()->nullable();
+                $table->foreign('deleted_by')->references('id')->on('users')->onDelete('set null')->after('modified_by');
+
+            });
+
+
+        } catch(Exception $e)
         {
-            $table->integer('created_by')->unsigned()->nullable();
-            $table->foreign('created_by')->references('id')->on('users')->onDelete('set null')->after('active');
+            echo $e->getMessage();
+            echo " - this will not stop the execution of other functions<hr/>";
+        }
 
-            $table->integer('modified_by')->unsigned()->nullable();
-            $table->foreign('modified_by')->references('id')->on('users')->onDelete('set null')->after('created_by');
 
-            $table->integer('deleted_by')->unsigned()->nullable();
-            $table->foreign('deleted_by')->references('id')->on('users')->onDelete('set null')->after('modified_by');
-
-        });
     }
 
     //------------------------------------------------------

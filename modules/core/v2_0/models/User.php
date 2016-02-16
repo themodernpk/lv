@@ -278,6 +278,12 @@ class User extends Eloquent implements UserInterface, RemindableInterface
             $input['username'] = Common::generate_username($input['email']);
         }
 
+
+        if(!in_array('password', $input))
+        {
+            $input['password'] = Common::generate_password();
+        }
+
         if (!is_object($input)) {
             $input = (object)$input;
         }

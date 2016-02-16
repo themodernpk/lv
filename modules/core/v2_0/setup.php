@@ -21,6 +21,11 @@ function install()
     //run seeds
     seeds();
 
+    //all remaining db updates
+    $extractor = new CoreExtractor();
+    $url = URL::route('core-db-update');
+    $extractor->LoadCURLPage($url);
+
     $response['status'] = 'success';
 
     return $response;
