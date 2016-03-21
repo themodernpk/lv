@@ -1,7 +1,5 @@
 <?php
 
-/* ****** Code Completed till 10th april */
-
 //----------Doc
 Route::get('/doc', array('as' => 'doc', 'uses' => 'CoreController@doc'));
 
@@ -15,6 +13,12 @@ Route::get('/createAdmin', array('as' => 'createAdmin', 'uses' => 'SetupControll
 //----------Common pages
 Route::get('/', array('as' => 'home', 'uses' => 'CoreController@getLogin'));
 Route::get('/login', array('as' => 'login', 'uses' => 'CoreController@getLogin'));
+Route::get('/forgot-password', array('as' => 'forgot-password', 'uses' => 'CoreController@getForgotPassword'));
+Route::post('/forgot-password', array('as' => 'forgot-password-post', 'uses' => 'CoreController@postForgotPassword'));
+
+Route::get('/reset-password/{otp?}', array('as' => 'reset-password', 'uses' => 'CoreController@getRestPassword'));
+Route::post('/reset-password', array('as' => 'reset-password-post', 'uses' => 'CoreController@postRestPassword'));
+
 Route::get('/error', array('as' => 'error', 'uses' => 'CoreController@getError'));
 Route::any('/postlogin', array('as' => 'postlogin', 'uses' => 'CoreController@postLogin'));
 Route::get('/register', array('as' => 'register', 'uses' => 'CoreController@getRegister'));

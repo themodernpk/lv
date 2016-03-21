@@ -166,7 +166,7 @@ class Permission extends Eloquent
     }
 
     //------------------------------------------------------------
-    public static function check($permission_slug)
+    public static function check($permission_slug, $user_id = NULL)
     {
 
         //if permission does not exist then create one
@@ -180,8 +180,21 @@ class Permission extends Eloquent
             $find_or_create->save();
             Custom::syncPermissions();
         }
+        if($user_id == NULL)
+        {
+            if(isset(Auth::user()->id))
+            {
+                $user_id = Auth::user()->id;
+            }
+        }
 
-        $user = Auth::user();
+        if(!isset($user_id) || $user_id == NULL)
+        {
+            return false;
+        }
+
+        $user = User::find($user_id);
+
         $group_id = $user->group_id;
         /* if user belong to admin & active then permission slug will not matter */
         $group = Group::find($group_id);
@@ -220,6 +233,7 @@ class Permission extends Eloquent
         //find all the group which has this permission active
         $groups = $permission->groups(1)->get();
 
+
         if(!$groups)
         {
             $response['status'] = 'failed';
@@ -233,18 +247,17 @@ class Permission extends Eloquent
             $group_id[] = $group->id;
         }
 
+        $users = User::whereIn('group_id', $group_id)->where('active', 1);
+
         if($exclude_current_user == true)
         {
-            $users = User::whereIn('group_id', $group_id)->where('id', "!=", Auth::user()->id)
-                ->where('active', 1)
-                ->get();
-        } else
-        {
-            $users = User::whereIn('group_id', $group_id)->where('active', 1)->get();
+            $users->where('id', "!=", Auth::user()->id);
         }
 
+        $list = $users->get();
 
-        return $users;
+
+        return $list;
     }
 
     //------------------------------------------------------------

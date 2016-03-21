@@ -98,7 +98,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface
 
         $rules = array(
             'email' => 'required|email',
-            'password' => 'required|alpha_num|min:4'
+            'password' => 'required|min:4'
         );
 
 
@@ -147,34 +147,34 @@ class User extends Eloquent implements UserInterface, RemindableInterface
 
         if (isset($input['apirequest']) )
         {
-            //check of for invalid credentails if it is apirquest
+            //check of for invalid credentials if it is apirquest
             if (!Auth::loginUsingId($get_user->id))
             {
 
                 $response = array();
                 $response['status'] = 'failed';
-                $response['errors'][] = "Invalid Credentials";
+                $response['errors'][] = "Api authentication failed, invalid credentials";
                 return $response;
             }
 
         }
-        else{
-            //check of for invalid credentails
+        else
+        {
+
+            //check of for invalid credentials
             if (!Auth::attempt($credentials, $remember))
             {
                 $response = array();
                 $response['status'] = 'failed';
                 $response['errors'][] = "Invalid Credentials";
                 return $response;
+            } else
+            {
+
             }
+
+
         }
-
-
-        if (Auth::viaRemember())
-        {
-            return Redirect::route('dashboard')->with('flash_success', 'Remember login');
-        }
-
 
         //if credentials are valid then process further
         $user_id = Auth::id();
@@ -226,6 +226,10 @@ class User extends Eloquent implements UserInterface, RemindableInterface
         $user->lastlogin = Dates::now();
         $user->save();
 
+        if (Auth::viaRemember())
+        {
+            return Redirect::route('dashboard')->with('flash_success', 'Remember login');
+        }
 
         $response = array();
         $response['status'] = 'success';
@@ -273,13 +277,12 @@ class User extends Eloquent implements UserInterface, RemindableInterface
             $input = array_filter($input);
         }
 
-        if(!in_array('username', $input))
+        if(!isset($input['username']) || empty($input['username']))
         {
             $input['username'] = Common::generate_username($input['email']);
         }
 
-
-        if(!in_array('password', $input))
+        if(!isset($input['password']))
         {
             $input['password'] = Common::generate_password();
         }
@@ -287,6 +290,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface
         if (!is_object($input)) {
             $input = (object)$input;
         }
+
 
         //if id is provided then find
         if (isset($input->id) && !empty($input->id))
@@ -319,6 +323,8 @@ class User extends Eloquent implements UserInterface, RemindableInterface
 
         $columns = Schema::getColumnListing('users');
 
+        $input = (array) $input;
+
         foreach($input as $key => $value)
         {
             if(in_array($key, $columns))
@@ -339,6 +345,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface
 
 
         try{
+
             $item->save();
             $response['status'] = 'success';
             $response['data'] = $item;
@@ -380,5 +387,143 @@ class User extends Eloquent implements UserInterface, RemindableInterface
         return $response;
 
     }
+    //------------------------------------------------------------
+    public static function dbCreateForgotPasswordColumn()
+    {
+        Schema::table('users', function($table)
+        {
+            $table->string('forgot_password')->nullable()->after('remember_token');
+        });
+    }
+    //------------------------------------------------------------
+    public static function sendResetPasswordOTP($email)
+    {
+        $input = new stdClass();
+
+        $rules = array(
+            'email' => 'required|email',
+        );
+
+        $validate = Validator::make( array('email' => $email), $rules);
+        if($validate->fails())
+        {
+            $response['status'] = 'failed';
+            $response['errors'] = $validate->messages();
+            return $response;
+        }
+
+        //find user based on email
+        $user = User::where('email', '=', $email)->withTrashed()->first();
+        if(!$user)
+        {
+            $response['status'] = 'failed';
+            $response['errors'][] = "User does not exist";
+            return $response;
+        }
+
+        $otp = Common::generate_password(5);
+        $user->forgot_password = Crypt::encrypt($otp);
+
+
+        try{
+
+            $user->save();
+
+            //activity log
+            Activity::log($user->name." / ".$user->email." - generated OTP to reset password", NULL, "PASSWORD", NULL, $user->id);
+
+            //send email alert
+            $subject = $user->name." - Rest your ".Setting::value('app-name')." password";
+
+            $from = array("noreply@webreinvent.com" => Setting::value('app-name'));
+
+            $input->otp = $otp;
+            $input->user = $user;
+
+            $message = View::make('core::email-alerts.send-reset-password')->with('data', $input)->render();
+
+            $to[] = $email;
+
+            $response = CoreSmtp::send_email($from, $to, $subject, $message);
+            $response['status'] = 'success';
+        }catch(Exception $e)
+        {
+            $response['status'] = 'failed';
+            $response['errors'][] = $e->getMessage();
+        }
+        return $response;
+
+    }
+    //------------------------------------------------------------
+    public static function resetPassword($input=NULL)
+    {
+
+        if($input == NULL)
+        {
+            $input = Input::all();
+        }
+
+        if(!is_array($input))
+        {
+            $input = (array) $input;
+        }
+
+        $object = (object) $input;
+
+
+        $messages = array(
+            'forgot_password.required' => 'Enter one time password (OTP)',
+            'password.required' => 'Enter new password',
+            'password.min:4' => 'Minimum 4 characters required password',
+            'email.required' => 'Enter your email',
+        );
+
+        $rules = array(
+            'forgot_password' => 'required',
+            'password' => 'required',
+            'email' => 'required|email'
+        );
+
+        $validate = Validator::make($input, $rules, $messages);
+
+        if($validate->fails())
+        {
+            $response['status'] = 'failed';
+            $response['errors'] = $validate->messages();
+            return $response;
+        }
+
+        //find user based on email
+        $user = User::where('email', '=', $object->email)->withTrashed()->first();
+        if(!$user)
+        {
+            $response['status'] = 'failed';
+            $response['errors'][] = "User does not exist";
+            return $response;
+        }
+        //check if otp is match with exist otp in database
+        $db_otp = Crypt::decrypt($user->forgot_password);
+        if($db_otp != trim($object->forgot_password))
+        {
+            $response['status'] = 'failed';
+            $response['errors'][] = "Invalid OTP";
+            return $response;
+        }
+        $user->password = Hash::make($object->password);
+        $user->forgot_password = NULL;
+        try{
+            $user->save();
+            Activity::log($user->name." / ".$user->email." - password successfully reset", NULL, "PASSWORD", NULL, $user->id);
+            $response['status'] = 'success';
+        }catch(Exception $e)
+        {
+            $response['status'] = 'failed';
+            $response['errors'][] = $e->getMessage();
+        }
+        return $response;
+
+    }
+    //------------------------------------------------------------
+    //------------------------------------------------------------
     //------------------------------------------------------------
 }

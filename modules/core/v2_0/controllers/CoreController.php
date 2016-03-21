@@ -4,9 +4,12 @@ class CoreController extends BaseController
 {
     /* ****** Code Completed till 10th april */
     public static $view = 'core::';
+    public $data;
 
     public function __construct()
     {
+        $this->data = new stdClass();
+        $this->data->input = (object)Input::all();
     }
 
     //------------------------------------------------------
@@ -161,7 +164,73 @@ class CoreController extends BaseController
     }
 
     //------------------------------------------------------
-    /* ******\ Code Completed till 10th april */
+    function getForgotPassword()
+    {
+        $data = array();
+
+        //create column if not exist in users table
+        if(!Schema::hasColumn('users', 'forgot_password')) ;
+        {
+            try{
+                User::dbCreateForgotPasswordColumn();
+            }catch(Exception $e)
+            {
+                //do nothing
+            }
+
+        }
+
+        return View::make('core::forgot-password')->with('title', 'Recover your password')->with('data', $data);
+    }
+    //------------------------------------------------------
+    function postForgotPassword()
+    {
+        $response = User::sendResetPasswordOTP($this->data->input->email);
+
+        if($response['status'] == 'failed')
+        {
+            return Redirect::back()->withErrors($response['errors']);
+        } else
+        {
+            return Redirect::back()->with('flash_notice', 'Password reset instructions are sent to '.$this->data->input->email);
+        }
+    }
+    //------------------------------------------------------
+
+    function getRestPassword()
+    {
+
+        $otp = Request::segment(2);
+        $this->data->otp = "";
+
+        if(isset($otp) && !empty($otp))
+        {
+            try{
+                $this->data->otp =  Crypt::decrypt($otp);
+            }catch(Exception $e)
+            {
+
+            }
+        }
+
+        return View::make('core::reset-password')->with('title', 'Reset your password')->with('data', $this->data);
+    }
+    //------------------------------------------------------
+    function postRestPassword()
+    {
+
+        $response = User::resetPassword($this->data->input);
+
+        if($response['status'] == 'failed')
+        {
+            return Redirect::back()->withErrors($response['errors']);
+        } else
+        {
+            return Redirect::route('login')->with('flash_notice', 'Password successfully reset');
+        }
+    }
+    //------------------------------------------------------
+
 
     function setting()
     {

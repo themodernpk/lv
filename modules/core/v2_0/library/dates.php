@@ -137,7 +137,7 @@ class Dates
         return $result;
     }
     //-----------------------------------------------------------------
-    function getFirstAndLastDay($month, $year)
+    public static function getFirstAndLastDay($month, $year)
     {
         $first = date('Y-m-d', mktime(0, 0, 0, $month, 1, $year));
         $last = date('Y-m-t', mktime(0, 0, 0, $month, 1, $year));
@@ -154,7 +154,6 @@ class Dates
         $end_ts = strtotime($end);
         $diff = $end_ts - $start_ts;
         return round($diff / 86400);
-
     }
     //-----------------------------------------------------------------
     public static function getDaysBetweenDates($start, $end)
@@ -176,6 +175,23 @@ class Dates
         return $days;
     }
 
+    //-----------------------------------------------------------------
+    public static function getMonthsBetweenDates($start, $end)
+    {
+        $start    = new DateTime($start);
+        $start->modify('first day of this month');
+        $end      = new DateTime($end);
+        $end->modify('first day of next month');
+        $interval = DateInterval::createFromDateString('1 month');
+        $period   = new DatePeriod($start, $interval, $end);
+
+        $result = array();
+        foreach ($period as $dt) {
+            $result[] = $dt->format("Y-m");
+        }
+
+        return $result;
+    }
     //-----------------------------------------------------------------
     public static function compareDates($date1,$date2)
     {

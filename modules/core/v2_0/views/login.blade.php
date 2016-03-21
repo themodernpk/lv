@@ -38,6 +38,7 @@
                     <label>
                         <input type="checkbox" name="remember"/> Remember Me
                     </label>
+                    <span class="pull-right"><a href="{{URL::route('forgot-password')}}">Forgot Password?</a></span>
                 </div>
                 <div class="login-buttons">
                     <button type="submit" class="btn btn-success ">Sign me in</button>

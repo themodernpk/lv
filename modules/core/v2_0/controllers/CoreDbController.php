@@ -118,61 +118,62 @@ class CoreDbController extends BaseController
     }
 
     //------------------------------------------------------
-    public function update_2016_01_08_7_30PM()
+    public function update_2016_01_08_6_30PM()
     {
+        $permissions[] = 'Core Activity Create';
+        $permissions[] = 'Core Activity Read';
+        $permissions[] = 'Core Activity Update';
+        $permissions[] = 'Core Activity Delete';
+        $permissions[] = 'Core Manage All Users Activity';
 
-        try{
+        $permissions[] = 'Core Notification Create';
+        $permissions[] = 'Core Notification Read';
+        $permissions[] = 'Core Notification Update';
+        $permissions[] = 'Core Notification Delete';
+        $permissions[] = 'Core All Users Notification';
 
-            $permissions[] = 'Core Activity Create';
-            $permissions[] = 'Core Activity Read';
-            $permissions[] = 'Core Activity Update';
-            $permissions[] = 'Core Activity Delete';
-            $permissions[] = 'Core Manage All Users Activity';
+        $permissions[] = 'Core Permission Create';
+        $permissions[] = 'Core Permission Read';
+        $permissions[] = 'Core Permission Update';
+        $permissions[] = 'Core Permission Delete';
 
-            $permissions[] = 'Core Notification Create';
-            $permissions[] = 'Core Notification Read';
-            $permissions[] = 'Core Notification Update';
-            $permissions[] = 'Core Notification Delete';
-            $permissions[] = 'Core All Users Notification';
+        $permissions[] = 'Core Setting Create';
+        $permissions[] = 'Core Setting Read';
+        $permissions[] = 'Core Setting Update';
+        $permissions[] = 'Core Setting Delete';
 
-            $permissions[] = 'Core Permission Create';
-            $permissions[] = 'Core Permission Read';
-            $permissions[] = 'Core Permission Update';
-            $permissions[] = 'Core Permission Delete';
-
-            $permissions[] = 'Core Setting Create';
-            $permissions[] = 'Core Setting Read';
-            $permissions[] = 'Core Setting Update';
-            $permissions[] = 'Core Setting Delete';
-
-            $permissions[] = 'Core User Create';
-            $permissions[] = 'Core User Read';
-            $permissions[] = 'Core User Update';
-            $permissions[] = 'Core User Delete';
+        $permissions[] = 'Core User Create';
+        $permissions[] = 'Core User Read';
+        $permissions[] = 'Core User Update';
+        $permissions[] = 'Core User Delete';
 
 
-            foreach ($permissions as $permission) {
-                $input['name'] = $permission;
-                $input['slug'] = Str::slug($permission);
+        foreach ($permissions as $permission) {
+            $input['name'] = $permission;
+            $input['slug'] = Str::slug($permission);
 
-                //check if already exist
-                $exist = Permission::where('slug', '=', $input['slug'])->first();
-                if ($exist) {
-                    continue;
-                }
-
-                $response = Permission::create($input);
-
-                if ($response['status'] == 'failed') {
-                    return $response;
-                    die();
-                }
-
+            //check if already exist
+            $exist = Permission::where('slug', '=', $input['slug'])->first();
+            if ($exist) {
+                continue;
             }
 
-            //sync this permission with rest of the groups
-            Custom::syncPermissions();
+            $response = Permission::create($input);
 
+            if ($response['status'] == 'failed') {
+                return $response;
+                die();
+            }
+
+        }
+
+        //sync this permission with rest of the groups
+        Custom::syncPermissions();
+    }
+    //------------------------------------------------------
+    public function update_2016_01_08_7_30PM()
+    {
+        try{
             Schema::table('users', function($table)
             {
                 $table->integer('created_by')->unsigned()->nullable();
@@ -185,8 +186,6 @@ class CoreDbController extends BaseController
                 $table->foreign('deleted_by')->references('id')->on('users')->onDelete('set null')->after('modified_by');
 
             });
-
-
         } catch(Exception $e)
         {
             echo $e->getMessage();
@@ -196,6 +195,23 @@ class CoreDbController extends BaseController
 
     }
 
+    //------------------------------------------------------
+    public function update_2016_03_11_4PM()
+    {
+
+        try{
+            User::dbCreateForgotPasswordColumn();
+        } catch(Exception $e)
+        {
+            echo $e->getMessage();
+            echo " - this will not stop the execution of other functions<hr/>";
+        }
+
+
+
+    }
+    //------------------------------------------------------
+    //------------------------------------------------------
     //------------------------------------------------------
 
 

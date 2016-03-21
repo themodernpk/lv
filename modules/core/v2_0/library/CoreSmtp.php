@@ -13,7 +13,7 @@ class CoreSmtp
      */
 
 
-    public static function send_email($from, $to, $subject, $message, $cc=NULL, $bcc=NULL)
+    public static function send_email($from, $to, $subject, $message, $cc=NULL, $bcc=NULL, $default_css=true)
     {
         $rules = array(
                         "subject"=>"required",
@@ -114,14 +114,19 @@ class CoreSmtp
         {
             return $response;
         }
+        if($default_css == true)
+        {
+            $cssToInlineStyles = new \TijsVerkoyen\CssToInlineStyles\CssToInlineStyles();
+            $cssToInlineStyles->setHTML($message);
+            $css = asset_path()."/email-alerts.css";
+            $css = @file_get_contents($css);
+            $cssToInlineStyles->setCSS($css);
+            $input['message'] = $cssToInlineStyles->convert();
+        } else
+        {
+            $input['message'] = $message;
+        }
 
-        $cssToInlineStyles = new \TijsVerkoyen\CssToInlineStyles\CssToInlineStyles();
-        $cssToInlineStyles->setHTML($message);
-        $css = asset_path()."/email-alerts.css";
-        $css = @file_get_contents($css);
-        $cssToInlineStyles->setCSS($css);
-
-        $input['message'] = $cssToInlineStyles->convert();
 
         try{
 

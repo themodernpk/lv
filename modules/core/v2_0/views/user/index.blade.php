@@ -134,6 +134,10 @@
             </tbody>
 
         </table>
+
+
+            <br class="clearfix"/><br/>
+            <hr/>
             <?php
             $get = Input::get();
             echo $data->list->appends($get)->links();
@@ -174,7 +178,11 @@
             {
                 FormSliderSwitcher.init();
 
-                $("#data-table").DataTable({ responsive:true, "autoWidth": false, pageLength:100, "order": [[ 0, "desc" ]]});
+                $("#data-table").DataTable({ "autoWidth": false,
+                    pageLength:100,
+                    "order": [[ 0, "desc" ]],
+                    "bPaginate": false,
+                });
 
                 $(".paginate_button").click(function()
                 {

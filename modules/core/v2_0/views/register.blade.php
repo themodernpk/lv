@@ -47,9 +47,15 @@
                            placeholder="Mobile Number"/>
                 </div>
 
+
+
                 <div class="login-buttons">
                     <button type="submit" class="btn btn-success ">Sign Up</button>
                     <a href="{{URL::route('login')}}" class="btn btn-info">Sign In</a>
+                </div>
+                <div class="checkbox m-b-20">
+
+                    <span class="pull-right"><a href="{{URL::route('forgot-password')}}">Forgot Password?</a></span>
                 </div>
                 {{ Form::close() }}
             </div>

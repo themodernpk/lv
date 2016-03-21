@@ -167,11 +167,41 @@ class Group extends Eloquent
 
         if(!$group->isEmpty)
         {
-            return $group;
+            return $group->id;
         } else
         {
             return false;
         }
+    }
+    //------------------------------------------------------------
+    public static function getGroupUsersFromSlug($slug, $format=NULL)
+    {
+        $group_id = Group::getGroupIdFromSlug($slug);
+
+        if($format == NULL)
+        {
+            $users = User::where('group_id', $group_id)->get();
+        } else if($format == 'array')
+        {
+            $users = User::where('group_id', $group_id)->get()->toArray();
+        }
+
+        return $users;
+
+    }
+    //------------------------------------------------------------
+    public static function getGroupUsersFromID($group_id, $format=NULL)
+    {
+        if($format == NULL)
+        {
+            $users = User::where('group_id', $group_id)->get();
+        } else if($format == 'array')
+        {
+            $users = User::where('group_id', $group_id)->get()->toArray();
+        }
+
+        return $users;
+
     }
     //------------------------------------------------------------
     //------------------------------------------------------------
