@@ -42,7 +42,7 @@
                 </div>
                 <div class="login-buttons">
                     <button type="submit" class="btn btn-success ">Sign me in</button>
-                    <a href="{{URL::route('register')}}" class="btn btn-info">Sign up</a>
+                    {{--<a href="{{URL::route('register')}}" class="btn btn-info">Sign up</a>--}}
                 </div>
                 {{ Form::close() }}
             </div>
