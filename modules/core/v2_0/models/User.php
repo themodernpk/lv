@@ -150,7 +150,6 @@ class User extends Eloquent implements UserInterface, RemindableInterface
             //check of for invalid credentials if it is apirquest
             if (!Auth::loginUsingId($get_user->id))
             {
-
                 $response = array();
                 $response['status'] = 'failed';
                 $response['errors'][] = "Api authentication failed, invalid credentials";
@@ -160,19 +159,15 @@ class User extends Eloquent implements UserInterface, RemindableInterface
         }
         else
         {
-
             //check of for invalid credentials
             if (!Auth::attempt($credentials, $remember))
             {
+                Activity::log($credentials['email']." - Login failure due to invalid credentials", NULL, "LOGIN", NULL);
                 $response = array();
                 $response['status'] = 'failed';
                 $response['errors'][] = "Invalid Credentials";
                 return $response;
-            } else
-            {
-
             }
-
 
         }
 
@@ -187,6 +182,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface
             $response = array();
             $response['status'] = 'failed';
             $response['errors'][] = "Your account belongs to inactive user group.";
+            Activity::log($credentials['email']." - Login failure, User group is inactive", NULL, "LOGIN", NULL, $user->id);
             Auth::logout();
             return $response;
         }
@@ -197,6 +193,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface
             $response = array();
             $response['status'] = 'failed';
             $response['errors'][] = "Your account is inactive.";
+            Activity::log($credentials['email']." - Login failure, User account is inactive", NULL, "LOGIN", NULL, $user->id);
             Auth::logout();
             return $response;
         }
@@ -208,6 +205,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface
             $response = array();
             $response['status'] = 'failed';
             $response['errors'][] = "You don't have permission to login";
+            Activity::log($credentials['email']." - Login failure, user does not have permission to login", NULL, "LOGIN", NULL, $user->id);
             Auth::logout();
             return $response;
         }
@@ -218,8 +216,17 @@ class User extends Eloquent implements UserInterface, RemindableInterface
             $response = array();
             $response['status'] = 'failed';
             $response['errors'][] = "API Access denied";
+            Activity::log($credentials['email']." - API access denied", NULL, "API", NULL, $user->id);
             Auth::logout();
             return $response;
+        }
+
+
+        //generate log if some login during off hours
+        $hour = date('H');
+        if($user->group->slug != 'admin' && ( ($hour >= 0 && $hour <= 10) || $hour > 22))
+        {
+            Activity::log($user->name." - Login during off hours at <b>".Dates::dateformat(date('Y-m-d h:i:s'))."</b>", $user->id, "LOGIN");
         }
 
         //update last login column
@@ -524,6 +531,11 @@ class User extends Eloquent implements UserInterface, RemindableInterface
 
     }
     //------------------------------------------------------------
+    public static function findByEmail($email)
+    {
+        $user = User::withTrashed()->where('email', '=', $email)->first();
+        return $user;
+    }
     //------------------------------------------------------------
     //------------------------------------------------------------
 }

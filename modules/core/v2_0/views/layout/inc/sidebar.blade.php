@@ -10,7 +10,7 @@
                 </div>
                 <div class="info">
                     {{Auth::user()->name}}
-                    <small>Front end developer</small>
+                    {{--<small>Front end developer</small>--}}
                 </div>
             </li>
         </ul>

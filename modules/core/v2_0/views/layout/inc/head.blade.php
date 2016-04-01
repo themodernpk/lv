@@ -27,5 +27,17 @@
     @yield('page_specific_head')
     <!--page specific css & js-->
 
+    <?php
+    $modules = modules_list();
+    foreach($modules as $module)
+    {
+    ?>
+    @if(View::exists($module.'::extend_core.common_css'))
+        @include($module.'::extend_core.common_css')
+    @endif
+    <?php
+    }
+    ?>
+
     <link href="<?php echo asset_path(); ?>/custom.css" rel="stylesheet" id="theme" />
 </head>

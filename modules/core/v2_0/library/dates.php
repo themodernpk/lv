@@ -213,7 +213,138 @@ class Dates
         }
     }
     //-----------------------------------------------------------------
+    public static function getMinutesBetweenDates($start, $end)
+    {
+        $datetime1 = strtotime($start);
+        $datetime2 = strtotime($end);
+        $interval  = abs($datetime2 - $datetime1);
+        $minutes   = round($interval / 60);
+        return $minutes;
+    }
     //-----------------------------------------------------------------
+    public static function getSecondsBetweenDates($start, $end)
+    {
+        $timeFirst  = strtotime($start);
+        $timeSecond = strtotime($end);
+        $differenceInSeconds = $timeSecond - $timeFirst;
+        return $differenceInSeconds;
+    }
+    //-----------------------------------------------------------------
+    public static function getHoursBetweenDates($start, $end)
+    {
+        $minutes = Dates::getMinutesBetweenDates($start, $end);
+        $hours = round($minutes/60, 0);
+        return $hours;
+    }
+    //-----------------------------------------------------------------
+    public static function getTimeDifferenceBetweenDates($time1, $time2, $precision = 6)
+    {
+        // If not numeric then convert texts to unix timestamps
+        if (!is_int($time1)) {
+            $time1 = strtotime($time1);
+        }
+        if (!is_int($time2)) {
+            $time2 = strtotime($time2);
+        }
+
+        // If time1 is bigger than time2
+        // Then swap time1 and time2
+        if ($time1 > $time2) {
+            $ttime = $time1;
+            $time1 = $time2;
+            $time2 = $ttime;
+        }
+
+        // Set up intervals and diffs arrays
+        $intervals = array('year','month','day','hour','minute','second');
+        $diffs = array();
+
+        // Loop thru all intervals
+        foreach ($intervals as $interval)
+        {
+            // Create temp time from time1 and interval
+            $ttime = strtotime('+1 ' . $interval, $time1);
+            // Set initial values
+            $add = 1;
+            $looped = 0;
+            // Loop until temp time is smaller than time2
+            while ($time2 >= $ttime) {
+                // Create new temp time from time1 and interval
+                $add++;
+                $ttime = strtotime("+" . $add . " " . $interval, $time1);
+                $looped++;
+            }
+
+            $time1 = strtotime("+" . $looped . " " . $interval, $time1);
+            $diffs[$interval] = $looped;
+        }
+
+        $count = 0;
+        $times = array();
+        // Loop thru all diffs
+        foreach ($diffs as $interval => $value) {
+            // Break if we have needed precission
+            if ($count >= $precision) {
+                break;
+            }
+            // Add value and interval
+            // if value is bigger than 0
+            if ($value > 0) {
+                // Add s if value is not 1
+                if ($value != 1) {
+                    $interval .= "s";
+                }
+                // Add value and interval to times array
+                $times[$interval] = $value;
+                $count++;
+            }
+        }
+
+        return $times;
+    }
+    //-----------------------------------------------------------------
+    public static function getTimeDifferenceInHHMMSS($start, $end)
+    {
+        $time_difference = Dates::getTimeDifferenceBetweenDates($start, $end);
+
+        $result = "";
+
+        if(isset($time_difference['hour']))
+        {
+            $result .= $time_difference['hour'].":";
+        } else if(isset($time_difference['hours']))
+        {
+            $result .= $time_difference['hours'].":";
+        } else
+        {
+            $result .= "00:";
+        }
+
+        if(isset($time_difference['minute']))
+        {
+            $result .= $time_difference['minute'].":";
+        } else if(isset($time_difference['minutes']))
+        {
+            $result .= $time_difference['minutes'].":";
+        } else
+        {
+            $result .= "00:";
+        }
+
+        if(isset($time_difference['second']))
+        {
+            $result .= $time_difference['second'];
+        } else if(isset($time_difference['seconds']))
+        {
+            $result .= $time_difference['seconds'];
+        } else
+        {
+            $result .= "00";
+        }
+
+        return $result;
+
+    }
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------

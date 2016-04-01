@@ -35,8 +35,8 @@
 
 /* ******\ Code Completed till 10th april */
 
-.colorpicker{
-  z-index: 10000000;
+.colorpicker, .datepicker{
+  z-index: 10000000 !important;
 }
 
 .modal-dialog-tiny, .modal-dialog-xs{

@@ -97,6 +97,24 @@
 
         </ul>
         <!-- end header navigation right -->
+
+
+        <?php
+        $modules = modules_list();
+        foreach($modules as $module)
+        {
+        ?>
+        @if(View::exists($module.'::extend_core.header_navigation'))
+            @include($module.'::extend_core.header_navigation')
+        @endif
+        <?php
+        }
+        ?>
+
+
+
+
+
     </div>
     <!-- end container-fluid -->
 </div><!-- end #header -->

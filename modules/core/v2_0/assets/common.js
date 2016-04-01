@@ -432,13 +432,11 @@ $('.markRead').click(function ()
         showSpinner: function(that)
         {
             that.find('i').addClass('fa').addClass('fa-spinner').addClass('fa-spin');
-
         },
         //---------------------------------------------------
         hideSpinner: function(that)
         {
             that.find('i').removeClass('fa-spinner').removeClass('fa-spin');
-
         },
         //---------------------------------------------------
         count: function(object)

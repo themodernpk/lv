@@ -101,7 +101,7 @@ class Crud extends Eloquent
     }
 
     //------------------------------------------------------------
-public static function store($input=NULL)
+    public static function store($input=NULL)
     {
 
         $settings = Crud::getSettings();

@@ -17,6 +17,18 @@
 @yield('page_specific_foot')
 <!-- ================== END PAGE LEVEL JS ================== -->
 
+<?php
+$modules = modules_list();
+foreach($modules as $module)
+{
+?>
+@if(View::exists($module.'::extend_core.common_js'))
+@include($module.'::extend_core.common_js')
+@endif
+<?php
+}
+?>
+
 <!-- ================== COMMON ================== -->
 <script src="<?php echo asset_path(); ?>/js/apps.min.js"></script>
 <script>
