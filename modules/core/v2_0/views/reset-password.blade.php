@@ -28,17 +28,20 @@
                 @include('core::layout.inc.error_msg')
                 @include('core::layout.inc.flash_msg')
 
-                {{ Form::open(array('route' => 'reset-password-post', 'class' =>'margin-bottom-0', 'role' => 'form')) }}
+                {{ Form::open(array('route' => 'reset-password-post', 'class' =>'margin-bottom-0', 'role' => 'form',
+                'autocomplete' => 'off')) }}
 
 
-                <div class="form-group m-b-20">
-                    <input type="password" class="form-control input-lg" name="forgot_password"
-                           placeholder="Enter OTP" value="{{$data->otp}}" required />
-                </div>
+
 
                 <div class="form-group m-b-20">
                     <input type="email" class="form-control input-lg" name="email"
                            placeholder="Enter your email" required />
+                </div>
+
+                <div class="form-group m-b-20">
+                    <input type="password" autocomplete="off" class="form-control input-lg" name="forgot_password"
+                           placeholder="Enter OTP" value="{{$data->otp}}" required />
                 </div>
 
                 <div class="form-group m-b-20">

@@ -221,7 +221,7 @@ public static function cleanText($str){
     $str = preg_replace('!\s+!', ' ', $str);
     $str = htmlspecialchars($str, ENT_QUOTES, "UTF-8");
 
-    $str = iconv("UTF-8", "ISO-8859-1", $str);
+    //$str = iconv("UTF-8", "ISO-8859-1", $str);
 
     $str = utf8_decode($str);
     $str = str_replace("?", " ", $str);

@@ -232,9 +232,19 @@ class Dates
     //-----------------------------------------------------------------
     public static function getHoursBetweenDates($start, $end)
     {
-        $minutes = Dates::getMinutesBetweenDates($start, $end);
-        $hours = round($minutes/60, 0);
-        return $hours;
+        $time_difference = Dates::getTimeDifferenceBetweenDates($start, $end);
+
+        if(isset($time_difference['hour']))
+        {
+            return $time_difference['hour'];
+        } else if(isset($time_difference['hours']))
+        {
+            return $time_difference['hours'];
+        } else
+        {
+            return 0;
+        }
+
     }
     //-----------------------------------------------------------------
     public static function getTimeDifferenceBetweenDates($time1, $time2, $precision = 6)
@@ -346,7 +356,42 @@ class Dates
 
     }
     //-----------------------------------------------------------------
+    public static function sum_the_time($time1, $time2)
+    {
+        $times = array($time1, $time2);
+        $seconds = 0;
+        foreach ($times as $time)
+        {
+            list($hour,$minute,$second) = explode(':', $time);
+            $seconds += $hour*3600;
+            $seconds += $minute*60;
+            $seconds += $second;
+        }
+        $hours = floor($seconds/3600);
+        $seconds -= $hours*3600;
+        $minutes  = floor($seconds/60);
+        $seconds -= $minutes*60;
+        return "{$hours}:{$minutes}:{$seconds}";
+    }
     //-----------------------------------------------------------------
+    public static function subtract_the_time($start_time, $end_time)
+    {
+
+        list($hours, $minutes) = explode(':', $start_time);
+        $startTimestamp = mktime($hours, $minutes);
+
+        list($hours, $minutes) = explode(':', $end_time);
+        $endTimestamp = mktime($hours, $minutes);
+
+        $seconds = $endTimestamp - $startTimestamp;
+
+        $hours = floor($seconds/3600);
+        $seconds -= $hours*3600;
+        $minutes  = floor($seconds/60);
+        $seconds -= $minutes*60;
+
+        return "{$hours}:{$minutes}:{$seconds}";
+    }
     //-----------------------------------------------------------------
 
 

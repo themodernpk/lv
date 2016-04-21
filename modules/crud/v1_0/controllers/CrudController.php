@@ -262,7 +262,9 @@ class CrudController extends BaseController
 
         if($this->data->input->action == 'search')
         {
-            return Redirect::route($this->data->prefix."-index", array('q' => $this->data->input->q));
+            $input = Input::all();
+            unset($input['_token']);
+            return Redirect::route($this->data->prefix."-index", $input);
         }
 
 

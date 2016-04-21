@@ -59,7 +59,13 @@
             <tr class="@if(!is_null($item->deleted_at)) danger @endif" >
                 <td>{{$item->id}}</td>
                 <td>{{$item->name}} / {{$item->email}} / {{$item->mobile}} </td>
-                <td>{{$item->group->name}}</td>
+                <td>
+                    @if($item->group)
+                    {{$item->group->name}}
+                    @else
+                        <span class="text-danger">No Group Assigned</span>
+                    @endif
+                </td>
                 <td>{{Dates::dateformat($item->lastlogin)}}</td>
                 <td>
                     <span data-toggle="tooltip" data-placement="top" data-original-title="View">

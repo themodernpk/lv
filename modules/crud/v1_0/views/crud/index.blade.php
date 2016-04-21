@@ -124,7 +124,7 @@
 
         {{Form::close()}}
 
-        {{HtmlHelper::modalClose()}}
+        {{HtmlHelper::panelClose()}}
 
 
     <!--/content-->
