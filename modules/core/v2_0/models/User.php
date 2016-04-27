@@ -225,11 +225,10 @@ class User extends Eloquent implements UserInterface, RemindableInterface
 
         //generate log if some login during off hours
         $hour = date('H');
-        if($user->group->slug != 'admin' && ( ($hour >= 0 && $hour <= 10) || $hour > 22))
+        if($user->group->slug != 'admin' && ( ($hour >= 0 && $hour < 10) || $hour > 22))
         {
             Activity::log($user->name." - Login during off hours at <b>".Dates::dateformat(date('Y-m-d h:i:s'))."</b>", $user->id, "LOGIN");
         }
-
         //update last login column
         $user->lastlogin = Dates::now();
         $user->save();
@@ -285,25 +284,15 @@ class User extends Eloquent implements UserInterface, RemindableInterface
             $input = array_filter($input);
         }
 
-        if(!isset($input['username']) || empty($input['username']))
-        {
-            $input['username'] = Common::generate_username($input['email']);
-        }
-
-        if(!isset($input['password']))
-        {
-            $input['password'] = Common::generate_password();
-        }
-
         if (!is_object($input)) {
             $input = (object)$input;
         }
 
-
         //if id is provided then find
         if (isset($input->id) && !empty($input->id))
         {
-            $item = User::find($input->id);
+
+            $item = User::withTrashed()->where('id', $input->id)->first();
 
             if(isset(Auth::user()->id))
             {
@@ -312,6 +301,17 @@ class User extends Eloquent implements UserInterface, RemindableInterface
         }
         else
         {
+            if(!isset($input['username']) || empty($input['username']))
+            {
+                $input['username'] = Common::generate_username($input['email']);
+            }
+
+            if(!isset($input['password']))
+            {
+                $input['password'] = Common::generate_password();
+            }
+
+
             $validator = Validator::make((array)$input, User::rules());
             if($validator->fails())
             {
@@ -431,8 +431,6 @@ class User extends Eloquent implements UserInterface, RemindableInterface
 
         $otp = Common::generate_password(5);
         $user->forgot_password = Crypt::encrypt($otp);
-
-
         try{
 
             $user->save();
@@ -441,7 +439,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface
             Activity::log($user->name." / ".$user->email." - generated OTP to reset password", NULL, "PASSWORD", NULL, $user->id);
 
             //send email alert
-            $subject = $user->name." - Rest your ".Setting::value('app-name')." password";
+            $subject = $user->name." - Reset your ".Setting::value('app-name')." password";
 
             $from = array("noreply@webreinvent.com" => Setting::value('app-name'));
 
