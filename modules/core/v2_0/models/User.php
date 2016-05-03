@@ -301,14 +301,14 @@ class User extends Eloquent implements UserInterface, RemindableInterface
         }
         else
         {
-            if(!isset($input['username']) || empty($input['username']))
+            if(!isset($input->username) || empty($input->username))
             {
-                $input['username'] = Common::generate_username($input['email']);
+                $input->username = Common::generate_username($input->email);
             }
 
-            if(!isset($input['password']))
+            if(!isset($input->password))
             {
-                $input['password'] = Common::generate_password();
+                $input->password = Common::generate_password();
             }
 
 
