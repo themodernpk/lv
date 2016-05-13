@@ -148,6 +148,17 @@ class Dates
         return $result;
     }
     //-----------------------------------------------------------------
+    public static function getFirstAndCurrentDay()
+    {
+        $first = date('Y-m-01');
+        $last = date('Y-m-d');
+
+        $result['first'] = $first;
+        $result['last'] = $last;
+
+        return $result;
+    }
+    //-----------------------------------------------------------------
     public static function countDaysBetweenDates($start, $end)
     {
         $start_ts = strtotime($start);
@@ -392,6 +403,15 @@ class Dates
 
         return "{$hours}:{$minutes}:{$seconds}";
     }
+    //-----------------------------------------------------------------
+    public static function getDaysInMonth($month, $year) {
+
+        $numDays = cal_days_in_month (CAL_GREGORIAN, $month, $year);
+        return $numDays;
+    }
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
     //-----------------------------------------------------------------
 
 
