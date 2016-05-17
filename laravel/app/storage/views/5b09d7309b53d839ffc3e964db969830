@@ -1,0 +1,12 @@
+<!DOCTYPE html><!--[if IE 8]>
+<html lang="en" class="ie8"> <![endif]--><!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+<?php echo $__env->make('core::layout.inc.head', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+<body class="<?php echo body_class(); ?>">
+<!--content part-->
+<?php echo $__env->yieldContent('content'); ?>
+<!--content part-->
+<?php echo $__env->make('core::layout.inc.foot_frontend', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+</body>
+</html>

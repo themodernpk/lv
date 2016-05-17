@@ -1,5 +1,7 @@
 <?php
 
+\Debugbar::disable();
+
 /*
 |--------------------------------------------------------------------------
 | Register The Laravel Class Loader

@@ -1,0 +1,1 @@
+[2016-05-18 00:26:24] development.ERROR: FATAL DATABASE ERROR: 500 = SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected (SQL: select count(*) as aggregate from `users` where `users`.`deleted_at` is null) [] []
