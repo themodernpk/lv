@@ -332,7 +332,7 @@ class UserController extends BaseController
                 {
                     $model::withTrashed()->where('id', $id)->forceDelete();
                 }
-                return Redirect::back()->with('flash_success', constant('crm_success_message'));
+                return Redirect::back()->with('flash_success', constant('core_success_message'));
 
                 break;
 

@@ -8,7 +8,6 @@
  */
 class AccountController extends BaseController
 {
-
     /* ****** Code Completed till 10th april */
     public static $view = 'core::account.core-account';
 
@@ -19,43 +18,28 @@ class AccountController extends BaseController
     //------------------------------------------------------
     function updateAccount()
     {
-        $response = User::store();
-        if ($response['status'] == 'failed') {
-            return Redirect::back()->withErrors($response['errors']);
-        } else if ($response['status'] == 'success') {
-            return Redirect::back()->with('flash_success', 'Account details successfully updated');
-        }
+        $response = User::updateAccount();
+        echo json_encode($response);
+        die();
     }
 
     //------------------------------------------------------
     function getProfile()
     {
         $data = array();
-
         $id = Request::segment(3);
-
-
-        if(!isset($id))
-        {
+        if (!isset($id)) {
             $id = Auth::user()->id;
-        } else
-        {
+        } else {
             $user_id = Auth::user()->id;
-
-            if($id != $user_id)
-            {
-                if (!Permission::check('can-see-others-profile-section'))
-                {
+            if ($id != $user_id) {
+                if (!Permission::check('can-see-others-profile-section')) {
                     return Redirect::route('error')->with('flash_error', "You don't have permission to view this page");
                 }
             }
-
         }
-
         $data['user'] = User::findorFail($id);
         return View::make(self::$view . '-profile')->with('title', 'Profile')->with('data', $data);
-
-
     }
 
     //------------------------------------------------------
@@ -92,16 +76,12 @@ class AccountController extends BaseController
     }
 
     //------------------------------------------------------
-    /*
-    * get the id of current logged in user
-    * use this Auth::user()->id to get id
-    * get data of user from User Model using this id
-    * pass all detail of user to setting page
-    */
     function getIndex()
     {
         $data = array();
-        return View::make(self::$view)->with('title', 'Account')->with('data', $data);
+        $user_id = Auth::user()->id;
+        $user = User::findOrFail($user_id);
+        $data['user'] = $user;
+        return View::make(self::$view)->with('title', 'Account Details')->with('data', $data);
     }
-    /* ******\ Code Completed till 10th april */
 } // end of the class

@@ -404,7 +404,17 @@ class Dates
         return "{$hours}:{$minutes}:{$seconds}";
     }
     //-----------------------------------------------------------------
-    public static function getDaysInMonth($month, $year) {
+    public static function getDaysInMonth($month=NULL, $year=NULL)
+    {
+        if($month == NULL)
+        {
+            $month = date('m');
+        }
+
+        if($year == NULL)
+        {
+            $year = date('Y');
+        }
 
         $numDays = cal_days_in_month (CAL_GREGORIAN, $month, $year);
         return $numDays;
