@@ -198,7 +198,6 @@ class CoreDbController extends BaseController
     //------------------------------------------------------
     public function update_2016_03_11_4PM()
     {
-
         try{
             User::dbCreateForgotPasswordColumn();
         } catch(Exception $e)
@@ -207,10 +206,24 @@ class CoreDbController extends BaseController
             echo " - this will not stop the execution of other functions<hr/>";
         }
 
-
-
     }
     //------------------------------------------------------
+    public function update_2016_05_26_1AM()
+    {
+        try{
+
+            Schema::table('notifications', function($table)
+            {
+                $table->boolean('realtime')->nullable()->after('read');
+            });
+
+        } catch(Exception $e)
+        {
+            echo $e->getMessage();
+            echo " - this will not stop the execution of other functions<hr/>";
+        }
+
+    }
     //------------------------------------------------------
     //------------------------------------------------------
 

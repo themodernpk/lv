@@ -8,9 +8,7 @@ class Activity extends Eloquent
     use SoftDeletingTrait;
     protected $dates = ['deleted_at'];
     protected $softDelete = true;
-
     protected $guarded = array('id');
-
     protected $fillable = [
         'user_id',
         'label',
@@ -18,7 +16,6 @@ class Activity extends Eloquent
         'parent_id',
         'content'
     ];
-
     //------------------------------------------------------------
     /* #################################
      * This function returns all the activity which is performed
@@ -34,10 +31,8 @@ class Activity extends Eloquent
          * otherwise only else block will be executed which returns all activity till now
          */
         $q = new Activity();
-        if (!empty($filter))
-        {
-            foreach ($filter as $key => $value)
-            {
+        if (!empty($filter)) {
+            foreach ($filter as $key => $value) {
                 $q = $q->where($key, $value);
             }
         }
@@ -101,12 +96,8 @@ class Activity extends Eloquent
         if ($parent_id != NULL) {
             $activity->parent_id = $parent_id;
         }
-
-
         $activity->content = $content;
-
         $activity->save();
-
     }
 
     //------------------------------------------------------------
