@@ -11,125 +11,63 @@ class PermissionsTableSeeder extends Seeder
 
     public function run()
     {
-        $users = [
-            [   'name' => 'Allow Login',
-                'slug' => 'allow-login',
-                'active' => 1,
-                'created_at' => Dates::now(),
-                'updated_at' => Dates::now(),
-            ],
-            [   'name' => 'API Access',
-                'slug' => 'api-access',
-                'active' => 1,
-                'created_at' => Dates::now(),
-                'updated_at' => Dates::now(),
-            ],
-            [   'name' => 'Allow Dashboard Activity Log',
-                'slug' => 'allow-dashboard-activity-log',
-                'active' => 1,
-                'created_at' => Dates::now(),
-                'updated_at' => Dates::now(),
-            ],
-            [   'name' => 'Show Admin Section',
-                'slug' => 'show-admin-section',
-                'active' => 1,
-                'created_at' => Dates::now(),
-                'updated_at' => Dates::now(),
-            ],
-            [   'name' => 'Allow Bulk Active',
-                'slug' => 'allow-bulk-active',
-                'active' => 1,
-                'created_at' => Dates::now(),
-                'updated_at' => Dates::now(),
-            ],
-            [   'name' => 'Allow Bulk Deactive',
-                'slug' => 'allow-bulk-deactive',
-                'active' => 1,
-                'created_at' => Dates::now(),
-                'updated_at' => Dates::now(),
-            ],
-            [   'name' => 'Allow Bulk Delete',
-                'slug' => 'allow-bulk-delete',
-                'active' => 1,
-                'created_at' => Dates::now(),
-                'updated_at' => Dates::now(),
-            ],
-            [   'name' => 'Allow To View Trash',
-                'slug' => 'allow-to-view-trash',
-                'active' => 1,
-                'created_at' => Dates::now(),
-                'updated_at' => Dates::now(),
-            ],
-            [   'name' => 'Allow Permanent Delete',
-                'slug' => 'allow-permanent-delete',
-                'active' => 1,
-                'created_at' => Dates::now(),
-                'updated_at' => Dates::now(),
-            ],
-            [   'name' => 'Allow To Restore',
-                'slug' => 'allow-to-restore',
-                'active' => 1,
-                'created_at' => Dates::now(),
-                'updated_at' => Dates::now(),
-            ],
-            [   'name' => 'Allow Active/Deactive',
-                'slug' => 'allow-activedeactive',
-                'active' => 1,
-                'created_at' => Dates::now(),
-                'updated_at' => Dates::now(),
-            ],
-            [   'name' => 'Allow Soft Delete',
-                'slug' => 'allow-soft-delete',
-                'active' => 1,
-                'created_at' => Dates::now(),
-                'updated_at' => Dates::now(),
-            ],
-            [   'name' => 'Allow Ajax Edit',
-                'slug' => 'allow-ajax-edit',
-                'active' => 1,
-                'created_at' => Dates::now(),
-                'updated_at' => Dates::now(),
-            ],
-            [   'name' => 'Allow To Add User',
-                'slug' => 'allow-to-add-user',
-                'active' => 1,
-                'created_at' => Dates::now(),
-                'updated_at' => Dates::now(),
-            ],
-            [   'name' => 'Allow To Edit User',
-                'slug' => 'allow-to-edit-user',
-                'active' => 1,
-                'created_at' => Dates::now(),
-                'updated_at' => Dates::now(),
-            ],
-            [   'name' => 'Manage Group Permission',
-                'slug' => 'manage-group-permission',
-                'active' => 1,
-                'created_at' => Dates::now(),
-                'updated_at' => Dates::now(),
-            ],
-            [   'name' => 'View Activities',
-                'slug' => 'view-activities',
-                'active' => 1,
-                'created_at' => Dates::now(),
-                'updated_at' => Dates::now(),
-            ],
-            [   'name' => 'Allow To Add Group',
-                'slug' => 'allow-to-add-group',
-                'active' => 1,
-                'created_at' => Dates::now(),
-                'updated_at' => Dates::now(),
-            ],
-            [   'name' => 'Allow To Add Permission',
-                'slug' => 'allow-to-add-permission',
-                'active' => 1,
-                'created_at' => Dates::now(),
-                'updated_at' => Dates::now(),
-            ]
+        
+        $permissions[] = 'Allow Dashboard Activity Log';
+        $permissions[] = 'Show Admin Section';
+        $permissions[] = 'API Access';
+        $permissions[] = 'Allow Login';
 
-        ];
+        $permissions[] = 'Core Activity Create';
+        $permissions[] = 'Core Activity Read';
+        $permissions[] = 'Core Activity Update';
+        $permissions[] = 'Core Activity Delete';
+        $permissions[] = 'Core Manage All Users Activity';
 
-        DB::table('permissions')->insert($users);
+        $permissions[] = 'Core Notification Create';
+        $permissions[] = 'Core Notification Read';
+        $permissions[] = 'Core Notification Update';
+        $permissions[] = 'Core Notification Delete';
+        $permissions[] = 'Core All Users Notification';
+
+        $permissions[] = 'Core Permission Create';
+        $permissions[] = 'Core Permission Read';
+        $permissions[] = 'Core Permission Update';
+        $permissions[] = 'Core Permission Delete';
+
+        $permissions[] = 'Core Setting Create';
+        $permissions[] = 'Core Setting Read';
+        $permissions[] = 'Core Setting Update';
+        $permissions[] = 'Core Setting Delete';
+
+        $permissions[] = 'Core User Create';
+        $permissions[] = 'Core User Read';
+        $permissions[] = 'Core User Update';
+        $permissions[] = 'Core User Delete';
+
+
+        foreach ($permissions as $permission)
+        {
+            $input['name'] = $permission;
+            $input['slug'] = Str::slug($permission);
+
+            //check if already exist
+            $exist = Permission::where('slug', '=', $input['slug'])->first();
+            if ($exist) {
+                continue;
+            }
+
+            $response = Permission::create($input);
+
+            if ($response['status'] == 'failed') {
+                return $response;
+                die();
+            }
+
+        }
+
+        //sync this permission with rest of the groups
+        Custom::syncPermissions();
+
 
     }
 

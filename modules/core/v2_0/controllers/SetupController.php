@@ -2,7 +2,6 @@
 
 class SetupController extends BaseController
 {
-
     /* ****** Code Completed till 10th april */
     public static $view = 'core::setup.core-setup';
 
@@ -66,29 +65,22 @@ class SetupController extends BaseController
     {
         $input = Input::all();
         try {
-            if (!Schema::hasTable('migrations'))
-            {
-
+            if (!Schema::hasTable('migrations')) {
                 Artisan::call('migrate:install');
                 Artisan::call('migrate');
-
                 /*activate current version of core*/
                 $current_version_core = module_current_version('core');
                 $items = [
-
-                    [   'name' => 'core',
+                    ['name' => 'core',
                         'version' => $current_version_core,
                         'active' => 1,
                         'created_at' => Dates::now(),
                         'updated_at' => Dates::now(),
                     ]
                 ];
-
                 DB::table('modules')->insert($items);
                 /*activate current version of core*/
-
                 Artisan::call('db:seed');
-
             } else {
                 Artisan::call('migrate:refresh');
                 Artisan::call('db:seed');

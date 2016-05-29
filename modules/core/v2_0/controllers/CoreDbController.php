@@ -12,7 +12,17 @@ class CoreDbController extends BaseController
 
         $this->beforeFilter(function () {
             if (!Permission::check('show-admin-section')) {
-                return Redirect::route('error')->with('flash_error', "You don't have permission to view this page");
+                $error_message = "You don't have permission to view this page";
+                if(isset($this->data->input->format) && $this->data->input->format == "json")
+                {
+                    $response['status'] = 'failed';
+                    $response['errors'][] = $error_message;
+                    echo json_encode($response);
+                    die();
+                } else
+                {
+                    return Redirect::route('error')->with('flash_error', $error_message);
+                }
             }
         });
     }
@@ -99,25 +109,6 @@ class CoreDbController extends BaseController
     }
 
     //------------------------------------------------------
-    public function update_2016_01_08_7PM()
-    {
-
-        try{
-
-
-
-        } catch(Exception $e)
-        {
-            echo $e->getMessage();
-            echo " - this will not stop the execution of other functions<hr/>";
-        }
-
-
-
-
-    }
-
-    //------------------------------------------------------
     public function update_2016_01_08_6_30PM()
     {
         $permissions[] = 'Core Activity Create';
@@ -148,7 +139,8 @@ class CoreDbController extends BaseController
         $permissions[] = 'Core User Delete';
 
 
-        foreach ($permissions as $permission) {
+        foreach ($permissions as $permission) 
+        {
             $input['name'] = $permission;
             $input['slug'] = Str::slug($permission);
 
@@ -191,8 +183,6 @@ class CoreDbController extends BaseController
             echo $e->getMessage();
             echo " - this will not stop the execution of other functions<hr/>";
         }
-
-
     }
 
     //------------------------------------------------------

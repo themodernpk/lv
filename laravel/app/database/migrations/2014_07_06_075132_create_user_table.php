@@ -26,13 +26,22 @@ class CreateUserTable extends Migration {
             $t->text('apikey');
         	$t->dateTime('lastlogin');
         	$t->string('remember_token');
+			$t->string('forgot_password')->nullable();
         	$t->boolean('active')->default(1);
+			$t->integer('created_by')->unsigned()->nullable();
+			$t->foreign('created_by')->references('id')->on('users')->onDelete('set null')->after('active');
+
+			$t->integer('modified_by')->unsigned()->nullable();
+			$t->foreign('modified_by')->references('id')->on('users')->onDelete('set null')->after('created_by');
+
+			$t->integer('deleted_by')->unsigned()->nullable();
+			$t->foreign('deleted_by')->references('id')->on('users')->onDelete('set null')->after('modified_by');
         	$t->timestamps();
         	$t->softDeletes();
 
         });
-        
-        
+
+
 	}
 
 	/**

@@ -17,6 +17,7 @@ class CreateNotificationsTable extends Migration {
 			$table->increments('id');
 			$table->integer('user_id');
 			$table->boolean('read')->default(0);
+			$table->boolean('realtime')->nullable();
 			$table->boolean('email_sent')->default(0);
 			$table->string('icon')->nullable();
 			$table->string('link')->nullable();

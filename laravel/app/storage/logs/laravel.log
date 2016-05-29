@@ -1,2 +1,359 @@
 [2016-05-18 00:26:24] development.ERROR: FATAL DATABASE ERROR: 500 = SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected (SQL: select count(*) as aggregate from `users` where `users`.`deleted_at` is null) [] []
 [2016-05-18 00:33:20] development.ERROR: FATAL DATABASE ERROR: 500 = SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected (SQL: select count(*) as aggregate from `users` where `users`.`deleted_at` is null) [] []
+[2016-05-19 18:44:55] development.ERROR: FATAL DATABASE ERROR: 500 = SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected (SQL: select count(*) as aggregate from `users` where `users`.`deleted_at` is null) [] []
+[2016-05-30 01:48:54] development.ERROR: FATAL DATABASE ERROR: 500 = SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected (SQL: select count(*) as aggregate from `users` where `users`.`deleted_at` is null) [] []
+[2016-05-30 02:16:46] development.ERROR: exception 'ErrorException' with message 'Undefined variable: item' in F:\xampp56\htdocs\lv\laravel\app\storage\views\3a16484acaddcdf8d9757aec4f6d892f:2
+Stack trace:
+#0 F:\xampp56\htdocs\lv\laravel\app\storage\views\3a16484acaddcdf8d9757aec4f6d892f(2): Illuminate\Exception\Handler->handleError(8, 'Undefined varia...', 'F:\\xampp56\\htdo...', 2, Array)
+#1 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\Engines\PhpEngine.php(37): include('F:\\xampp56\\htdo...')
+#2 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\Engines\CompilerEngine.php(56): Illuminate\View\Engines\PhpEngine->evaluatePath('F:\\xampp56\\htdo...', Array)
+#3 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\View.php(134): Illuminate\View\Engines\CompilerEngine->get('F:\\xampp56\\htdo...', Array)
+#4 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\View.php(102): Illuminate\View\View->getContents()
+#5 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\View.php(76): Illuminate\View\View->renderContents()
+#6 F:\xampp56\htdocs\lv\laravel\app\storage\views\860ad1e3e41ffb7d480505be0011b67b(45): Illuminate\View\View->render()
+#7 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\Engines\PhpEngine.php(37): include('F:\\xampp56\\htdo...')
+#8 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\Engines\CompilerEngine.php(56): Illuminate\View\Engines\PhpEngine->evaluatePath('F:\\xampp56\\htdo...', Array)
+#9 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\View.php(134): Illuminate\View\Engines\CompilerEngine->get('F:\\xampp56\\htdo...', Array)
+#10 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\View.php(102): Illuminate\View\View->getContents()
+#11 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\View.php(76): Illuminate\View\View->renderContents()
+#12 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Http\Response.php(43): Illuminate\View\View->render()
+#13 F:\xampp56\htdocs\lv\laravel\vendor\symfony\http-foundation\Symfony\Component\HttpFoundation\Response.php(202): Illuminate\Http\Response->setContent(Object(Illuminate\View\View))
+#14 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1501): Symfony\Component\HttpFoundation\Response->__construct(Object(Illuminate\View\View))
+#15 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1036): Illuminate\Routing\Router->prepareResponse(Object(Illuminate\Http\Request), Object(Illuminate\View\View))
+#16 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1001): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#17 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(775): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#18 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(745): Illuminate\Foundation\Application->dispatch(Object(Illuminate\Http\Request))
+#19 F:\xampp56\htdocs\lv\laravel\vendor\barryvdh\laravel-debugbar\src\Middleware\Stack.php(34): Illuminate\Foundation\Application->handle(Object(Illuminate\Http\Request), 1, true)
+#20 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Session\Middleware.php(72): Barryvdh\Debugbar\Middleware\Stack->handle(Object(Illuminate\Http\Request), 1, true)
+#21 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Cookie\Queue.php(47): Illuminate\Session\Middleware->handle(Object(Illuminate\Http\Request), 1, true)
+#22 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Cookie\Guard.php(51): Illuminate\Cookie\Queue->handle(Object(Illuminate\Http\Request), 1, true)
+#23 F:\xampp56\htdocs\lv\laravel\vendor\stack\builder\src\Stack\StackedHttpKernel.php(23): Illuminate\Cookie\Guard->handle(Object(Illuminate\Http\Request), 1, true)
+#24 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(641): Stack\StackedHttpKernel->handle(Object(Illuminate\Http\Request))
+#25 F:\xampp56\htdocs\lv\index.php(49): Illuminate\Foundation\Application->run()
+#26 {main}
+
+Next exception 'ErrorException' with message 'Undefined variable: item (View: F:\xampp56\htdocs\lv\modules\crud\v1_0\views\crud\elements\index-item.blade.php)' in F:\xampp56\htdocs\lv\laravel\app\storage\views\3a16484acaddcdf8d9757aec4f6d892f:2
+Stack trace:
+#0 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\Engines\PhpEngine.php(41): Illuminate\View\Engines\CompilerEngine->handleViewException(Object(ErrorException), 3)
+#1 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\Engines\CompilerEngine.php(56): Illuminate\View\Engines\PhpEngine->evaluatePath('F:\\xampp56\\htdo...', Array)
+#2 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\View.php(134): Illuminate\View\Engines\CompilerEngine->get('F:\\xampp56\\htdo...', Array)
+#3 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\View.php(102): Illuminate\View\View->getContents()
+#4 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\View.php(76): Illuminate\View\View->renderContents()
+#5 F:\xampp56\htdocs\lv\laravel\app\storage\views\860ad1e3e41ffb7d480505be0011b67b(45): Illuminate\View\View->render()
+#6 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\Engines\PhpEngine.php(37): include('F:\\xampp56\\htdo...')
+#7 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\Engines\CompilerEngine.php(56): Illuminate\View\Engines\PhpEngine->evaluatePath('F:\\xampp56\\htdo...', Array)
+#8 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\View.php(134): Illuminate\View\Engines\CompilerEngine->get('F:\\xampp56\\htdo...', Array)
+#9 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\View.php(102): Illuminate\View\View->getContents()
+#10 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\View.php(76): Illuminate\View\View->renderContents()
+#11 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Http\Response.php(43): Illuminate\View\View->render()
+#12 F:\xampp56\htdocs\lv\laravel\vendor\symfony\http-foundation\Symfony\Component\HttpFoundation\Response.php(202): Illuminate\Http\Response->setContent(Object(Illuminate\View\View))
+#13 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1501): Symfony\Component\HttpFoundation\Response->__construct(Object(Illuminate\View\View))
+#14 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1036): Illuminate\Routing\Router->prepareResponse(Object(Illuminate\Http\Request), Object(Illuminate\View\View))
+#15 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1001): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#16 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(775): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#17 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(745): Illuminate\Foundation\Application->dispatch(Object(Illuminate\Http\Request))
+#18 F:\xampp56\htdocs\lv\laravel\vendor\barryvdh\laravel-debugbar\src\Middleware\Stack.php(34): Illuminate\Foundation\Application->handle(Object(Illuminate\Http\Request), 1, true)
+#19 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Session\Middleware.php(72): Barryvdh\Debugbar\Middleware\Stack->handle(Object(Illuminate\Http\Request), 1, true)
+#20 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Cookie\Queue.php(47): Illuminate\Session\Middleware->handle(Object(Illuminate\Http\Request), 1, true)
+#21 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Cookie\Guard.php(51): Illuminate\Cookie\Queue->handle(Object(Illuminate\Http\Request), 1, true)
+#22 F:\xampp56\htdocs\lv\laravel\vendor\stack\builder\src\Stack\StackedHttpKernel.php(23): Illuminate\Cookie\Guard->handle(Object(Illuminate\Http\Request), 1, true)
+#23 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(641): Stack\StackedHttpKernel->handle(Object(Illuminate\Http\Request))
+#24 F:\xampp56\htdocs\lv\index.php(49): Illuminate\Foundation\Application->run()
+#25 {main}
+
+Next exception 'ErrorException' with message 'Undefined variable: item (View: F:\xampp56\htdocs\lv\modules\crud\v1_0\views\crud\elements\index-item.blade.php) (View: F:\xampp56\htdocs\lv\modules\crud\v1_0\views\crud\elements\index-item.blade.php)' in F:\xampp56\htdocs\lv\laravel\app\storage\views\3a16484acaddcdf8d9757aec4f6d892f:2
+Stack trace:
+#0 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\Engines\PhpEngine.php(41): Illuminate\View\Engines\CompilerEngine->handleViewException(Object(ErrorException), 1)
+#1 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\Engines\CompilerEngine.php(56): Illuminate\View\Engines\PhpEngine->evaluatePath('F:\\xampp56\\htdo...', Array)
+#2 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\View.php(134): Illuminate\View\Engines\CompilerEngine->get('F:\\xampp56\\htdo...', Array)
+#3 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\View.php(102): Illuminate\View\View->getContents()
+#4 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\View.php(76): Illuminate\View\View->renderContents()
+#5 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Http\Response.php(43): Illuminate\View\View->render()
+#6 F:\xampp56\htdocs\lv\laravel\vendor\symfony\http-foundation\Symfony\Component\HttpFoundation\Response.php(202): Illuminate\Http\Response->setContent(Object(Illuminate\View\View))
+#7 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1501): Symfony\Component\HttpFoundation\Response->__construct(Object(Illuminate\View\View))
+#8 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1036): Illuminate\Routing\Router->prepareResponse(Object(Illuminate\Http\Request), Object(Illuminate\View\View))
+#9 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1001): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#10 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(775): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#11 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(745): Illuminate\Foundation\Application->dispatch(Object(Illuminate\Http\Request))
+#12 F:\xampp56\htdocs\lv\laravel\vendor\barryvdh\laravel-debugbar\src\Middleware\Stack.php(34): Illuminate\Foundation\Application->handle(Object(Illuminate\Http\Request), 1, true)
+#13 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Session\Middleware.php(72): Barryvdh\Debugbar\Middleware\Stack->handle(Object(Illuminate\Http\Request), 1, true)
+#14 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Cookie\Queue.php(47): Illuminate\Session\Middleware->handle(Object(Illuminate\Http\Request), 1, true)
+#15 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Cookie\Guard.php(51): Illuminate\Cookie\Queue->handle(Object(Illuminate\Http\Request), 1, true)
+#16 F:\xampp56\htdocs\lv\laravel\vendor\stack\builder\src\Stack\StackedHttpKernel.php(23): Illuminate\Cookie\Guard->handle(Object(Illuminate\Http\Request), 1, true)
+#17 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(641): Stack\StackedHttpKernel->handle(Object(Illuminate\Http\Request))
+#18 F:\xampp56\htdocs\lv\index.php(49): Illuminate\Foundation\Application->run()
+#19 {main} [] []
+[2016-05-30 02:17:17] development.ERROR: exception 'ErrorException' with message 'Undefined variable: data' in F:\xampp56\htdocs\lv\laravel\app\storage\views\3a16484acaddcdf8d9757aec4f6d892f:10
+Stack trace:
+#0 F:\xampp56\htdocs\lv\laravel\app\storage\views\3a16484acaddcdf8d9757aec4f6d892f(10): Illuminate\Exception\Handler->handleError(8, 'Undefined varia...', 'F:\\xampp56\\htdo...', 10, Array)
+#1 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\Engines\PhpEngine.php(37): include('F:\\xampp56\\htdo...')
+#2 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\Engines\CompilerEngine.php(56): Illuminate\View\Engines\PhpEngine->evaluatePath('F:\\xampp56\\htdo...', Array)
+#3 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\View.php(134): Illuminate\View\Engines\CompilerEngine->get('F:\\xampp56\\htdo...', Array)
+#4 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\View.php(102): Illuminate\View\View->getContents()
+#5 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\View.php(76): Illuminate\View\View->renderContents()
+#6 F:\xampp56\htdocs\lv\laravel\app\storage\views\860ad1e3e41ffb7d480505be0011b67b(45): Illuminate\View\View->render()
+#7 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\Engines\PhpEngine.php(37): include('F:\\xampp56\\htdo...')
+#8 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\Engines\CompilerEngine.php(56): Illuminate\View\Engines\PhpEngine->evaluatePath('F:\\xampp56\\htdo...', Array)
+#9 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\View.php(134): Illuminate\View\Engines\CompilerEngine->get('F:\\xampp56\\htdo...', Array)
+#10 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\View.php(102): Illuminate\View\View->getContents()
+#11 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\View.php(76): Illuminate\View\View->renderContents()
+#12 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Http\Response.php(43): Illuminate\View\View->render()
+#13 F:\xampp56\htdocs\lv\laravel\vendor\symfony\http-foundation\Symfony\Component\HttpFoundation\Response.php(202): Illuminate\Http\Response->setContent(Object(Illuminate\View\View))
+#14 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1501): Symfony\Component\HttpFoundation\Response->__construct(Object(Illuminate\View\View))
+#15 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1036): Illuminate\Routing\Router->prepareResponse(Object(Illuminate\Http\Request), Object(Illuminate\View\View))
+#16 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1001): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#17 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(775): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#18 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(745): Illuminate\Foundation\Application->dispatch(Object(Illuminate\Http\Request))
+#19 F:\xampp56\htdocs\lv\laravel\vendor\barryvdh\laravel-debugbar\src\Middleware\Stack.php(34): Illuminate\Foundation\Application->handle(Object(Illuminate\Http\Request), 1, true)
+#20 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Session\Middleware.php(72): Barryvdh\Debugbar\Middleware\Stack->handle(Object(Illuminate\Http\Request), 1, true)
+#21 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Cookie\Queue.php(47): Illuminate\Session\Middleware->handle(Object(Illuminate\Http\Request), 1, true)
+#22 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Cookie\Guard.php(51): Illuminate\Cookie\Queue->handle(Object(Illuminate\Http\Request), 1, true)
+#23 F:\xampp56\htdocs\lv\laravel\vendor\stack\builder\src\Stack\StackedHttpKernel.php(23): Illuminate\Cookie\Guard->handle(Object(Illuminate\Http\Request), 1, true)
+#24 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(641): Stack\StackedHttpKernel->handle(Object(Illuminate\Http\Request))
+#25 F:\xampp56\htdocs\lv\index.php(49): Illuminate\Foundation\Application->run()
+#26 {main}
+
+Next exception 'ErrorException' with message 'Undefined variable: data (View: F:\xampp56\htdocs\lv\modules\crud\v1_0\views\crud\elements\index-item.blade.php)' in F:\xampp56\htdocs\lv\laravel\app\storage\views\3a16484acaddcdf8d9757aec4f6d892f:10
+Stack trace:
+#0 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\Engines\PhpEngine.php(41): Illuminate\View\Engines\CompilerEngine->handleViewException(Object(ErrorException), 3)
+#1 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\Engines\CompilerEngine.php(56): Illuminate\View\Engines\PhpEngine->evaluatePath('F:\\xampp56\\htdo...', Array)
+#2 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\View.php(134): Illuminate\View\Engines\CompilerEngine->get('F:\\xampp56\\htdo...', Array)
+#3 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\View.php(102): Illuminate\View\View->getContents()
+#4 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\View.php(76): Illuminate\View\View->renderContents()
+#5 F:\xampp56\htdocs\lv\laravel\app\storage\views\860ad1e3e41ffb7d480505be0011b67b(45): Illuminate\View\View->render()
+#6 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\Engines\PhpEngine.php(37): include('F:\\xampp56\\htdo...')
+#7 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\Engines\CompilerEngine.php(56): Illuminate\View\Engines\PhpEngine->evaluatePath('F:\\xampp56\\htdo...', Array)
+#8 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\View.php(134): Illuminate\View\Engines\CompilerEngine->get('F:\\xampp56\\htdo...', Array)
+#9 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\View.php(102): Illuminate\View\View->getContents()
+#10 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\View.php(76): Illuminate\View\View->renderContents()
+#11 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Http\Response.php(43): Illuminate\View\View->render()
+#12 F:\xampp56\htdocs\lv\laravel\vendor\symfony\http-foundation\Symfony\Component\HttpFoundation\Response.php(202): Illuminate\Http\Response->setContent(Object(Illuminate\View\View))
+#13 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1501): Symfony\Component\HttpFoundation\Response->__construct(Object(Illuminate\View\View))
+#14 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1036): Illuminate\Routing\Router->prepareResponse(Object(Illuminate\Http\Request), Object(Illuminate\View\View))
+#15 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1001): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#16 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(775): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#17 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(745): Illuminate\Foundation\Application->dispatch(Object(Illuminate\Http\Request))
+#18 F:\xampp56\htdocs\lv\laravel\vendor\barryvdh\laravel-debugbar\src\Middleware\Stack.php(34): Illuminate\Foundation\Application->handle(Object(Illuminate\Http\Request), 1, true)
+#19 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Session\Middleware.php(72): Barryvdh\Debugbar\Middleware\Stack->handle(Object(Illuminate\Http\Request), 1, true)
+#20 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Cookie\Queue.php(47): Illuminate\Session\Middleware->handle(Object(Illuminate\Http\Request), 1, true)
+#21 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Cookie\Guard.php(51): Illuminate\Cookie\Queue->handle(Object(Illuminate\Http\Request), 1, true)
+#22 F:\xampp56\htdocs\lv\laravel\vendor\stack\builder\src\Stack\StackedHttpKernel.php(23): Illuminate\Cookie\Guard->handle(Object(Illuminate\Http\Request), 1, true)
+#23 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(641): Stack\StackedHttpKernel->handle(Object(Illuminate\Http\Request))
+#24 F:\xampp56\htdocs\lv\index.php(49): Illuminate\Foundation\Application->run()
+#25 {main}
+
+Next exception 'ErrorException' with message 'Undefined variable: data (View: F:\xampp56\htdocs\lv\modules\crud\v1_0\views\crud\elements\index-item.blade.php) (View: F:\xampp56\htdocs\lv\modules\crud\v1_0\views\crud\elements\index-item.blade.php)' in F:\xampp56\htdocs\lv\laravel\app\storage\views\3a16484acaddcdf8d9757aec4f6d892f:10
+Stack trace:
+#0 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\Engines\PhpEngine.php(41): Illuminate\View\Engines\CompilerEngine->handleViewException(Object(ErrorException), 1)
+#1 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\Engines\CompilerEngine.php(56): Illuminate\View\Engines\PhpEngine->evaluatePath('F:\\xampp56\\htdo...', Array)
+#2 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\View.php(134): Illuminate\View\Engines\CompilerEngine->get('F:\\xampp56\\htdo...', Array)
+#3 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\View.php(102): Illuminate\View\View->getContents()
+#4 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\View.php(76): Illuminate\View\View->renderContents()
+#5 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Http\Response.php(43): Illuminate\View\View->render()
+#6 F:\xampp56\htdocs\lv\laravel\vendor\symfony\http-foundation\Symfony\Component\HttpFoundation\Response.php(202): Illuminate\Http\Response->setContent(Object(Illuminate\View\View))
+#7 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1501): Symfony\Component\HttpFoundation\Response->__construct(Object(Illuminate\View\View))
+#8 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1036): Illuminate\Routing\Router->prepareResponse(Object(Illuminate\Http\Request), Object(Illuminate\View\View))
+#9 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1001): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#10 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(775): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#11 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(745): Illuminate\Foundation\Application->dispatch(Object(Illuminate\Http\Request))
+#12 F:\xampp56\htdocs\lv\laravel\vendor\barryvdh\laravel-debugbar\src\Middleware\Stack.php(34): Illuminate\Foundation\Application->handle(Object(Illuminate\Http\Request), 1, true)
+#13 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Session\Middleware.php(72): Barryvdh\Debugbar\Middleware\Stack->handle(Object(Illuminate\Http\Request), 1, true)
+#14 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Cookie\Queue.php(47): Illuminate\Session\Middleware->handle(Object(Illuminate\Http\Request), 1, true)
+#15 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Cookie\Guard.php(51): Illuminate\Cookie\Queue->handle(Object(Illuminate\Http\Request), 1, true)
+#16 F:\xampp56\htdocs\lv\laravel\vendor\stack\builder\src\Stack\StackedHttpKernel.php(23): Illuminate\Cookie\Guard->handle(Object(Illuminate\Http\Request), 1, true)
+#17 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(641): Stack\StackedHttpKernel->handle(Object(Illuminate\Http\Request))
+#18 F:\xampp56\htdocs\lv\index.php(49): Illuminate\Foundation\Application->run()
+#19 {main} [] []
+[2016-05-30 02:27:01] development.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'syntax error, unexpected 'getSettings' (T_STRING)' in F:\xampp56\htdocs\lv\modules\crud\v1_0\models\Crud.php:195
+Stack trace:
+#0 [internal function]: Illuminate\Exception\Handler->handleShutdown()
+#1 {main} [] []
+[2016-05-30 02:28:21] development.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'syntax error, unexpected 'use' (T_USE), expecting ',' or ';'' in F:\xampp56\htdocs\lv\modules\crud\v1_0\models\Crud.php:7
+Stack trace:
+#0 [internal function]: Illuminate\Exception\Handler->handleShutdown()
+#1 {main} [] []
+[2016-05-30 02:30:16] development.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Call to a member function onlyTrashed() on integer' in F:\xampp56\htdocs\lv\modules\crud\v1_0\models\Crud.php:204
+Stack trace:
+#0 [internal function]: Illuminate\Exception\Handler->handleShutdown()
+#1 {main} [] []
+[2016-05-30 02:31:25] development.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'syntax error, unexpected 'if' (T_IF)' in F:\xampp56\htdocs\lv\modules\crud\v1_0\models\Crud.php:203
+Stack trace:
+#0 [internal function]: Illuminate\Exception\Handler->handleShutdown()
+#1 {main} [] []
+[2016-05-30 02:32:01] development.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'syntax error, unexpected '::' (T_PAAMAYIM_NEKUDOTAYIM)' in F:\xampp56\htdocs\lv\modules\crud\v1_0\models\Crud.php:198
+Stack trace:
+#0 [internal function]: Illuminate\Exception\Handler->handleShutdown()
+#1 {main} [] []
+[2016-05-30 02:32:16] development.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'syntax error, unexpected '::' (T_PAAMAYIM_NEKUDOTAYIM)' in F:\xampp56\htdocs\lv\modules\crud\v1_0\models\Crud.php:198
+Stack trace:
+#0 [internal function]: Illuminate\Exception\Handler->handleShutdown()
+#1 {main} [] []
+[2016-05-30 02:32:31] development.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'syntax error, unexpected '::' (T_PAAMAYIM_NEKUDOTAYIM)' in F:\xampp56\htdocs\lv\modules\crud\v1_0\models\Crud.php:198
+Stack trace:
+#0 [internal function]: Illuminate\Exception\Handler->handleShutdown()
+#1 {main} [] []
+[2016-05-30 02:32:46] development.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'syntax error, unexpected '::' (T_PAAMAYIM_NEKUDOTAYIM)' in F:\xampp56\htdocs\lv\modules\crud\v1_0\models\Crud.php:198
+Stack trace:
+#0 [internal function]: Illuminate\Exception\Handler->handleShutdown()
+#1 {main} [] []
+[2016-05-30 02:33:01] development.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'syntax error, unexpected '::' (T_PAAMAYIM_NEKUDOTAYIM)' in F:\xampp56\htdocs\lv\modules\crud\v1_0\models\Crud.php:198
+Stack trace:
+#0 [internal function]: Illuminate\Exception\Handler->handleShutdown()
+#1 {main} [] []
+[2016-05-30 02:34:31] development.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'syntax error, unexpected '::' (T_PAAMAYIM_NEKUDOTAYIM)' in F:\xampp56\htdocs\lv\modules\crud\v1_0\models\Crud.php:188
+Stack trace:
+#0 [internal function]: Illuminate\Exception\Handler->handleShutdown()
+#1 {main} [] []
+[2016-05-30 02:34:42] development.ERROR: exception 'ErrorException' with message 'Trying to get property of non-object' in F:\xampp56\htdocs\lv\modules\crud\v1_0\controllers\CrudController.php:12
+Stack trace:
+#0 F:\xampp56\htdocs\lv\modules\crud\v1_0\controllers\CrudController.php(12): Illuminate\Exception\Handler->handleError(8, 'Trying to get p...', 'F:\\xampp56\\htdo...', 12, Array)
+#1 [internal function]: CrudController->__construct()
+#2 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php(539): ReflectionClass->newInstanceArgs(Array)
+#3 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php(428): Illuminate\Container\Container->build('CrudController', Array)
+#4 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(462): Illuminate\Container\Container->make('CrudController', Array)
+#5 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(78): Illuminate\Foundation\Application->make('CrudController')
+#6 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(51): Illuminate\Routing\ControllerDispatcher->makeController('CrudController')
+#7 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(967): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request), 'CrudController', 'index')
+#8 [internal function]: Illuminate\Routing\Router->Illuminate\Routing\{closure}()
+#9 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Route.php(109): call_user_func_array(Object(Closure), Array)
+#10 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1033): Illuminate\Routing\Route->run(Object(Illuminate\Http\Request))
+#11 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1001): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#12 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(775): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#13 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(745): Illuminate\Foundation\Application->dispatch(Object(Illuminate\Http\Request))
+#14 F:\xampp56\htdocs\lv\laravel\vendor\barryvdh\laravel-debugbar\src\Middleware\Stack.php(34): Illuminate\Foundation\Application->handle(Object(Illuminate\Http\Request), 1, true)
+#15 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Session\Middleware.php(72): Barryvdh\Debugbar\Middleware\Stack->handle(Object(Illuminate\Http\Request), 1, true)
+#16 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Cookie\Queue.php(47): Illuminate\Session\Middleware->handle(Object(Illuminate\Http\Request), 1, true)
+#17 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Cookie\Guard.php(51): Illuminate\Cookie\Queue->handle(Object(Illuminate\Http\Request), 1, true)
+#18 F:\xampp56\htdocs\lv\laravel\vendor\stack\builder\src\Stack\StackedHttpKernel.php(23): Illuminate\Cookie\Guard->handle(Object(Illuminate\Http\Request), 1, true)
+#19 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(641): Stack\StackedHttpKernel->handle(Object(Illuminate\Http\Request))
+#20 F:\xampp56\htdocs\lv\index.php(49): Illuminate\Foundation\Application->run()
+#21 {main} [] []
+[2016-05-30 02:35:32] development.ERROR: exception 'ErrorException' with message 'Trying to get property of non-object' in F:\xampp56\htdocs\lv\modules\crud\v1_0\controllers\CrudController.php:12
+Stack trace:
+#0 F:\xampp56\htdocs\lv\modules\crud\v1_0\controllers\CrudController.php(12): Illuminate\Exception\Handler->handleError(8, 'Trying to get p...', 'F:\\xampp56\\htdo...', 12, Array)
+#1 [internal function]: CrudController->__construct()
+#2 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php(539): ReflectionClass->newInstanceArgs(Array)
+#3 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php(428): Illuminate\Container\Container->build('CrudController', Array)
+#4 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(462): Illuminate\Container\Container->make('CrudController', Array)
+#5 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(78): Illuminate\Foundation\Application->make('CrudController')
+#6 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(51): Illuminate\Routing\ControllerDispatcher->makeController('CrudController')
+#7 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(967): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request), 'CrudController', 'index')
+#8 [internal function]: Illuminate\Routing\Router->Illuminate\Routing\{closure}()
+#9 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Route.php(109): call_user_func_array(Object(Closure), Array)
+#10 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1033): Illuminate\Routing\Route->run(Object(Illuminate\Http\Request))
+#11 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1001): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#12 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(775): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#13 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(745): Illuminate\Foundation\Application->dispatch(Object(Illuminate\Http\Request))
+#14 F:\xampp56\htdocs\lv\laravel\vendor\barryvdh\laravel-debugbar\src\Middleware\Stack.php(34): Illuminate\Foundation\Application->handle(Object(Illuminate\Http\Request), 1, true)
+#15 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Session\Middleware.php(72): Barryvdh\Debugbar\Middleware\Stack->handle(Object(Illuminate\Http\Request), 1, true)
+#16 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Cookie\Queue.php(47): Illuminate\Session\Middleware->handle(Object(Illuminate\Http\Request), 1, true)
+#17 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Cookie\Guard.php(51): Illuminate\Cookie\Queue->handle(Object(Illuminate\Http\Request), 1, true)
+#18 F:\xampp56\htdocs\lv\laravel\vendor\stack\builder\src\Stack\StackedHttpKernel.php(23): Illuminate\Cookie\Guard->handle(Object(Illuminate\Http\Request), 1, true)
+#19 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(641): Stack\StackedHttpKernel->handle(Object(Illuminate\Http\Request))
+#20 F:\xampp56\htdocs\lv\index.php(49): Illuminate\Foundation\Application->run()
+#21 {main} [] []
+[2016-05-30 02:36:08] development.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Access to undeclared static property: Crud::$seetings' in F:\xampp56\htdocs\lv\modules\crud\v1_0\controllers\CrudController.php:11
+Stack trace:
+#0 [internal function]: Illuminate\Exception\Handler->handleShutdown()
+#1 {main} [] []
+[2016-05-30 02:47:14] development.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Cannot redeclare non static Illuminate\Database\Eloquent\Model::$table as static Crud::$table' in F:\xampp56\htdocs\lv\modules\crud\v1_0\models\Crud.php:5
+Stack trace:
+#0 [internal function]: Illuminate\Exception\Handler->handleShutdown()
+#1 {main} [] []
+[2016-05-30 02:48:13] development.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Access to undeclared static property: Crud::$table' in F:\xampp56\htdocs\lv\modules\crud\v1_0\models\Crud.php:50
+Stack trace:
+#0 [internal function]: Illuminate\Exception\Handler->handleShutdown()
+#1 {main} [] []
+[2016-05-30 02:48:45] development.ERROR: exception 'ErrorException' with message 'Invalid argument supplied for foreach()' in F:\xampp56\htdocs\lv\laravel\app\storage\views\860ad1e3e41ffb7d480505be0011b67b:44
+Stack trace:
+#0 F:\xampp56\htdocs\lv\laravel\app\storage\views\860ad1e3e41ffb7d480505be0011b67b(44): Illuminate\Exception\Handler->handleError(2, 'Invalid argumen...', 'F:\\xampp56\\htdo...', 44, Array)
+#1 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\Engines\PhpEngine.php(37): include('F:\\xampp56\\htdo...')
+#2 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\Engines\CompilerEngine.php(56): Illuminate\View\Engines\PhpEngine->evaluatePath('F:\\xampp56\\htdo...', Array)
+#3 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\View.php(134): Illuminate\View\Engines\CompilerEngine->get('F:\\xampp56\\htdo...', Array)
+#4 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\View.php(102): Illuminate\View\View->getContents()
+#5 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\View.php(76): Illuminate\View\View->renderContents()
+#6 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Http\Response.php(43): Illuminate\View\View->render()
+#7 F:\xampp56\htdocs\lv\laravel\vendor\symfony\http-foundation\Symfony\Component\HttpFoundation\Response.php(202): Illuminate\Http\Response->setContent(Object(Illuminate\View\View))
+#8 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1501): Symfony\Component\HttpFoundation\Response->__construct(Object(Illuminate\View\View))
+#9 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1036): Illuminate\Routing\Router->prepareResponse(Object(Illuminate\Http\Request), Object(Illuminate\View\View))
+#10 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1001): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#11 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(775): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#12 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(745): Illuminate\Foundation\Application->dispatch(Object(Illuminate\Http\Request))
+#13 F:\xampp56\htdocs\lv\laravel\vendor\barryvdh\laravel-debugbar\src\Middleware\Stack.php(34): Illuminate\Foundation\Application->handle(Object(Illuminate\Http\Request), 1, true)
+#14 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Session\Middleware.php(72): Barryvdh\Debugbar\Middleware\Stack->handle(Object(Illuminate\Http\Request), 1, true)
+#15 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Cookie\Queue.php(47): Illuminate\Session\Middleware->handle(Object(Illuminate\Http\Request), 1, true)
+#16 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Cookie\Guard.php(51): Illuminate\Cookie\Queue->handle(Object(Illuminate\Http\Request), 1, true)
+#17 F:\xampp56\htdocs\lv\laravel\vendor\stack\builder\src\Stack\StackedHttpKernel.php(23): Illuminate\Cookie\Guard->handle(Object(Illuminate\Http\Request), 1, true)
+#18 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(641): Stack\StackedHttpKernel->handle(Object(Illuminate\Http\Request))
+#19 F:\xampp56\htdocs\lv\index.php(49): Illuminate\Foundation\Application->run()
+#20 {main}
+
+Next exception 'ErrorException' with message 'Invalid argument supplied for foreach() (View: F:\xampp56\htdocs\lv\modules\crud\v1_0\views\crud\index.blade.php)' in F:\xampp56\htdocs\lv\laravel\app\storage\views\860ad1e3e41ffb7d480505be0011b67b:44
+Stack trace:
+#0 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\Engines\PhpEngine.php(41): Illuminate\View\Engines\CompilerEngine->handleViewException(Object(ErrorException), 1)
+#1 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\Engines\CompilerEngine.php(56): Illuminate\View\Engines\PhpEngine->evaluatePath('F:\\xampp56\\htdo...', Array)
+#2 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\View.php(134): Illuminate\View\Engines\CompilerEngine->get('F:\\xampp56\\htdo...', Array)
+#3 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\View.php(102): Illuminate\View\View->getContents()
+#4 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\View\View.php(76): Illuminate\View\View->renderContents()
+#5 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Http\Response.php(43): Illuminate\View\View->render()
+#6 F:\xampp56\htdocs\lv\laravel\vendor\symfony\http-foundation\Symfony\Component\HttpFoundation\Response.php(202): Illuminate\Http\Response->setContent(Object(Illuminate\View\View))
+#7 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1501): Symfony\Component\HttpFoundation\Response->__construct(Object(Illuminate\View\View))
+#8 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1036): Illuminate\Routing\Router->prepareResponse(Object(Illuminate\Http\Request), Object(Illuminate\View\View))
+#9 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1001): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#10 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(775): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#11 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(745): Illuminate\Foundation\Application->dispatch(Object(Illuminate\Http\Request))
+#12 F:\xampp56\htdocs\lv\laravel\vendor\barryvdh\laravel-debugbar\src\Middleware\Stack.php(34): Illuminate\Foundation\Application->handle(Object(Illuminate\Http\Request), 1, true)
+#13 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Session\Middleware.php(72): Barryvdh\Debugbar\Middleware\Stack->handle(Object(Illuminate\Http\Request), 1, true)
+#14 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Cookie\Queue.php(47): Illuminate\Session\Middleware->handle(Object(Illuminate\Http\Request), 1, true)
+#15 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Cookie\Guard.php(51): Illuminate\Cookie\Queue->handle(Object(Illuminate\Http\Request), 1, true)
+#16 F:\xampp56\htdocs\lv\laravel\vendor\stack\builder\src\Stack\StackedHttpKernel.php(23): Illuminate\Cookie\Guard->handle(Object(Illuminate\Http\Request), 1, true)
+#17 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(641): Stack\StackedHttpKernel->handle(Object(Illuminate\Http\Request))
+#18 F:\xampp56\htdocs\lv\index.php(49): Illuminate\Foundation\Application->run()
+#19 {main} [] []
+[2016-05-30 02:56:14] development.ERROR: exception 'ErrorException' with message 'Undefined index: name' in F:\xampp56\htdocs\lv\modules\crud\v1_0\models\Crud.php:153
+Stack trace:
+#0 F:\xampp56\htdocs\lv\modules\crud\v1_0\models\Crud.php(153): Illuminate\Exception\Handler->handleError(8, 'Undefined index...', 'F:\\xampp56\\htdo...', 153, Array)
+#1 F:\xampp56\htdocs\lv\modules\crud\v1_0\controllers\CrudController.php(184): Crud::store(Array)
+#2 F:\xampp56\htdocs\lv\modules\crud\v1_0\controllers\CrudController.php(275): CrudController->disable()
+#3 [internal function]: CrudController->bulkAction()
+#4 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Controller.php(231): call_user_func_array(Array, Array)
+#5 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(93): Illuminate\Routing\Controller->callAction('bulkAction', Array)
+#6 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(62): Illuminate\Routing\ControllerDispatcher->call(Object(CrudController), Object(Illuminate\Routing\Route), 'bulkAction')
+#7 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(967): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request), 'CrudController', 'bulkAction')
+#8 [internal function]: Illuminate\Routing\Router->Illuminate\Routing\{closure}()
+#9 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Route.php(109): call_user_func_array(Object(Closure), Array)
+#10 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1033): Illuminate\Routing\Route->run(Object(Illuminate\Http\Request))
+#11 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1001): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#12 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(775): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#13 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(745): Illuminate\Foundation\Application->dispatch(Object(Illuminate\Http\Request))
+#14 F:\xampp56\htdocs\lv\laravel\vendor\barryvdh\laravel-debugbar\src\Middleware\Stack.php(34): Illuminate\Foundation\Application->handle(Object(Illuminate\Http\Request), 1, true)
+#15 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Session\Middleware.php(72): Barryvdh\Debugbar\Middleware\Stack->handle(Object(Illuminate\Http\Request), 1, true)
+#16 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Cookie\Queue.php(47): Illuminate\Session\Middleware->handle(Object(Illuminate\Http\Request), 1, true)
+#17 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Cookie\Guard.php(51): Illuminate\Cookie\Queue->handle(Object(Illuminate\Http\Request), 1, true)
+#18 F:\xampp56\htdocs\lv\laravel\vendor\stack\builder\src\Stack\StackedHttpKernel.php(23): Illuminate\Cookie\Guard->handle(Object(Illuminate\Http\Request), 1, true)
+#19 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(641): Stack\StackedHttpKernel->handle(Object(Illuminate\Http\Request))
+#20 F:\xampp56\htdocs\lv\index.php(49): Illuminate\Foundation\Application->run()
+#21 {main} [] []
+[2016-05-30 03:19:31] development.ERROR: exception 'ErrorException' with message 'constant(): Couldn't find constant crm_success_message' in F:\xampp56\htdocs\lv\modules\crud\v1_0\controllers\CrudController.php:299
+Stack trace:
+#0 [internal function]: Illuminate\Exception\Handler->handleError(2, 'constant(): Cou...', 'F:\\xampp56\\htdo...', 299, Array)
+#1 F:\xampp56\htdocs\lv\modules\crud\v1_0\controllers\CrudController.php(299): constant('crm_success_mes...')
+#2 [internal function]: CrudController->bulkAction()
+#3 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Controller.php(231): call_user_func_array(Array, Array)
+#4 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(93): Illuminate\Routing\Controller->callAction('bulkAction', Array)
+#5 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(62): Illuminate\Routing\ControllerDispatcher->call(Object(CrudController), Object(Illuminate\Routing\Route), 'bulkAction')
+#6 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(967): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request), 'CrudController', 'bulkAction')
+#7 [internal function]: Illuminate\Routing\Router->Illuminate\Routing\{closure}()
+#8 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Route.php(109): call_user_func_array(Object(Closure), Array)
+#9 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1033): Illuminate\Routing\Route->run(Object(Illuminate\Http\Request))
+#10 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1001): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#11 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(775): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#12 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(745): Illuminate\Foundation\Application->dispatch(Object(Illuminate\Http\Request))
+#13 F:\xampp56\htdocs\lv\laravel\vendor\barryvdh\laravel-debugbar\src\Middleware\Stack.php(34): Illuminate\Foundation\Application->handle(Object(Illuminate\Http\Request), 1, true)
+#14 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Session\Middleware.php(72): Barryvdh\Debugbar\Middleware\Stack->handle(Object(Illuminate\Http\Request), 1, true)
+#15 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Cookie\Queue.php(47): Illuminate\Session\Middleware->handle(Object(Illuminate\Http\Request), 1, true)
+#16 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Cookie\Guard.php(51): Illuminate\Cookie\Queue->handle(Object(Illuminate\Http\Request), 1, true)
+#17 F:\xampp56\htdocs\lv\laravel\vendor\stack\builder\src\Stack\StackedHttpKernel.php(23): Illuminate\Cookie\Guard->handle(Object(Illuminate\Http\Request), 1, true)
+#18 F:\xampp56\htdocs\lv\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(641): Stack\StackedHttpKernel->handle(Object(Illuminate\Http\Request))
+#19 F:\xampp56\htdocs\lv\index.php(49): Illuminate\Foundation\Application->run()
+#20 {main} [] []

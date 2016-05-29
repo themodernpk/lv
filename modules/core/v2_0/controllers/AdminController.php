@@ -17,7 +17,17 @@ class AdminController extends BaseController
         $this->input = Input::all();
         $this->beforeFilter(function () {
             if (!Permission::check('show-admin-section')) {
-                return Redirect::route('error')->with('flash_error', "You don't have permission to view this page");
+                $error_message = "You don't have permission to view this page";
+                if(isset($this->data->input->format) && $this->data->input->format == "json")
+                {
+                    $response['status'] = 'failed';
+                    $response['errors'][] = $error_message;
+                    echo json_encode($response);
+                    die();
+                } else
+                {
+                    return Redirect::route('error')->with('flash_error', $error_message);
+                }
             }
         });
     }
@@ -151,7 +161,17 @@ class AdminController extends BaseController
     {
         $this->beforeFilter(function () {
             if (!Permission::check('admin')) {
-                return Redirect::route('error')->with('flash_error', "You don't have permission to view this page");
+                $error_message = "You don't have permission to view this page";
+                if(isset($this->data->input->format) && $this->data->input->format == "json")
+                {
+                    $response['status'] = 'failed';
+                    $response['errors'][] = $error_message;
+                    echo json_encode($response);
+                    die();
+                } else
+                {
+                    return Redirect::route('error')->with('flash_error', $error_message);
+                }
             }
         });
         $path = base_path() . "/.." . "/modules";
@@ -199,7 +219,17 @@ class AdminController extends BaseController
     function moduleInstall()
     {
         if (!Permission::check('allow-admin-modules')) {
-            return Redirect::route('error')->with('flash_error', "You don't have permission to view this page");
+            $error_message = "You don't have permission to view this page";
+            if(isset($this->data->input->format) && $this->data->input->format == "json")
+            {
+                $response['status'] = 'failed';
+                $response['errors'][] = $error_message;
+                echo json_encode($response);
+                die();
+            } else
+            {
+                return Redirect::route('error')->with('flash_error', $error_message);
+            }
         }
         $input = Input::all();
         //load helper
