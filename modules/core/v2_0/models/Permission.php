@@ -152,7 +152,7 @@ class Permission extends Eloquent
             }
         }
 
-        $users = User::where('group_id', $group_ids)->get();
+        $users = User::whereIn('group_id', $group_ids)->get();
 
         return $users;
 
